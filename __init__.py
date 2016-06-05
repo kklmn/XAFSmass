@@ -1,10 +1,19 @@
 ﻿# -*- coding: utf-8 -*-
 r"""
+
+|Screenshot|
+
 A program for calculating the mass of XAFS [X-Ray Absorption Fine Structure]
 samples. The chemical formula parser understands parentheses and weight
 percentage, also in nested form. XAFSmassQt reports the quantity (weight,
 thickness or pressure) together with the expected height of the absorption
 edge.
+
+You are welcomed to join this project on
+`Github <https://github.com/kklmn/XAFSmass>`__.
+
+.. |Screenshot| image:: https://pythonhosted.org/XAFSmass/_images/1powder.png
+   :height: 440
 
 Dependencies
 ------------
@@ -171,7 +180,7 @@ as :math:`x = (\nu_A/\nu_B)/[1+(\nu_A/\nu_B)]`.
 
 """
 __module__ = "XAFSmass"
-__versioninfo__ = (1, 3, 1)
+__versioninfo__ = (1, 3, 2)
 __version__ = '.'.join(map(str, __versioninfo__))
 __author__ = \
     "Konstantin Klementiev (MAX IV Laboratory)",\
