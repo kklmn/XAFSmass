@@ -29,10 +29,15 @@ suppress the console window.
 You may want to run ``python setup.py install`` in order to put the XAFSmass
 package to the standard location.
 
-Citing xrt
-----------
+Citing XAFSmass
+---------------
 
-to be determined
+Please cite XAFSmass as:
+`K. Klementiev and R. Chernikov, "XAFSmass: a program for calculating the
+optimal mass of XAFS samples", J. Phys.: Conf. Ser. **712** (2016) 012008,
+doi:10.1088/1742-6596/712/1/012008
+<http://dx.doi.org/10.1088/1742-6596/712/1/012008>`_.
+
 
 Theoretical references used
 ---------------------------
@@ -166,11 +171,11 @@ as :math:`x = (\nu_A/\nu_B)/[1+(\nu_A/\nu_B)]`.
 
 """
 __module__ = "XAFSmass"
-__versioninfo__ = (1, 3, 0)
+__versioninfo__ = (1, 3, 1)
 __version__ = '.'.join(map(str, __versioninfo__))
 __author__ = \
     "Konstantin Klementiev (MAX IV Laboratory)",\
     "Roman Chernikov (DESY Photon Science)"
 __email__ = "first dot last at gmail dot com"
-__date__ = "1 Mar 2016"
+__date__ = "5 Jun 2016"
 __license__ = "MIT license"
