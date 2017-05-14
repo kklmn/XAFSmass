@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>XAFSmass &mdash; XAFSmassQt 1.3.2 documentation</title>
+    <title>XAFSmass &#8212; XAFSmassQt 1.3.3 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,10 +14,11 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.3.2',
+        VERSION:     '1.3.3',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
       };
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
@@ -25,7 +26,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="shortcut icon" href="_static/XAFSmassQt.ico"/>
-    <link rel="top" title="XAFSmassQt 1.3.2 documentation" href="#" /> 
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -37,7 +39,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">XAFSmassQt 1.3.2 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">XAFSmassQt 1.3.3 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -52,17 +54,17 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">1.3.2</td>
+<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">1.3.3</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">June 05, 2016</td>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">May 14, 2017</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Konstantin Klementiev (MAX IV Laboratory), Roman Chernikov (DESY Photon Science)</td>
+<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Konstantin Klementiev (MAX IV Laboratory), Roman Chernikov (Canadian Light Source)</td>
 </tr>
-<tr class="field-even field"><th class="field-name">License:</th><td class="field-body">Open Source, <a class="reference internal" href="license.html#license"><span>MIT License</span></a></td>
+<tr class="field-even field"><th class="field-name">License:</th><td class="field-body">Open Source, <a class="reference internal" href="license.html#license"><span class="std std-ref">MIT License</span></a></td>
 </tr>
 </tbody>
 </table>
-<span class="target" id="module-XAFSmass.__init__"></span><p><a class="reference internal" href="https://pythonhosted.org/XAFSmass/_images/1powder.png"><img alt="Screenshot" src="https://pythonhosted.org/XAFSmass/_images/1powder.png" style="height: 440px;" /></a></p>
+<span class="target" id="module-XAFSmass.__init__"></span><p><a class="reference internal" href="https://pythonhosted.org/XAFSmass/_images/1powder.png"><img alt="Screenshot" src="https://pythonhosted.org/XAFSmass/_images/1powder.png" style="height: 360px;" /></a></p>
 <p>A program for calculating the mass of XAFS [X-Ray Absorption Fine Structure]
 samples. The chemical formula parser understands parentheses and weight
 percentage, also in nested form. XAFSmassQt reports the quantity (weight,
@@ -100,6 +102,15 @@ doi:10.1088/1742-6596/712/1/012008</a>.</p>
 <p>The tabulated scattering factors are taken from Henke et al. (10 eV &lt; <em>E</em> &lt; 30
 keV) <a class="reference internal" href="#henke" id="id1">[Henke]</a>, Chantler (11 eV &lt; <em>E</em> &lt; 405 keV) <a class="reference internal" href="#chantler" id="id2">[Chantler]</a> and Brennan &amp; Cowan
 (30 eV &lt; <em>E</em> &lt; 509 keV) <a class="reference internal" href="#brco" id="id3">[BrCo]</a>.</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The tables of f2 factors consider only photoelectric
+cross-sections. The tabulation by Chantler can optionally have
+<em>total</em> absorption cross-sections. This option is enabled by selecting
+the data table &#8216;Chantler total (NIST)&#8217;.</p>
+</div>
+</div></blockquote>
 <table class="docutils citation" frame="void" id="henke" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
@@ -262,21 +273,18 @@ as <span class="math">\(x = (\nu_A/\nu_B)/[1+(\nu_A/\nu_B)]\)</span>.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/index.txt"
+      <li><a href="_sources/index.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -292,12 +300,12 @@ as <span class="math">\(x = (\nu_A/\nu_B)/[1+(\nu_A/\nu_B)]\)</span>.</p>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">XAFSmassQt 1.3.2 documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">XAFSmassQt 1.3.3 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &copy; Copyright 2015, Konstantin Klementiev, Roman Chernikov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
+        &#169; Copyright 2015, Konstantin Klementiev, Roman Chernikov.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.3.
     </div>
   </body>
 </html>

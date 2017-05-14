@@ -92,6 +92,10 @@ class Element(object):
         [Henke]_, 'Chantler' (11 eV < *E* < 405 keV) [Chantler]_ or 'BrCo'
         (30 eV < *E* < 509 keV) [BrCo]_.
 
+        The tables of f2 factors consider only photoelectric cross-sections.
+        The tabulation by Chantler can optionally have *total* absorption
+        cross-sections. This option is enabled by *table*='Chantler total'.
+
         .. [Henke] http://henke.lbl.gov/optical_constants/asf.html
            B.L. Henke, E.M. Gullikson, and J.C. Davis, *X-ray interactions:
            photoabsorption, scattering, transmission, and reflection at
@@ -110,7 +114,7 @@ class Element(object):
            x-ray absorption, reflection and diffraction performance for a
            variety of materials at arbitrary wavelengths*, Rev. Sci. Instrum.
            **63** (1992) 850-853.
-           """
+        """
         if isinstance(elem, str):
             self.name = elem
             self.Z = elementsList.index(elem)
@@ -126,28 +130,16 @@ class Element(object):
     def read_f1f2_vs_E(self, table):
         """Reads f1 and f2 scattering factors from the given *table* at the
         instantiation time."""
-        table += '.Ef'
-        E, f1, f2 = [], [], []
-        startFound = False
         dataDir = os.path.dirname(__file__)
-        with open(os.path.join(dataDir, 'data', table), "rb") as f:
-            while True:
-                structEf1f2 = f.read(12)
-                if not structEf1f2:
-                    break
-                ELoc, f1Loc, f2Loc = struct.unpack_from("<3f", structEf1f2)
-                if startFound and ELoc == -1:
-                    break
-                if ELoc == -1 and f2Loc == self.Z:
-                    startFound = True
-                    continue
-                if startFound:
-                    E.append(ELoc)
-                    f1.append(f1Loc - self.Z)
-                    f2.append(f2Loc)
-    #    pylab.plot(E, f1, '.', label=table+'f1')
-    #    pylab.plot(E, f2, '.', label=table+'f2')
-        return np.array(E), np.array(f1), np.array(f2)
+        table_fn = table.split()[0]
+        pname = os.path.join(dataDir, 'data', table_fn+'.npz')
+        f2key = '_f2tot' if 'total' in table else '_f2'
+        with open(pname, 'rb') as f:
+            res = np.load(f)
+            ef1f2 = (np.array(res[self.name+'_E']),
+                     np.array(res[self.name+'_f1']),
+                     np.array(res[self.name+f2key]))
+        return ef1f2
 
     def get_f1f2(self, E):
         """Calculates (interpolates) f1 and f2 for the given array *E*."""

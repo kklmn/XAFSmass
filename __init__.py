@@ -13,7 +13,7 @@ You are welcomed to join this project on
 `Github <https://github.com/kklmn/XAFSmass>`__.
 
 .. |Screenshot| image:: https://pythonhosted.org/XAFSmass/_images/1powder.png
-   :height: 440
+   :height: 360
 
 Dependencies
 ------------
@@ -54,6 +54,12 @@ Theoretical references used
 The tabulated scattering factors are taken from Henke et al. (10 eV < *E* < 30
 keV) [Henke]_, Chantler (11 eV < *E* < 405 keV) [Chantler]_ and Brennan & Cowan
 (30 eV < *E* < 509 keV) [BrCo]_.
+
+    .. note::
+        The tables of f2 factors consider only photoelectric
+        cross-sections. The tabulation by Chantler can optionally have
+        *total* absorption cross-sections. This option is enabled by selecting
+        the data table 'Chantler total (NIST)'.
 
 .. [Henke] http://henke.lbl.gov/optical_constants/asf.html
    B.L. Henke, E.M. Gullikson, and J.C. Davis, *X-ray interactions:
@@ -180,11 +186,13 @@ as :math:`x = (\nu_A/\nu_B)/[1+(\nu_A/\nu_B)]`.
 
 """
 __module__ = "XAFSmass"
-__versioninfo__ = (1, 3, 2)
+__versioninfo__ = (1, 3, 3)
 __version__ = '.'.join(map(str, __versioninfo__))
 __author__ = \
     "Konstantin Klementiev (MAX IV Laboratory)",\
-    "Roman Chernikov (DESY Photon Science)"
-__email__ = "first dot last at gmail dot com"
-__date__ = "5 Jun 2016"
+    "Roman Chernikov (Canadian Light Source)"
+__email__ = \
+    "konstantin DOT klementiev AT gmail DOT com, " +\
+    "rchernikov AT gmail DOT com"
+__date__ = "14 May 2017"
 __license__ = "MIT license"
