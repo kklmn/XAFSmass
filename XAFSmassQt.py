@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 __author__ = "Konstantin Klementiev, Roman Chernikov"
-__date__ = "1 Mar 2016"
+__date__ = "15 May 2017"
 
 import sys
 import os

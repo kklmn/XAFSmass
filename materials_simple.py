@@ -6,7 +6,7 @@ Materials, simplified form for XAFSmass
 Defines f1 and f2 scattering factors.
 """
 __author__ = "Konstantin Klementiev, Roman Chernikov"
-__date__ = "1 Mar 2016"
+__date__ = "15 May 2017"
 import os
 import math
 #import struct
