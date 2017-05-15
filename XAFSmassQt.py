@@ -78,8 +78,8 @@ formulas = (
 examples = (
     "Cu(NO3)2  <i>or</i>  Cu%1Zn%1((Al2O3)%10SiO2)",
     "Cu%25Zn", "Ar0.9Kr0.1  <i>or</i>  N2", "FexSiO2")
-tables = ("Henke", "Brennan&Cowan", "Chantler (NIST)")
-tablesF = ("Henke", "BrCo", "Chantler")
+tables = ("Henke", "Brennan&Cowan", "Chantler (NIST)", "Chantler total (NIST)")
+tablesF = ("Henke", "BrCo", "Chantler", "Chantler total")
 edges = ("K", "L1", "L2", "L3", "M1", "M2", "M3", "M4", "M5", "N1", "N2", "N3")
 
 
@@ -220,6 +220,7 @@ class MainDlg(QDialog):
         self.tableLabel = QLabel(r"&data table:")
         self.tableCB = QComboBox()
         self.tableCB.addItems(tables)
+        self.tableCB.setCurrentIndex(3)  # Chantler total
         self.tableCB.currentIndexChanged.connect(self.calculate)
         self.tableLabel.setBuddy(self.tableCB)
         self.tablePlotButton = QPushButton('&Plot f"')

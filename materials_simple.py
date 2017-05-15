@@ -9,7 +9,7 @@ __author__ = "Konstantin Klementiev, Roman Chernikov"
 __date__ = "1 Mar 2016"
 import os
 import math
-import struct
+#import struct
 import numpy as np
 
 ch = 12398.4186  # {5}   {c*h[eV*A]}
