@@ -136,9 +136,9 @@ class Element(object):
         f2key = '_f2tot' if 'total' in table else '_f2'
         with open(pname, 'rb') as f:
             res = np.load(f)
-            ef1f2 = (np.array(res[self.name+'_E']),
-                     np.array(res[self.name+'_f1']),
-                     np.array(res[self.name+f2key]))
+            ef1f2 = (np.array(res[self.name+'_E'], dtype=np.float64),
+                     np.array(res[self.name+'_f1'], dtype=np.float64),
+                     np.array(res[self.name+f2key], dtype=np.float64))
         return ef1f2
 
     def get_f1f2(self, E):

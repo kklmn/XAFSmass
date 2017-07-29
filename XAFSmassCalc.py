@@ -105,8 +105,9 @@ formula.setParseAction(sum_by_element)
 def round_to_n(x, n=3):
     res = x
     try:
-        res = round(x, -int(floor(log10(x))) + n-1) if isinstance(x, float)\
-            else x
+        res = round(x, -int(floor(log10(x))) + n-1) if \
+            isinstance(x, (float, np.float32, np.float64)) else x
+#        res = round(x, -int(floor(log10(x))) + n-1)
     except ValueError:
         pass
     return res

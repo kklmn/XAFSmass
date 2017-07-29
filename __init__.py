@@ -9,9 +9,6 @@ percentage, also in nested form. XAFSmassQt reports the quantity (weight,
 thickness or pressure) together with the expected height of the absorption
 edge.
 
-You are welcomed to join this project on
-`Github <https://github.com/kklmn/XAFSmass>`__.
-
 .. |Screenshot| image:: https://pythonhosted.org/XAFSmass/_images/1powder.png
    :height: 360
 
@@ -24,9 +21,10 @@ PyQt4, PyQt5 or PySide.
 Get XAFSmass
 ------------
 
-XAFSmass is available as source distribution from `here
-<https://pypi.python.org/pypi/XAFSmass>`_. The distribution archive also
-includes documentation.
+XAFSmass is available as source distribution from
+`PyPI <https://pypi.python.org/pypi/XAFSmass>`_ or
+`Github <https://github.com/kklmn/XAFSmass>`__.
+The distribution archive also includes documentation.
 
 Installation
 ------------
@@ -186,13 +184,13 @@ as :math:`x = (\nu_A/\nu_B)/[1+(\nu_A/\nu_B)]`.
 
 """
 __module__ = "XAFSmass"
-__versioninfo__ = (1, 3, 4)
+__versioninfo__ = (1, 3, 6)
 __version__ = '.'.join(map(str, __versioninfo__))
 __author__ = \
-    "Konstantin Klementiev (MAX IV Laboratory)",\
+    "Konstantin Klementiev (MAX IV Laboratory), " +\
     "Roman Chernikov (Canadian Light Source)"
 __email__ = \
     "konstantin DOT klementiev AT gmail DOT com, " +\
     "rchernikov AT gmail DOT com"
-__date__ = "15 May 2017"
+__date__ = "29 Jul 2017"
 __license__ = "MIT license"

@@ -8,6 +8,11 @@ import webbrowser
 import numpy as np
 from pyparsing import ParseBaseException
 
+#=this may help to resolve conflict betwen Qt4 and Qt5=========================
+# import matplotlib as mpl
+# mpl.use("Qt4Agg")
+#==============================================================================
+
 try:
     from matplotlib.backends import qt_compat
 except ImportError:
@@ -84,8 +89,8 @@ edges = ("K", "L1", "L2", "L3", "M1", "M2", "M3", "M4", "M5", "N1", "N2", "N3")
 
 
 class MyFormulaMplCanvas(Canvas):
-    def __init__(self, parent=None, width=5, height=4):
-        fig = Figure(figsize=(width, height))
+    def __init__(self, parent=None, width=5, height=0.4):
+        fig = Figure(figsize=(width, height), dpi=96)
         self.fig = fig
         Canvas.__init__(self, fig)
         bg = self.palette().window().color()
@@ -96,7 +101,7 @@ class MyFormulaMplCanvas(Canvas):
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.updateGeometry()
         fm = QtGui.QFontMetrics(self.font())
-        self.fontsize = int(fm.height()) / 1.06
+        self.fontsize = int(fm.height()) / 1.25
 
     def update_formula(self, formula=None):
         self.fig.clf()
@@ -116,15 +121,15 @@ class MyMplCanvas(Canvas):
         self.setParent(parent)
         self.updateGeometry()
         fm = QtGui.QFontMetrics(self.font())
-        self.fontsize = int(fm.height()) / 1.2
+        self.fontsize = int(fm.height()) / 1.25
 
     def plot(self, compound, E, table):
         self.axes.cla()
         self.axes.set_xlabel('energy (keV)', fontsize=self.fontsize)
         self.axes.set_ylabel(r"$f''$", fontsize=self.fontsize)
         if compound is None:
-            l = self.axes.legend([], title='no given elements',
-                                 loc='upper right', fontsize=self.fontsize)
+            ll = self.axes.legend([], title='no given elements',
+                                  loc='upper right', fontsize=self.fontsize)
         else:
             ced = xc.calculate_element_dict(compound.asList(), E, table)
             if isinstance(ced, str):
@@ -138,24 +143,24 @@ class MyMplCanvas(Canvas):
                 self.axes.plot(el[0].E*1e-3, el[0].f2, '-', marker='.',
                                label=label)
             self.axes.set_xlim(el[0].E[0]*1e-3, el[0].E[-1]*1e-3)
-            l = self.axes.legend(loc='upper right', fontsize=self.fontsize)
+            ll = self.axes.legend(loc='upper right', fontsize=self.fontsize)
             ylim = self.axes.get_ylim()
             self.axes.plot([E*1e-3, E*1e-3], ylim, '--', color='gray',
                            label=None)
-        mpl.artist.setp(l.get_title(), fontsize=self.fontsize)
+        mpl.artist.setp(ll.get_title(), fontsize=self.fontsize)
         self.draw()
 
 
 class PlotDlg(QDialog):
     def __init__(self, parent, compound, E, table):
         super(PlotDlg, self).__init__(parent)
-        l = QVBoxLayout(self)
+        bl = QVBoxLayout(self)
         self.plotCanvas = MyMplCanvas(self)
         self.plotCanvas.setSizePolicy(
             QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.toolbar = ToolBar(self.plotCanvas, self)
-        l.addWidget(self.toolbar)
-        l.addWidget(self.plotCanvas)
+        bl.addWidget(self.toolbar)
+        bl.addWidget(self.plotCanvas)
         pg = parent.frameGeometry()
         self.move(parent.x()+pg.width(), parent.y())
         pg = parent.geometry()
@@ -568,7 +573,7 @@ class MainDlg(QDialog):
             iSelect = 0
             for i, (k, v) in enumerate(eDict.items()):
                 self.stepCB.addItem("{0}({1}mg={2}wt%): {3}".format(
-                    k, xc.round_to_n(v[-2], 2), xc.round_to_n(v[-2]/m*100., 2),
+                    k, xc.round_to_n(v[-2], 3), xc.round_to_n(v[-2]/m*100., 3),
                     xc.round_to_n(v[-1], 3)))
                 if v[2] > 0:
                     iSelect = i
@@ -628,7 +633,7 @@ class MainDlg(QDialog):
             <li>{1[0]}
             <li>{1[1]}
             </ul>
-            <p>Open source, {2}. Available at pypi.python.org<p>
+            <p>Open source, {2}. Available at PyPI and GitHub<p>
             <p>Your system:
             <ul>
             <li>{3}
@@ -636,7 +641,7 @@ class MainDlg(QDialog):
             <li>Qt {5}
             <li>{6} {7}
             </ul>""".format(
-                __version__, __author__, __license__,
+                __version__, __author__.split(','), __license__,
                 platform.platform(terse=True), platform.python_version(),
                 Qt_version, QtName, PyQt_version))
 
