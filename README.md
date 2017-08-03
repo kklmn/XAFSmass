@@ -1,5 +1,5 @@
-About XAFSmass
---------------
+XAFSmass
+========
 
 <p align="center">
   <img src="doc/_images/1powder_136s.png" width=320 />
@@ -10,7 +10,7 @@ The chemical formula parser understands parentheses and weight percentage, also 
 XAFSmass reports the quantity (weight, thickness or pressure) together with the expected height
 of the absorption edge. The GUI is provided by Qt.
 
-Created by Konstantin Klementiev and Roman Chernikov under MIT License.
+Copyright (c) 2015 Konstantin Klementiev and Roman Chernikov under the MIT License terms
 
 Dependencies
 ------------
