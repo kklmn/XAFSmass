@@ -2,7 +2,7 @@ About XAFSmass
 --------------
 
 <p align="center">
-  <img src="doc/_images/1powder_136s.png" width=360 />
+  <img src="doc/_images/1powder_136s.png" width=320 />
 </p>
 
 XAFSmass is a program for calculating the mass of XAFS [X-Ray Absorption Fine Structure] samples.
