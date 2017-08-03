@@ -9,8 +9,8 @@ percentage, also in nested form. XAFSmassQt reports the quantity (weight,
 thickness or pressure) together with the expected height of the absorption
 edge.
 
-.. |Screenshot| image:: https://pythonhosted.org/XAFSmass/_images/1powder.png
-   :height: 360
+.. |Screenshot| image:: _images/1powder_136s.png
+   :scale: 66 %
 
 Dependencies
 ------------
@@ -41,7 +41,7 @@ Citing XAFSmass
 
 Please cite XAFSmass as:
 `K. Klementiev and R. Chernikov, "XAFSmass: a program for calculating the
-optimal mass of XAFS samples", J. Phys.: Conf. Ser. **712** (2016) 012008,
+optimal mass of XAFS samples", J. Phys.: Conf. Ser. 712 (2016) 012008,
 doi:10.1088/1742-6596/712/1/012008
 <http://dx.doi.org/10.1088/1742-6596/712/1/012008>`_.
 
@@ -50,8 +50,8 @@ Theoretical references used
 ---------------------------
 
 The tabulated scattering factors are taken from Henke et al. (10 eV < *E* < 30
-keV) [Henke]_, Chantler (11 eV < *E* < 405 keV) [Chantler]_ and Brennan & Cowan
-(30 eV < *E* < 509 keV) [BrCo]_.
+keV) [Henke]_, Brennan & Cowan (30 eV < *E* < 509 keV) [BrCo]_ and Chantler
+(11 eV < *E* < 405 keV) [Chantler]_.
 
     .. note::
         The tables of f2 factors consider only photoelectric
@@ -65,18 +65,19 @@ keV) [Henke]_, Chantler (11 eV < *E* < 405 keV) [Chantler]_ and Brennan & Cowan
    E=50-30000 eV, Z=1-92*, Atomic Data and Nuclear Data Tables
    **54** (no.2) (1993) 181-342.
 
-.. [Chantler] http://physics.nist.gov/PhysRefData/FFast/Text/cover.html
-   http://physics.nist.gov/PhysRefData/FFast/html/form.html
-   C. T. Chantler, *Theoretical Form Factor, Attenuation, and
-   Scattering Tabulation for Z = 1 - 92 from E = 1 - 10 eV to E = 0.4 -
-   1.0 MeV*, J. Phys. Chem. Ref. Data **24** (1995) 71-643.
-
 .. [BrCo] http://www.bmsc.washington.edu/scatter/periodic-table.html
    ftp://ftpa.aps.anl.gov/pub/cross-section_codes/
    S. Brennan and P.L. Cowan, *A suite of programs for calculating
    x-ray absorption, reflection and diffraction performance for a
    variety of materials at arbitrary wavelengths*, Rev. Sci. Instrum.
    **63** (1992) 850-853.
+
+.. [Chantler] http://physics.nist.gov/PhysRefData/FFast/Text/cover.html
+   http://physics.nist.gov/PhysRefData/FFast/html/form.html
+   C. T. Chantler, *Theoretical Form Factor, Attenuation, and
+   Scattering Tabulation for Z = 1 - 92 from E = 1 - 10 eV to E = 0.4 -
+   1.0 MeV*, J. Phys. Chem. Ref. Data **24** (1995) 71-643.
+
 
 Usage
 -----
@@ -113,8 +114,8 @@ step more that 1.5 (reported by the drop-down list "absorptance step = "), it
 is recommended to reduce the sample mass to avoid the potential thickness
 effect due to possible inhomogeneity in the wafer. If your sample is diluted
 and you get a very low absorption step, do not try to make the wafer thicker
-hoping that you will get better spectra -- you will not: The optimal thickness
-gets the best signal-to-noise ratio (it is in *this* sense the optimal). You
+hoping that you will get better spectra -- you will not: the optimal thickness
+gets *the best* signal-to-noise ratio (it is in this sense the optimal). You
 can only try to measure your absorption spectra with another registration
 technique: in fluorescence or electron yield modes.
 
@@ -162,7 +163,7 @@ Case 2: *You know the sample mass and area*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Determine the edge jump (Δμd). For the pure element find such a value for μTd
-that the absorption step in the pull-down list was equal to your experimental
+that the absorption step in the pull-down list be equal to your experimental
 Δμd. This will give you the mass of the element of interest. Just divide it by
 the total mass to get the weight percentage.
 
@@ -184,13 +185,13 @@ as :math:`x = (\nu_A/\nu_B)/[1+(\nu_A/\nu_B)]`.
 
 """
 __module__ = "XAFSmass"
-__versioninfo__ = (1, 3, 6)
+__versioninfo__ = (1, 3, 7)
 __version__ = '.'.join(map(str, __versioninfo__))
 __author__ = \
     "Konstantin Klementiev (MAX IV Laboratory), " +\
     "Roman Chernikov (Canadian Light Source)"
 __email__ = \
-    "konstantin DOT klementiev AT gmail DOT com, " +\
-    "rchernikov AT gmail DOT com"
-__date__ = "29 Jul 2017"
+    "konstantin.klementiev@gmail.com" +\
+    "rchernikov@gmail.com"
+__date__ = "03 Aug 2017"
 __license__ = "MIT license"

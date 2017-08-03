@@ -1,17 +1,19 @@
 ﻿# -*- coding: utf-8 -*-
 __author__ = "Konstantin Klementiev, Roman Chernikov"
-__date__ = "15 May 2017"
+__date__ = "03 Aug 2017"
 
 import sys
 import os
 import webbrowser
 import numpy as np
+import matplotlib as mpl
 from pyparsing import ParseBaseException
+import XAFSmassCalc as xc
+from __init__ import (__version__, __author__, __license__)
 
-#=this may help to resolve conflict betwen Qt4 and Qt5=========================
-# import matplotlib as mpl
+# ==this may help to resolve conflict betwen Qt4 and Qt5=======================
 # mpl.use("Qt4Agg")
-#==============================================================================
+# =============================================================================
 
 try:
     from matplotlib.backends import qt_compat
@@ -46,25 +48,26 @@ QDialog, QApplication, QLabel, QComboBox, QLineEdit, QPushButton,\
 Canvas = mpl_qt.FigureCanvasQTAgg
 ToolBar = mpl_qt.NavigationToolbar2QT
 
-from matplotlib.figure import Figure
-import matplotlib as mpl
-# Set the default color cycle
-#mpl.rcParams['axes.color_cycle'] = ['r', 'g', 'b', 'm', 'c', 'k']
-#mpl.rcParams['text.usetex'] = True
-#mpl.rcParams['text.latex.preamble'] = [
-#       r'\usepackage{siunitx}',
-# ...this to force siunitx to actually use your fonts:
-#       r'\sisetup{detect-all}',
-# set the normal font here:
-#       r'\usepackage{helvet}',
-# load up the sansmath so that math -> helvet:
-#       r'\usepackage{sansmath}',
-# <- tricky! -- gotta actually tell tex to use!:
-#       r'\sansmath'
-#]
+# ==this can make the formulas look nicer:=====================================
+mpl.rcParams['mathtext.fontset'] = 'custom'
 
-import XAFSmassCalc as xc
-from __init__ import (__version__, __author__, __license__)
+#mpl.rcParams['mathtext.rm'] = 'serif'
+#mpl.rcParams['mathtext.it'] = 'serif:italic'
+#mpl.rcParams['mathtext.bf'] = 'serif:bold'
+#mpl.rcParams['mathtext.cal'] = 'cursive'
+#mpl.rcParams['mathtext.rm'] = 'serif'
+#mpl.rcParams['mathtext.tt'] = 'monospace'
+
+mpl.rcParams['mathtext.rm'] = 'cmr10'
+mpl.rcParams['mathtext.it'] = 'cmmi10'
+mpl.rcParams['mathtext.bf'] = 'cmb10'
+mpl.rcParams['mathtext.cal'] = 'cmsy10'
+mpl.rcParams['mathtext.bf'] = 'cmtt10'
+mpl.rcParams['mathtext.bf'] = 'cmss10'
+# =============================================================================
+
+# Set the default color cycle:
+#mpl.rcParams['axes.color_cycle'] = ['r', 'g', 'b', 'm', 'c', 'k']
 
 MAC = "qt_mac_set_native_menubar" in dir()
 
@@ -76,7 +79,7 @@ formulas = (
     r"\right)^{-1}; \quad m = M\cdot\nu$",
     r"$d = (\mu_T d)\cdot M\cdot\left(\rho\sum_i{N_AN_i2r_0\lambda f_i''}"
     r"\right)^{-1}$",
-    r"$p = -\ln(1-{\rm attenuation})\cdot kT \cdot"
+    r"$p = -\ln(1-{\rm att})\cdot kT \cdot"
     r"\left(d\sum_i{N_i2r_0\lambda f_i''}\right)^{-1}$",
     r"$\Delta\mu/\mu_T = N_x\Delta f_x'' \cdot"
     r"\left(\sum_{i\ne x}{N_if_i''} + N_xf_x''\right)^{-1}$")
@@ -90,7 +93,7 @@ edges = ("K", "L1", "L2", "L3", "M1", "M2", "M3", "M4", "M5", "N1", "N2", "N3")
 
 class MyFormulaMplCanvas(Canvas):
     def __init__(self, parent=None, width=5, height=0.4):
-        fig = Figure(figsize=(width, height), dpi=96)
+        fig = mpl.figure.Figure(figsize=(width, height), dpi=96)
         self.fig = fig
         Canvas.__init__(self, fig)
         bg = self.palette().window().color()
@@ -112,10 +115,10 @@ class MyFormulaMplCanvas(Canvas):
 
 class MyMplCanvas(Canvas):
     def __init__(self, parent=None, width=6, height=5):
-        fig = Figure(figsize=(width, height))
+        fig = mpl.figure.Figure(figsize=(width, height), dpi=96)
         self.fig = fig
         self.axes = fig.add_subplot(111)
-        self.fig.subplots_adjust(left=0.13, right=0.97, bottom=0.13, top=0.97)
+        self.fig.subplots_adjust(left=0.15, right=0.97, bottom=0.15, top=0.97)
 #        self.axes.hold(False)  # clear axes every time plot() is called
         Canvas.__init__(self, fig)
         self.setParent(parent)
@@ -187,7 +190,7 @@ class MainDlg(QDialog):
         self.whatLabel.setBuddy(self.whatCB)
         self.what = 0
 
-        self.formula = MyFormulaMplCanvas(self, width=3.2, height=0.6)
+        self.formula = MyFormulaMplCanvas(self, width=3.2, height=0.5)
 
         self.compoundLabel = QLabel(r"&compound:")
         self.compoundExLabel = QLabel("")
@@ -573,7 +576,7 @@ class MainDlg(QDialog):
             iSelect = 0
             for i, (k, v) in enumerate(eDict.items()):
                 self.stepCB.addItem("{0}({1}mg={2}wt%): {3}".format(
-                    k, xc.round_to_n(v[-2], 3), xc.round_to_n(v[-2]/m*100., 3),
+                    k, xc.round_to_n(v[-2], 3), xc.round_to_n(v[-2]/m*100., 2),
                     xc.round_to_n(v[-1], 3)))
                 if v[2] > 0:
                     iSelect = i
