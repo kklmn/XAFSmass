@@ -1,6 +1,10 @@
 About XAFSmass
 --------------
 
+<p align="center">
+  <img src="doc/_images/1powder_136s.png" width="507"/>
+</p>
+
 XAFSmass is a program for calculating the mass of XAFS [X-Ray Absorption Fine Structure] samples.
 The chemical formula parser understands parentheses and weight percentage, also in nested form.
 XAFSmass reports the quantity (weight, thickness or pressure) together with the expected height
