@@ -54,7 +54,7 @@ keV) [Henke]_, Brennan & Cowan (30 eV < *E* < 509 keV) [BrCo]_ and Chantler
 (11 eV < *E* < 405 keV) [Chantler]_.
 
     .. note::
-        The tables of f2 factors consider only photoelectric
+        The tables of f'' factors consider only photoelectric
         cross-sections. The tabulation by Chantler can optionally have
         *total* absorption cross-sections. This option is enabled by selecting
         the data table 'Chantler total (NIST)'.
