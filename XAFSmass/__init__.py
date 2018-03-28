@@ -185,13 +185,12 @@ as :math:`x = (\nu_A/\nu_B)/[1+(\nu_A/\nu_B)]`.
 
 """
 __module__ = "XAFSmass"
-__versioninfo__ = (1, 3, 7)
+__versioninfo__ = (1, 3, 8)
 __version__ = '.'.join(map(str, __versioninfo__))
 __author__ = \
     "Konstantin Klementiev (MAX IV Laboratory), " +\
     "Roman Chernikov (Canadian Light Source)"
 __email__ = \
-    "konstantin.klementiev@gmail.com" +\
-    "rchernikov@gmail.com"
-__date__ = "03 Aug 2017"
+    "konstantin.klementiev@gmail.com, rchernikov@gmail.com"
+__date__ = "28 Mar 2017"
 __license__ = "MIT license"

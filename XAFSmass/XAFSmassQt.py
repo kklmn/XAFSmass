@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 __author__ = "Konstantin Klementiev, Roman Chernikov"
-__date__ = "03 Aug 2017"
+__date__ = "28 Mar 2018"
 
 import sys
 import os
@@ -96,15 +96,13 @@ class MyFormulaMplCanvas(Canvas):
         fig = mpl.figure.Figure(figsize=(width, height), dpi=96)
         self.fig = fig
         Canvas.__init__(self, fig)
-        bg = self.palette().window().color()
-        cl = (bg.redF(), bg.greenF(), bg.blueF())
-#        fig.set_edgecolor(cl)
-        fig.set_facecolor(cl)
+        fig.patch.set_visible(False)
         self.setParent(parent)
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.updateGeometry()
         fm = QtGui.QFontMetrics(self.font())
         self.fontsize = int(fm.height()) / 1.25
+        self.setStyleSheet("background-color:transparent;")
 
     def update_formula(self, formula=None):
         self.fig.clf()
