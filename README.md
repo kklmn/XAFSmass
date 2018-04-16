@@ -1,7 +1,7 @@
 XAFSmass
 ========
 
-<img src="https://zenodo.org/badge/54989911.svg" />
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.1219124.svg)](http://dx.doi.org/10.5281/zenodo.1219124)
 
 <p align="center">
   <img src="doc/_images/1powder_136s.png" width=320 />
