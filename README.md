@@ -1,6 +1,8 @@
 XAFSmass
 ========
 
+<img src="https://zenodo.org/badge/54989911.svg" />
+
 <p align="center">
   <img src="doc/_images/1powder_136s.png" width=320 />
 </p>
