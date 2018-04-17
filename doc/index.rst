@@ -6,10 +6,13 @@
 XAFSmass
 ========
 
-:Release: |version|
+:Release: |version| |DOI|
 :Date: |today|
 :Authors: Konstantin Klementiev (MAX IV Laboratory), Roman Chernikov (Canadian Light Source)
 :License: Open Source, :ref:`MIT License <license>`
+
+.. |DOI| image:: https://zenodo.org/badge/54989911.svg
+   :target: https://zenodo.org/badge/latestdoi/54989911
 
 .. automodule:: XAFSmass.__init__
 
