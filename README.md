@@ -29,3 +29,8 @@ suppress the console window.
 
 You may want to run ``python setup.py install`` in order to put the XAFSmass
 package to the standard location.
+
+Documentation
+-------------
+
+See it at http://xafsmass.readthedocs.io
