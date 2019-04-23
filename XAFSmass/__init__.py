@@ -1,7 +1,10 @@
 ﻿# -*- coding: utf-8 -*-
 r"""
+\
 
-|Screenshot|
++-------------------+--------------------+
+|   |Screenshot1|   |    |Screenshot3|   |
++-------------------+--------------------+
 
 A program for calculating the mass of XAFS [X-Ray Absorption Fine Structure]
 samples. The chemical formula parser understands parentheses and weight
@@ -9,7 +12,9 @@ percentage, also in nested form. XAFSmassQt reports the quantity (weight,
 thickness or pressure) together with the expected height of the absorption
 edge.
 
-.. |Screenshot| image:: _images/1powder_136s.png
+.. |Screenshot1| image:: _images/1powder_140.png
+   :scale: 66 %
+.. |Screenshot3| image:: _images/3gas_140.png
    :scale: 66 %
 
 Dependencies
@@ -145,6 +150,11 @@ is usually set to 50%. If the reference foil is not needed, one can select the
 total absorption (100%). For these two cases the optimal absorption of the 1st
 IC at a certain μd is found from the figures above showing the levels of
 signal-to-noise ratio.
+
+For exploring mixtures of several gases, give the gases in parentheses, e.g.
+as (Ar)(N2). The corresponding number of sliders will appear that define
+partial pressures. The program will calculate the molar weight of each gas and
+update the chemical formula and the total attenuation.
 
 Calculation of an unknown elemental concentration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

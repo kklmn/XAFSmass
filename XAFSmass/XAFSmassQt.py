@@ -4,6 +4,8 @@ __date__ = "28 Mar 2018"
 
 import sys
 import os
+import re
+from functools import partial
 import webbrowser
 import numpy as np
 import matplotlib as mpl
@@ -40,11 +42,12 @@ else:
         import matplotlib.backends.backend_qt5agg as mpl_qt
 
 QDialog, QApplication, QLabel, QComboBox, QLineEdit, QPushButton,\
-    QSizePolicy, QHBoxLayout, QVBoxLayout, QFrame, QMessageBox = \
+    QSizePolicy, QHBoxLayout, QVBoxLayout, QFrame, QMessageBox, QWidget,\
+        QSlider = \
     myQtGUI.QDialog, myQtGUI.QApplication, myQtGUI.QLabel,\
     myQtGUI.QComboBox, myQtGUI.QLineEdit, myQtGUI.QPushButton,\
     myQtGUI.QSizePolicy, myQtGUI.QHBoxLayout, myQtGUI.QVBoxLayout,\
-    myQtGUI.QFrame, myQtGUI.QMessageBox
+    myQtGUI.QFrame, myQtGUI.QMessageBox, myQtGUI.QWidget, myQtGUI.QSlider
 Canvas = mpl_qt.FigureCanvasQTAgg
 ToolBar = mpl_qt.NavigationToolbar2QT
 
@@ -67,7 +70,7 @@ mpl.rcParams['mathtext.bf'] = 'cmss10'
 # =============================================================================
 
 # Set the default color cycle:
-#mpl.rcParams['axes.color_cycle'] = ['r', 'g', 'b', 'm', 'c', 'k']
+# mpl.rcParams['axes.color_cycle'] = ['r', 'g', 'b', 'm', 'c', 'k']
 
 MAC = "qt_mac_set_native_menubar" in dir()
 
@@ -84,11 +87,18 @@ formulas = (
     r"$\Delta\mu/\mu_T = N_x\Delta f_x'' \cdot"
     r"\left(\sum_{i\ne x}{N_if_i''} + N_xf_x''\right)^{-1}$")
 examples = (
-    "Cu(NO3)2  <i>or</i>  Cu%1Zn%1((Al2O3)%10SiO2)",
-    "Cu%25Zn", "Ar0.9Kr0.1  <i>or</i>  N2", "FexSiO2")
+    "Cu(NO3)2  <i>or</i>  Cu%1Zn%1((Al2O3)%10SiO2)", "Cu%25Zn",
+    "Ar <i>or</i> N2 <i>or</i> (Ar)(N2) to explore mixtures",
+    "FexSiO2")
 tables = ("Henke", "Brennan&Cowan", "Chantler (NIST)", "Chantler total (NIST)")
 tablesF = ("Henke", "BrCo", "Chantler", "Chantler total")
 edges = ("K", "L1", "L2", "L3", "M1", "M2", "M3", "M4", "M5", "N1", "N2", "N3")
+
+gasMixerN = 5
+gasMixerPressureMin = 0
+gasMixerPressureMax = 3000
+gasMixerPressurePageStep = 50
+gasMixerPressureDefault = 1000
 
 
 class MyFormulaMplCanvas(Canvas):
@@ -319,9 +329,42 @@ class MainDlg(QDialog):
         extraLayout.addWidget(self.extraD)
         extraLayout.addStretch()
 
+        self.gasesInMixture = []
+        self.gasesInMixtureN = 0
+        if gasMixerN > 0:
+            mixerLayout = QVBoxLayout()
+            mixerLayout.setContentsMargins(0, 0, 0, 0)
+            for iGas in range(gasMixerN):
+                gasInMixture = QWidget()
+                self.gasesInMixture.append(gasInMixture)
+                gasLayout = QHBoxLayout(gasInMixture)
+                gasLayout.setContentsMargins(0, 0, 0, 0)
+
+                gasLabel = QLabel()
+
+                gasSlider = QSlider(QtCore.Qt.Horizontal)
+                gasSlider.setMinimum(gasMixerPressureMin)
+                gasSlider.setMaximum(gasMixerPressureMax)
+                gasSlider.setTickPosition(QSlider.TicksAbove)
+                gasSlider.setTickInterval(gasMixerPressurePageStep)
+                gasSlider.setPageStep(gasMixerPressurePageStep)
+                gasSlider.setValue(gasMixerPressureDefault)
+                gasSlider.valueChanged.connect(
+                    partial(self.gasSliderChanged, iGas))
+
+                gasValue = QLabel(
+                    "{0:.0f} mbar".format(gasMixerPressureDefault))
+                gasInMixture.pressure = gasMixerPressureDefault
+
+                gasLayout.addWidget(gasLabel)
+                gasLayout.addWidget(gasSlider)
+                gasLayout.addWidget(gasValue)
+                mixerLayout.addWidget(gasInMixture)
+            self.calculateGasMixture()
+
         buttonLayout = QHBoxLayout()
         buttonLayout.addStretch()
-        buttonLayout.addWidget(self.buttonCalculate)
+        buttonLayout.addWidget(self.buttonCalculate)  # 1st button gets Enter
         buttonLayout.addWidget(self.buttonAbout)
         buttonLayout.addWidget(self.buttonHelp)
         buttonLayout.addStretch()
@@ -350,6 +393,8 @@ class MainDlg(QDialog):
         layout.addLayout(resLayout)
         layout.addLayout(stepLayout)
         layout.addLayout(extraLayout)
+        if gasMixerN > 0:
+            layout.addLayout(mixerLayout)
         layout.addStretch()
         layout.addLayout(buttonLayout)
         self.setLayout(layout)
@@ -427,7 +472,77 @@ class MainDlg(QDialog):
             self.extraDLabel.hide()
             self.extraD.hide()
 
+        for gas in self.gasesInMixture:
+            gas.hide()
+
+        self.resize(0, 0)
         self.calculate()
+
+    def setupGasMixtures(self, action='parse'):
+        if action == 'clear':
+            for gas in self.gasesInMixture:
+                gas.hide()
+            return
+        if len(self.gasesInMixture) == 0:
+            return
+        compound = str(self.compoundEdit.text())
+        groups = re.findall(r'\((.*?)\)', compound)
+        self.gasesInMixtureN = len(groups)
+        if self.gasesInMixtureN == 0:
+            self.setupGasMixtures('clear')
+            return
+        for g, gas in zip(groups, self.gasesInMixture):
+            gasLabel = gas.layout().itemAt(0).widget()
+            gasLabel.setText(g)
+            gas.show()
+        for gas in self.gasesInMixture[len(groups):]:
+            gas.hide()
+
+    def gasSliderChanged(self, gasNo, value):
+        gasValue = self.gasesInMixture[gasNo].layout().itemAt(2).widget()
+        self.gasesInMixture[gasNo].pressure = value
+        gasValue.setText("{0:.0f} mbar".format(value))
+        self.calculateGasMixture()
+
+    def calculateGasMixture(self):
+        if self.gasesInMixtureN == 0:
+            return
+        try:
+            E = float(self.energyCB.lineEdit().text())
+            length = float(self.areaEdit.text())
+        except ValueError:
+            return
+        table = tablesF[self.tableCB.currentIndex()]
+        nus2 = 0.
+        sumPressure = 0.
+        for gasNo in range(self.gasesInMixtureN):
+            gasLabel = self.gasesInMixture[gasNo].layout().itemAt(0).widget()
+            compound = str(gasLabel.text())
+            parsedCompound = xc.formula.parseString(compound, parseAll=True)
+            formulaList = parsedCompound.asList()
+            if isinstance(formulaList[0], dict):
+                sumSigma2 = formulaList[1]
+            else:
+                res = xc.calculate_element_dict(formulaList, E, table=table)
+                if isinstance(res, str):
+                    return res
+                sumSigma2 = res[1]
+            nu = self.gasesInMixture[gasNo].pressure / (xc.R*xc.T)*length*1e-4
+            nus2 += nu * sumSigma2
+            sumPressure += self.gasesInMixture[gasNo].pressure
+        attenuation = 1 - np.exp(-nus2)
+        self.muTdEdit.setText("{0:.3f}".format(attenuation))
+        self.resMass.setText("<b>{0:.0f}</b>".format(sumPressure))
+        compound = ""
+        for gasNo in range(self.gasesInMixtureN):
+            gasLabel = self.gasesInMixture[gasNo].layout().itemAt(0).widget()
+            normPressure = self.gasesInMixture[gasNo].pressure/sumPressure
+            if abs(normPressure - 1) < 1e-3:
+                textNormPressure = ''
+            else:
+                textNormPressure = xc.round_to_n(normPressure, 3)
+            compound += "({0}){1}".format(gasLabel.text(), textNormPressure)
+        self.compoundEdit.setText(compound)
 
     def read_energies(self):
         selfDir = os.path.dirname(__file__)
@@ -505,7 +620,11 @@ class MainDlg(QDialog):
 
     def calculate(self):
         if not self.parse_compound():
+            if self.what == GAS:
+                self.setupGasMixtures('clear')
             return
+        if self.what == GAS:
+            self.setupGasMixtures()
         try:
             E = float(self.energyCB.lineEdit().text())
         except ValueError:

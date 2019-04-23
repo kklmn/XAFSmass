@@ -108,7 +108,7 @@ def round_to_n(x, n=3):
         res = round(x, -int(floor(log10(x))) + n-1) if \
             isinstance(x, (float, np.float32, np.float64)) else x
 #        res = round(x, -int(floor(log10(x))) + n-1)
-    except ValueError:
+    except (ValueError, OverflowError):
         pass
     return res
 
