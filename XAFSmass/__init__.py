@@ -188,8 +188,8 @@ compound if you have the experimental edge heights at two edges. The absorption
 step Δμd at an absorption edge of energy E is proportional to Δf''ν/E, where ν
 is the amount of (resonantly) absorbing atoms in mole. Hence, the atomic ratio
 of two elements in the same sample is
-:math:`\nu_A/\nu_B = (\Delta\mu d)_A/(\Delta\mu d)_B\cdot[\Delta f_A''
-/\Delta f_B'' \cdot E_A/E_B]`. For binary compounds
+:math:`\nu_A/\nu_B = (\Delta\mu d)_A/(\Delta\mu d)_B\cdot[\Delta f_B''
+/\Delta f_A'' \cdot E_A/E_B]`. For binary compounds
 :math:`{\rm A}_x{\rm B}_{1-x}` the concentration :math:`x` is calculated then
 as :math:`x = (\nu_A/\nu_B)/[1+(\nu_A/\nu_B)]`.
 
@@ -202,5 +202,5 @@ __author__ = \
     "Roman Chernikov (Canadian Light Source)"
 __email__ = \
     "konstantin.klementiev@gmail.com, rchernikov@gmail.com"
-__date__ = "18 Mar 2019"
+__date__ = "09 Jul 2019"
 __license__ = "MIT license"
