@@ -4,7 +4,7 @@ XAFSmass
 [![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.1219124.svg)](http://dx.doi.org/10.5281/zenodo.1219124)
 
 <p align="center">
-  <img src="doc/_images/1powder_140s.png" width=320 />
+  <img src="doc/_images/1powder_140.png" width=320 />
 </p>
 
 XAFSmass is a program for calculating the mass of XAFS [X-Ray Absorption Fine Structure] samples.
