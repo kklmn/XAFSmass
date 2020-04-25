@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>XAFSmass &#8212; XAFSmassQt 1.4.0 documentation</title>
+    <meta charset="utf-8" />
+    <title>XAFSmass &#8212; XAFSmassQt 1.4.1 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
     <link rel="shortcut icon" href="_static/XAFSmassQt.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -27,7 +28,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">XAFSmassQt 1.4.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">XAFSmassQt 1.4.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -38,29 +39,29 @@
             
   <div class="section" id="xafsmass">
 <h1>XAFSmass<a class="headerlink" href="#xafsmass" title="Permalink to this headline">¶</a></h1>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">1.4.0 <a class="reference external" href="https://zenodo.org/badge/latestdoi/54989911"><img alt="DOI" src="https://zenodo.org/badge/54989911.svg" /></a></td>
-</tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">Jul 09, 2019</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Authors:</th><td class="field-body">Konstantin Klementiev (MAX IV Laboratory), Roman Chernikov (Canadian Light Source)</td>
-</tr>
-<tr class="field-even field"><th class="field-name">License:</th><td class="field-body">Open Source, <a class="reference internal" href="license.html#license"><span class="std std-ref">MIT License</span></a></td>
-</tr>
-</tbody>
-</table>
+<dl class="field-list simple">
+<dt class="field-odd">Release</dt>
+<dd class="field-odd"><p>1.4.1 <a class="reference external" href="https://zenodo.org/badge/latestdoi/54989911"><img alt="DOI" src="https://zenodo.org/badge/54989911.svg" /></a></p>
+</dd>
+<dt class="field-even">Date</dt>
+<dd class="field-even"><p>Apr 25, 2020</p>
+</dd>
+<dt class="field-odd">Authors</dt>
+<dd class="field-odd"><p>Konstantin Klementiev (MAX IV Laboratory), Roman Chernikov (Canadian Light Source)</p>
+</dd>
+<dt class="field-even">License</dt>
+<dd class="field-even"><p>Open Source, <a class="reference internal" href="license.html#license"><span class="std std-ref">MIT License</span></a></p>
+</dd>
+</dl>
 <span class="target" id="module-XAFSmass.__init__"></span><p></p>
-<table border="1" class="docutils">
+<table class="docutils align-default">
 <colgroup>
-<col width="49%" />
-<col width="51%" />
+<col style="width: 49%" />
+<col style="width: 51%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="_images/1powder_140.png"><img alt="Screenshot1" src="_images/1powder_140.png" style="width: 247.5px; height: 307.56px;" /></a></td>
-<td><a class="reference internal" href="_images/3gas_140.png"><img alt="Screenshot3" src="_images/3gas_140.png" style="width: 247.5px; height: 314.16px;" /></a></td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_images/1powder_140.png"><img alt="Screenshot1" src="_images/1powder_140.png" style="width: 247.5px; height: 307.56px;" /></a></p></td>
+<td><p><a class="reference internal" href="_images/3gas_140.png"><img alt="Screenshot3" src="_images/3gas_140.png" style="width: 247.5px; height: 314.16px;" /></a></p></td>
 </tr>
 </tbody>
 </table>
@@ -99,48 +100,41 @@ doi:10.1088/1742-6596/712/1/012008</a>.</p>
 <div class="section" id="theoretical-references-used">
 <h2>Theoretical references used<a class="headerlink" href="#theoretical-references-used" title="Permalink to this headline">¶</a></h2>
 <p>The tabulated scattering factors are taken from Henke et al. (10 eV &lt; <em>E</em> &lt; 30
-keV) <a class="reference internal" href="#henke" id="id1">[Henke]</a>, Brennan &amp; Cowan (30 eV &lt; <em>E</em> &lt; 509 keV) <a class="reference internal" href="#brco" id="id2">[BrCo]</a> and Chantler
-(11 eV &lt; <em>E</em> &lt; 405 keV) <a class="reference internal" href="#chantler" id="id3">[Chantler]</a>.</p>
+keV) <a class="reference internal" href="#henke" id="id1"><span>[Henke]</span></a>, Brennan &amp; Cowan (30 eV &lt; <em>E</em> &lt; 509 keV) <a class="reference internal" href="#brco" id="id2"><span>[BrCo]</span></a> and Chantler
+(11 eV &lt; <em>E</em> &lt; 405 keV) <a class="reference internal" href="#chantler" id="id3"><span>[Chantler]</span></a>.</p>
 <blockquote>
 <div><div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The tables of f’’ factors consider only photoelectric
+<p class="admonition-title">Note</p>
+<p>The tables of f’’ factors consider only photoelectric
 cross-sections. The tabulation by Chantler can optionally have
 <em>total</em> absorption cross-sections. This option is enabled by selecting
 the data table ‘Chantler total (NIST)’.</p>
 </div>
 </div></blockquote>
-<table class="docutils citation" frame="void" id="henke" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[Henke]</a></td><td><a class="reference external" href="http://henke.lbl.gov/optical_constants/asf.html">http://henke.lbl.gov/optical_constants/asf.html</a>
+<dl class="citation">
+<dt class="label" id="henke"><span class="brackets"><a class="fn-backref" href="#id1">Henke</a></span></dt>
+<dd><p><a class="reference external" href="http://henke.lbl.gov/optical_constants/asf.html">http://henke.lbl.gov/optical_constants/asf.html</a>
 B.L. Henke, E.M. Gullikson, and J.C. Davis, <em>X-ray interactions:
 photoabsorption, scattering, transmission, and reflection at
 E=50-30000 eV, Z=1-92</em>, Atomic Data and Nuclear Data Tables
-<strong>54</strong> (no.2) (1993) 181-342.</td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="brco" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[BrCo]</a></td><td><a class="reference external" href="http://www.bmsc.washington.edu/scatter/periodic-table.html">http://www.bmsc.washington.edu/scatter/periodic-table.html</a>
+<strong>54</strong> (no.2) (1993) 181-342.</p>
+</dd>
+<dt class="label" id="brco"><span class="brackets"><a class="fn-backref" href="#id2">BrCo</a></span></dt>
+<dd><p><a class="reference external" href="http://www.bmsc.washington.edu/scatter/periodic-table.html">http://www.bmsc.washington.edu/scatter/periodic-table.html</a>
 <a class="reference external" href="ftp://ftpa.aps.anl.gov/pub/cross-section_codes/">ftp://ftpa.aps.anl.gov/pub/cross-section_codes/</a>
 S. Brennan and P.L. Cowan, <em>A suite of programs for calculating
 x-ray absorption, reflection and diffraction performance for a
 variety of materials at arbitrary wavelengths</em>, Rev. Sci. Instrum.
-<strong>63</strong> (1992) 850-853.</td></tr>
-</tbody>
-</table>
-<table class="docutils citation" frame="void" id="chantler" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id3">[Chantler]</a></td><td><a class="reference external" href="http://physics.nist.gov/PhysRefData/FFast/Text/cover.html">http://physics.nist.gov/PhysRefData/FFast/Text/cover.html</a>
+<strong>63</strong> (1992) 850-853.</p>
+</dd>
+<dt class="label" id="chantler"><span class="brackets"><a class="fn-backref" href="#id3">Chantler</a></span></dt>
+<dd><p><a class="reference external" href="http://physics.nist.gov/PhysRefData/FFast/Text/cover.html">http://physics.nist.gov/PhysRefData/FFast/Text/cover.html</a>
 <a class="reference external" href="http://physics.nist.gov/PhysRefData/FFast/html/form.html">http://physics.nist.gov/PhysRefData/FFast/html/form.html</a>
 C. T. Chantler, <em>Theoretical Form Factor, Attenuation, and
 Scattering Tabulation for Z = 1 - 92 from E = 1 - 10 eV to E = 0.4 -
-1.0 MeV</em>, J. Phys. Chem. Ref. Data <strong>24</strong> (1995) 71-643.</td></tr>
-</tbody>
-</table>
+1.0 MeV</em>, J. Phys. Chem. Ref. Data <strong>24</strong> (1995) 71-643.</p>
+</dd>
+</dl>
 </div>
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
@@ -158,8 +152,8 @@ of interest.</p>
 <div class="section" id="calculation-of-mass-and-absorption-step-for-powder-samples">
 <h3>Calculation of mass and absorption step for powder samples<a class="headerlink" href="#calculation-of-mass-and-absorption-step-for-powder-samples" title="Permalink to this headline">¶</a></h3>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">You typically do not need the calculated values at exactly the edge
+<p class="admonition-title">Note</p>
+<p>You typically do not need the calculated values at exactly the edge
 position but rather at an energy somewhere above it. The list of edges
 offers the edge positions plus 50 eV. You are free to specify any energy
 within the range of the selected tabulation.</p>
@@ -189,8 +183,8 @@ ignore large step jumps and pay attention to the total μd only.</p>
 <div class="section" id="calculation-of-gas-pressure-for-ionization-chambers">
 <h3>Calculation of gas pressure for ionization chambers<a class="headerlink" href="#calculation-of-gas-pressure-for-ionization-chambers" title="Permalink to this headline">¶</a></h3>
 <div class="admonition caution">
-<p class="first admonition-title">Caution</p>
-<p class="last">For nitrogen, do not forget the 2: N2, not just N!</p>
+<p class="admonition-title">Caution</p>
+<p>For nitrogen, do not forget the 2: N2, not just N!</p>
 </div>
 <p>Start with the 2nd ionization chamber (IC). If a reference foil is placed
 between the 2nd and the 3rd IC, the fraction of x-rays absorbed by the 2nd IC
@@ -223,16 +217,16 @@ the total mass to get the weight percentage.</p>
 </div>
 </div>
 <div class="section" id="finding-the-scattering-factors-f">
-<h3>Finding the scattering factors f’‘<a class="headerlink" href="#finding-the-scattering-factors-f" title="Permalink to this headline">¶</a></h3>
+<h3>Finding the scattering factors f’’<a class="headerlink" href="#finding-the-scattering-factors-f" title="Permalink to this headline">¶</a></h3>
 <p>If you need to know the scattering factor f’’ at different energies and/or its
-jump at an edge (Δf’‘), XAFSmass provides a graphical tool for this.</p>
+jump at an edge (Δf’’), XAFSmass provides a graphical tool for this.</p>
 <p>For example, you may need these values to determine the composition of a binary
 compound if you have the experimental edge heights at two edges. The absorption
-step Δμd at an absorption edge of energy E is proportional to Δf’‘ν/E, where ν
+step Δμd at an absorption edge of energy E is proportional to Δf’’ν/E, where ν
 is the amount of (resonantly) absorbing atoms in mole. Hence, the atomic ratio
 of two elements in the same sample is
-<span class="math notranslate nohighlight">\(\nu_A/\nu_B = (\Delta\mu d)_A/(\Delta\mu d)_B\cdot[\Delta f_B''
-/\Delta f_A'' \cdot E_A/E_B]\)</span>. For binary compounds
+<span class="math notranslate nohighlight">\(\nu_A/\nu_B = (\Delta\mu d)_A/(\Delta\mu d)_B\cdot[\Delta f_A''
+/\Delta f_B'' \cdot E_A/E_B]\)</span>. For binary compounds
 <span class="math notranslate nohighlight">\({\rm A}_x{\rm B}_{1-x}\)</span> the concentration <span class="math notranslate nohighlight">\(x\)</span> is calculated then
 as <span class="math notranslate nohighlight">\(x = (\nu_A/\nu_B)/[1+(\nu_A/\nu_B)]\)</span>.</p>
 </div>
@@ -248,7 +242,7 @@ as <span class="math notranslate nohighlight">\(x = (\nu_A/\nu_B)/[1+(\nu_A/\nu_
             <p class="logo"><a href="#">
               <img class="logo" src="_static/XAFSmassQt.ico" alt="Logo"/>
             </a></p>
-  <h3><a href="#">Table Of Contents</a></h3>
+  <h3><a href="#">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">XAFSmass</a><ul>
 <li><a class="reference internal" href="#dependencies">Dependencies</a></li>
@@ -266,7 +260,7 @@ as <span class="math notranslate nohighlight">\(x = (\nu_A/\nu_B)/[1+(\nu_A/\nu_
 <li><a class="reference internal" href="#case-2-you-know-the-sample-mass-and-area">Case 2: <em>You know the sample mass and area</em></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#finding-the-scattering-factors-f">Finding the scattering factors f’‘</a></li>
+<li><a class="reference internal" href="#finding-the-scattering-factors-f">Finding the scattering factors f’’</a></li>
 </ul>
 </li>
 </ul>
@@ -281,13 +275,11 @@ as <span class="math notranslate nohighlight">\(x = (\nu_A/\nu_B)/[1+(\nu_A/\nu_
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -305,12 +297,12 @@ as <span class="math notranslate nohighlight">\(x = (\nu_A/\nu_B)/[1+(\nu_A/\nu_
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">XAFSmassQt 1.4.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">XAFSmassQt 1.4.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2015, Konstantin Klementiev, Roman Chernikov.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>
