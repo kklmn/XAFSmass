@@ -9,6 +9,7 @@ from functools import partial
 import webbrowser
 import numpy as np
 import matplotlib as mpl
+from matplotlib.figure import Figure
 from pyparsing import ParseBaseException
 import XAFSmassCalc as xc
 from __init__ import (__version__, __author__, __license__)
@@ -103,7 +104,7 @@ gasMixerPressureDefault = 1000
 
 class MyFormulaMplCanvas(Canvas):
     def __init__(self, parent=None, width=5, height=0.4):
-        fig = mpl.figure.Figure(figsize=(width, height), dpi=96)
+        fig = Figure(figsize=(width, height), dpi=96)
         self.fig = fig
         Canvas.__init__(self, fig)
         fig.patch.set_visible(False)
@@ -123,7 +124,7 @@ class MyFormulaMplCanvas(Canvas):
 
 class MyMplCanvas(Canvas):
     def __init__(self, parent=None, width=6, height=5):
-        fig = mpl.figure.Figure(figsize=(width, height), dpi=96)
+        fig = Figure(figsize=(width, height), dpi=96)
         self.fig = fig
         self.axes = fig.add_subplot(111)
         self.fig.subplots_adjust(left=0.15, right=0.97, bottom=0.15, top=0.97)
