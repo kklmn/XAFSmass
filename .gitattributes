@@ -16,4 +16,4 @@
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
 
-doc/* linguist-vendored
+XAFSmass/help/* linguist-vendored
