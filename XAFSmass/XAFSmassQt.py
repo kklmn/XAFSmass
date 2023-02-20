@@ -23,7 +23,7 @@ try:
 except ImportError:
     from matplotlib.backends import qt4_compat
     qt_compat = qt4_compat
-use_pyside = qt_compat.QT_API == qt_compat.QT_API_PYSIDE
+use_pyside = qt_compat.QT_API.startswith("PySide")
 if use_pyside:
     QtName = "PySide"
     import PySide
@@ -112,7 +112,7 @@ class MyFormulaMplCanvas(Canvas):
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.updateGeometry()
         fm = QtGui.QFontMetrics(self.font())
-        self.fontsize = int(fm.height()) / 1.25
+        self.fontsize = int(fm.height()) / 1.33
         self.setStyleSheet("background-color:transparent;")
 
     def update_formula(self, formula=None):
@@ -133,7 +133,7 @@ class MyMplCanvas(Canvas):
         self.setParent(parent)
         self.updateGeometry()
         fm = QtGui.QFontMetrics(self.font())
-        self.fontsize = int(fm.height()) / 1.25
+        self.fontsize = int(fm.height()) / 1.33
 
     def plot(self, compound, E, table):
         self.axes.cla()
@@ -176,7 +176,7 @@ class PlotDlg(QDialog):
         pg = parent.frameGeometry()
         self.move(parent.x()+pg.width(), parent.y())
         pg = parent.geometry()
-        self.resize(pg.width()*1.5, pg.height())
+        self.resize(int(pg.width()*1.5), int(pg.height()))
         self.setWindowTitle("plots of f''")
         self.setWindowFlags(QtCore.Qt.Window)
         self.show()

@@ -110,13 +110,13 @@ Calculation of mass and absorption step for powder samples
     offers the edge positions plus 50 eV. You are free to specify any energy
     within the range of the selected tabulation.
 
-A typical application is the calculation of the mass for a powder sample. The
-optimal *optical* sample thickness μd depends on the absorption levels selected
-for the ionization chambers (see below). Typically, μd is between 2 and 3 (e.g.
-for a 17.4% absorption level for the 1st chamber and a 50% level for the 2nd
-chamber, the optimal thickness is 2.42). However, if you get the absorption
-step more that 1.5 (reported by the drop-down list "absorptance step = "), it
-is recommended to reduce the sample mass to avoid the potential thickness
+The most typical application is the calculation of the mass of a powder sample.
+The optimal *optical* sample thickness μd depends on the absorption levels
+selected for the ionization chambers (see below). Typically, μd is between 2
+and 3 (e.g. for a 17.4% absorption level for the 1st chamber and a 50% level
+for the 2nd chamber, the optimal thickness is 2.42). However, if you get the
+absorption step > 1.5 (reported by the drop-down list "absorptance step = "),
+it is recommended to reduce the sample mass to avoid the potential thickness
 effect due to possible inhomogeneity in the wafer. If your sample is diluted
 and you get a very low absorption step, do not try to make the wafer thicker
 hoping that you will get better spectra -- you will not: the optimal thickness
@@ -195,12 +195,12 @@ as :math:`x = (\nu_A/\nu_B)/[1+(\nu_A/\nu_B)]`.
 
 """
 __module__ = "XAFSmass"
-__versioninfo__ = (1, 3, 9)
+__versioninfo__ = (1, 4, 2)
 __version__ = '.'.join(map(str, __versioninfo__))
 __author__ = \
     "Konstantin Klementiev (MAX IV Laboratory), " +\
     "Roman Chernikov (Canadian Light Source)"
 __email__ = \
     "konstantin.klementiev@gmail.com, rchernikov@gmail.com"
-__date__ = "09 Jul 2019"
+__date__ = "20 Feb 2023"
 __license__ = "MIT license"

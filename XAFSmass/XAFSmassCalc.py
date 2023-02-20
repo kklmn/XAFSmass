@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 __author__ = "Konstantin Klementiev, Roman Chernikov"
-__date__ = "17 Aug 2015"
+__date__ = "20 Feb 2023"
 
 from math import log10, floor
 import itertools
@@ -84,9 +84,9 @@ def sum_by_element(tokens):
         dopewtPercentsSum = sum(dopewtPercents)
         for dg, m, wt in zip(dopeGroups, dopeUnitMasses, dopewtPercents):
             if wt > 0:  # without 'x' or 'y'
-#            Ni%1Rh%1((SiO2)%10Al2O3)
-#            Ni%1Rh%1(Al2O3)
-#            (Si0.8Er0.2O2)%10Al2O3
+                # Ni%1Rh%1((SiO2)%10Al2O3)
+                # Ni%1Rh%1(Al2O3)
+                # (Si0.8Er0.2O2)%10Al2O3
                 dopeMass = matrixMass * wt / (100. - dopewtPercentsSum)
                 for e in dopes:
                     if e[1] == dg:
@@ -133,9 +133,12 @@ def _simple_line(x1, x2, y1, y2):
 
 
 def find_edge_step(E, element):
-    mask = np.abs(E - element.E) < 250  # eV
-    f2 = element.f2[mask]
-    ef2 = element.E[mask]
+    lenArr, dE = 0, 10
+    while lenArr < 2:
+        mask = np.abs(E - element.E) < (250 + dE)  # eV
+        f2 = element.f2[mask]
+        ef2 = element.E[mask]
+        lenArr = len(ef2)
     df2 = np.diff(f2)
     dSigma2 = 0
     f2jump = 0
@@ -148,7 +151,8 @@ def find_edge_step(E, element):
         ef2jump = ef2[iEdge+1]
         dSigma2 = f2jump * crossSection / ef2jump
         sigma2x = f2[iEdge+1] * crossSection / ef2jump
-    except IndexError:
+    except IndexError as e:
+        print(e)
         pass
     return dSigma2, f2jump, sigma2x
 
@@ -206,7 +210,7 @@ def calculate_powder(formulaList, E, muTd, area=None, rho=None,
         el.append(muTd / sumSigma2 * el[2] * el[3])  # jump
 
     if area:
-            return nu*1e3, mass, thickness, elementsDict
+        return nu*1e3, mass, thickness, elementsDict
     else:
         return thickness, elementsDict
 
@@ -256,7 +260,7 @@ def calculate_x(formulaList, E, muTd, Deltamud, deltamud=None,
 
 
 def test_formula():
-    tests = """\
+    tests = """
         H
         NaCl
         HO
