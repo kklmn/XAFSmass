@@ -134,7 +134,7 @@ def _simple_line(x1, x2, y1, y2):
 
 def find_edge_step(E, element):
     lenArr, dE = 0, 10
-    while lenArr < 2:
+    while lenArr < 3:
         mask = np.abs(E - element.E) < (250 + dE)  # eV
         f2 = element.f2[mask]
         ef2 = element.E[mask]
