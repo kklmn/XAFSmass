@@ -13,17 +13,18 @@ by either PyQt4, PyQt5 or PySide.
 
 setup(
     name='XAFSmass',
-    version='1.4.2',
+    version='1.4.4',
     description='A program for calculating the mass of XAFS samples. '
                 'For synchrotron users.',
     long_description=long_description,
+    long_description_content_type='text/x-rst',
     author='Konstantin Klementiev, Roman Chernikov',
     author_email='konstantin.klementiev@gmail.com, rchernikov@gmail.com',
     url='http://xafsmass.readthedocs.io',
     platforms='OS Independent',
     license='MIT License',
     keywords='',
-    zip_safe=True,
+    zip_safe=False,
     packages=['XAFSmass'],
     package_data={'XAFSmass': ['data/*.*', 'help/*.*', 'help/_images/*.*',
                                'help/_images/math/*.*', 'help/_sources/*.*',

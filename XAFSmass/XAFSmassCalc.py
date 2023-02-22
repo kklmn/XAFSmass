@@ -8,8 +8,8 @@ from collections import defaultdict, OrderedDict
 import numpy as np
 from pyparsing import (Suppress, Word, nums, Forward, Group,
                        Optional, OneOrMore, oneOf, ParseResults)
-import materials_simple as rm
-from materials_simple import read_atomic_data
+from . import materials_simple as rm
+from .materials_simple import read_atomic_data
 
 crossSection = 4.208e7  # 2*r_0*c*h*N_A [eV*cm^2/mol]
 R = 8.314510  # J/K/mol={m^3Pa/K/mol}
@@ -133,12 +133,17 @@ def _simple_line(x1, x2, y1, y2):
 
 
 def find_edge_step(E, element):
-    lenArr, dE = 0, 10
+    lenArr, dE, backStep, maxStep = 0, 10, 250, 100
+    step = 0
     while lenArr < 3:
-        mask = np.abs(E - element.E) < (250 + dE)  # eV
+        mask = np.abs(E - element.E) < backStep
         f2 = element.f2[mask]
         ef2 = element.E[mask]
+        backStep += dE  # eV
         lenArr = len(ef2)
+        step += 1
+        if step > maxStep:
+            break
     df2 = np.diff(f2)
     dSigma2 = 0
     f2jump = 0
@@ -151,8 +156,8 @@ def find_edge_step(E, element):
         ef2jump = ef2[iEdge+1]
         dSigma2 = f2jump * crossSection / ef2jump
         sigma2x = f2[iEdge+1] * crossSection / ef2jump
-    except IndexError as e:
-        print(e)
+    except IndexError:
+        # print(e)
         pass
     return dSigma2, f2jump, sigma2x
 

@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 __author__ = "Konstantin Klementiev, Roman Chernikov"
-__date__ = "28 Mar 2018"
+__date__ = "22 Feb 2023"
 
 import sys
 import os
@@ -11,8 +11,9 @@ import numpy as np
 import matplotlib as mpl
 from matplotlib.figure import Figure
 from pyparsing import ParseBaseException
-import XAFSmassCalc as xc
-from __init__ import (__version__, __author__, __license__)
+sys.path.append(os.path.join('..'))  # analysis:ignore
+from XAFSmass import XAFSmassCalc as xc
+from XAFSmass.__init__ import (__version__, __author__, __license__)
 
 # ==this may help to resolve conflict betwen Qt4 and Qt5=======================
 # mpl.use("Qt4Agg")
