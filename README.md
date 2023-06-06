@@ -7,7 +7,7 @@ XAFSmass
   <img src="doc/_images/1powder_140.png" width=320 />
 </p>
 
-XAFSmass is a python program for calculating the mass of XAFS [X-Ray Absorption Fine Structure] samples.
+XAFSmass is a python program for calculating the mass of XAFS [X-ray Absorption Fine Structure] samples.
 The chemical formula parser understands parentheses and weight percentage, also in nested form.
 XAFSmass reports the quantity (weight, thickness or pressure) together with the expected height
 of the absorption edge. The GUI is provided by Qt.

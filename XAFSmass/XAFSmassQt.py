@@ -45,11 +45,12 @@ else:
 
 QDialog, QApplication, QLabel, QComboBox, QLineEdit, QPushButton,\
     QSizePolicy, QHBoxLayout, QVBoxLayout, QFrame, QMessageBox, QWidget,\
-        QSlider = \
+    QSlider, QPixmap = \
     myQtGUI.QDialog, myQtGUI.QApplication, myQtGUI.QLabel,\
     myQtGUI.QComboBox, myQtGUI.QLineEdit, myQtGUI.QPushButton,\
     myQtGUI.QSizePolicy, myQtGUI.QHBoxLayout, myQtGUI.QVBoxLayout,\
-    myQtGUI.QFrame, myQtGUI.QMessageBox, myQtGUI.QWidget, myQtGUI.QSlider
+    myQtGUI.QFrame, myQtGUI.QMessageBox, myQtGUI.QWidget, myQtGUI.QSlider,\
+    QtGui.QPixmap
 Canvas = mpl_qt.FigureCanvasQTAgg
 ToolBar = mpl_qt.NavigationToolbar2QT
 
@@ -80,12 +81,12 @@ POWDER, FOIL, GAS, XCONTENT = range(4)
 whats = ('powder', 'foil, film, glass etc.', 'gas',
          'has unknown concentration')
 formulas = (
-    r"$\nu = (\mu_T d)\cdot S\cdot\left(\sum_i{N_AN_i2r_0\lambda f_i''}"
+    r"$\nu = (\mu_T d)\cdot S\cdot\left(N_A 2r_0 \lambda \sum_i{N_i f_i''}"
     r"\right)^{-1}; \quad m = M\cdot\nu$",
-    r"$d = (\mu_T d)\cdot M\cdot\left(\rho\sum_i{N_AN_i2r_0\lambda f_i''}"
+    r"$d = (\mu_T d)\cdot M\cdot\left(\rho N_A 2r_0 \lambda \sum_i{N_i f_i''}"
     r"\right)^{-1}$",
     r"$p = -\ln(1-{\rm att})\cdot kT \cdot"
-    r"\left(d\sum_i{N_i2r_0\lambda f_i''}\right)^{-1}$",
+    r"\left(d 2r_0 \lambda \sum_i{N_i f_i''}\right)^{-1}$",
     r"$\Delta\mu/\mu_T = N_x\Delta f_x'' \cdot"
     r"\left(\sum_{i\ne x}{N_if_i''} + N_xf_x''\right)^{-1}$")
 examples = (
@@ -741,15 +742,34 @@ class MainDlg(QDialog):
             self.resMass.setText(u"<b>{0}</b>".format(outStr))
 
     def about(self):
+        # https://stackoverflow.com/a/69325836/2696065
+        def isWin11():
+            return True if sys.getwindowsversion().build > 22000 else False
+
         import platform
+        locos = platform.platform(terse=True)
+        if 'Linux' in locos:
+            try:
+                locos = " ".join(platform.linux_distribution())
+            except AttributeError:  # no platform.linux_distribution in py3.8
+                try:
+                    import distro
+                    locos = " ".join(distro.linux_distribution())
+                except ImportError:
+                    print("do 'pip install distro' for a better view of Linux"
+                          " distro string")
+        elif 'Windows' in locos:
+            if isWin11:
+                locos = 'Winows 11'
+
         if use_pyside:
             Qt_version = QtCore.__version__
             PyQt_version = PySide.__version__
         else:
             Qt_version = QtCore.QT_VERSION_STR
             PyQt_version = QtCore.PYQT_VERSION_STR
-        QMessageBox.about(
-            self, "About XAFSmassQt",
+        title = "About XAFSmassQt"
+        txt = \
             """<b>XAFSmass(Qt)</b> v {0}
             <ul>
             <li>{1[0]}
@@ -764,8 +784,17 @@ class MainDlg(QDialog):
             <li>{6} {7}
             </ul>""".format(
                 __version__, __author__.split(','), __license__,
-                platform.platform(terse=True), platform.python_version(),
-                Qt_version, QtName, PyQt_version))
+                locos, platform.python_version(),
+                Qt_version, QtName, PyQt_version)
+
+        msg = QMessageBox()
+        msg.setStyleSheet("#qt_msgbox_label{min-width: 400px;}")
+        msg.setWindowIcon(self.windowIcon())
+        msg.setIconPixmap(QPixmap(os.path.join(
+             'help', '_static', 'XAFSmassQt.ico')))
+        msg.setText(txt)
+        msg.setWindowTitle(title)
+        msg.exec_()
 
     def myhelp(self):
         hname = os.path.join(os.path.dirname(__file__), 'help', 'index.html')

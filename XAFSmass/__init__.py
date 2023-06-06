@@ -6,7 +6,7 @@ r"""
 |   |Screenshot1|   |    |Screenshot3|   |
 +-------------------+--------------------+
 
-A program for calculating the mass of XAFS [X-Ray Absorption Fine Structure]
+A program for calculating the mass of XAFS [X-ray Absorption Fine Structure]
 samples. The chemical formula parser understands parentheses and weight
 percentage, also in nested form. XAFSmassQt reports the quantity (weight,
 thickness or pressure) together with the expected height of the absorption
@@ -120,8 +120,8 @@ it is recommended to reduce the sample mass to avoid the potential thickness
 effect due to possible inhomogeneity in the wafer. If your sample is diluted
 and you get a very low absorption step, do not try to make the wafer thicker
 hoping that you will get better spectra -- you will not: the optimal thickness
-gets *the best* signal-to-noise ratio (it is in this sense the optimal). You
-can only try to measure your absorption spectra with another registration
+gives *the best* signal-to-noise ratio (it is in this sense optimal). You can
+only try to measure your absorption spectra with another registration
 technique: in fluorescence or electron yield modes.
 
 .. image:: _images/SNtransm050.png
@@ -190,17 +190,17 @@ is the amount of (resonantly) absorbing atoms in mole. Hence, the atomic ratio
 of two elements in the same sample is
 :math:`\nu_A/\nu_B = (\Delta\mu d)_A/(\Delta\mu d)_B\cdot[\Delta f_B''
 /\Delta f_A'' \cdot E_A/E_B]`. For binary compounds
-:math:`{\rm A}_x{\rm B}_{1-x}` the concentration :math:`x` is calculated then
-as :math:`x = (\nu_A/\nu_B)/[1+(\nu_A/\nu_B)]`.
+:math:`{\rm A}_x{\rm B}_{1-x}` the concentration :math:`x` is calculated as
+:math:`x = (\nu_A/\nu_B)/[1+(\nu_A/\nu_B)]`.
 
 """
 __module__ = "XAFSmass"
-__versioninfo__ = (1, 4, 4)
+__versioninfo__ = (1, 4, 5)
 __version__ = '.'.join(map(str, __versioninfo__))
 __author__ = \
     "Konstantin Klementiev (MAX IV Laboratory), " +\
     "Roman Chernikov (Canadian Light Source)"
 __email__ = \
     "konstantin.klementiev@gmail.com, rchernikov@gmail.com"
-__date__ = "22 Feb 2023"
+__date__ = "6 Jun 2023"
 __license__ = "MIT license"

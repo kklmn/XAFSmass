@@ -1,7 +1,7 @@
 from distutils.core import setup
 
 long_description = r"""
-A program for calculating the mass of XAFS [X-Ray Absorption Fine Structure]
+A program for calculating the mass of XAFS [X-ray Absorption Fine Structure]
 samples. The chemical formula parser understands parentheses and weight
 percentage, also in nested form. XAFSmass reports the quantity (weight,
 thickness or pressure) together with the expected height of the absorption
@@ -13,7 +13,7 @@ by either PyQt4, PyQt5 or PySide.
 
 setup(
     name='XAFSmass',
-    version='1.4.4',
+    version='1.4.5',
     description='A program for calculating the mass of XAFS samples. '
                 'For synchrotron users.',
     long_description=long_description,
@@ -30,7 +30,7 @@ setup(
                                'help/_images/math/*.*', 'help/_sources/*.*',
                                'help/_static/*.*']},
     scripts=['XAFSmass/XAFSmassQt.py'],
-    install_requires=['numpy>=1.8.0', 'matplotlib>=2.0.0'],
+    install_requires=['numpy>=1.8.0', 'matplotlib>=2.0.0', 'distro'],
     classifiers=['Development Status :: 5 - Production/Stable',
                  'Intended Audience :: Science/Research',
                  'Natural Language :: English',
