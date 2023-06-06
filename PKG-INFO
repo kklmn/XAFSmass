@@ -1,0 +1,30 @@
+Metadata-Version: 2.1
+Name: XAFSmass
+Version: 1.4.5
+Summary: A program for calculating the mass of XAFS samples. For synchrotron users.
+Home-page: http://xafsmass.readthedocs.io
+Author: Konstantin Klementiev, Roman Chernikov
+Author-email: konstantin.klementiev@gmail.com, rchernikov@gmail.com
+License: MIT License
+Platform: OS Independent
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Science/Research
+Classifier: Natural Language :: English
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Topic :: Scientific/Engineering :: Physics
+Classifier: Topic :: Scientific/Engineering :: Visualization
+Description-Content-Type: text/x-rst
+License-File: LICENSE.md
+
+
+A program for calculating the mass of XAFS [X-ray Absorption Fine Structure]
+samples. The chemical formula parser understands parentheses and weight
+percentage, also in nested form. XAFSmass reports the quantity (weight,
+thickness or pressure) together with the expected height of the absorption
+edge. The GUI is provided by Qt. The documentation is included.
+
+Dependencies: numpy, pyparsing and matplotlib are required. Qt must be provided
+by either PyQt4, PyQt5 or PySide.
