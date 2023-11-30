@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 __author__ = "Konstantin Klementiev, Roman Chernikov"
-__date__ = "22 Feb 2023"
+__date__ = "30 Nov 2023"
 
 import sys
 import os
@@ -14,6 +14,7 @@ from pyparsing import ParseBaseException
 sys.path.append(os.path.join('..'))  # analysis:ignore
 from XAFSmass import XAFSmassCalc as xc
 from XAFSmass.__init__ import (__version__, __author__, __license__)
+from XAFSmass.materials_simple import elemental, compounds
 
 # ==this may help to resolve conflict betwen Qt4 and Qt5=======================
 # mpl.use("Qt4Agg")
@@ -45,12 +46,12 @@ else:
 
 QDialog, QApplication, QLabel, QComboBox, QLineEdit, QPushButton,\
     QSizePolicy, QHBoxLayout, QVBoxLayout, QFrame, QMessageBox, QWidget,\
-    QSlider, QPixmap = \
+    QSlider, QPixmap, QColor = \
     myQtGUI.QDialog, myQtGUI.QApplication, myQtGUI.QLabel,\
     myQtGUI.QComboBox, myQtGUI.QLineEdit, myQtGUI.QPushButton,\
     myQtGUI.QSizePolicy, myQtGUI.QHBoxLayout, myQtGUI.QVBoxLayout,\
     myQtGUI.QFrame, myQtGUI.QMessageBox, myQtGUI.QWidget, myQtGUI.QSlider,\
-    QtGui.QPixmap
+    QtGui.QPixmap, QtGui.QColor
 Canvas = mpl_qt.FigureCanvasQTAgg
 ToolBar = mpl_qt.NavigationToolbar2QT
 
@@ -102,6 +103,22 @@ gasMixerPressureMin = 0
 gasMixerPressureMax = 3000
 gasMixerPressurePageStep = 50
 gasMixerPressureDefault = 1000
+
+
+class ComboBoxWithPlaceholder(QComboBox):
+    def paintEvent(self, event):
+        painter = myQtGUI.QStylePainter(self)
+
+        opt = myQtGUI.QStyleOptionComboBox()
+        self.initStyleOption(opt)
+        painter.drawComplexControl(myQtGUI.QStyle.CC_ComboBox, opt)
+
+        if self.currentIndex() < 0:
+            painter.setPen(QColor('#888888'))
+            if self.placeholderText():
+                opt.currentText = self.placeholderText()
+
+        painter.drawControl(myQtGUI.QStyle.CE_ComboBoxLabel, opt)
 
 
 class MyFormulaMplCanvas(Canvas):
@@ -194,55 +211,72 @@ class MainDlg(QDialog):
     def __init__(self, parent=None):
         super(MainDlg, self).__init__(parent)
 
-        self.whatLabel = QLabel(r"&sample:")
+        self.whatLabel = QLabel(r"sample:")
         self.whatCB = QComboBox()
         self.whatCB.addItems(whats)
         self.whatCB.currentIndexChanged.connect(self.updateUi)
-        self.whatLabel.setBuddy(self.whatCB)
         self.what = 0
 
         self.formula = MyFormulaMplCanvas(self, width=3.2, height=0.5)
 
-        self.compoundLabel = QLabel(r"&compound:")
+        self.compoundLabel = QLabel("compound:")
         self.compoundExLabel = QLabel("")
         self.compoundExLabel.setTextInteractionFlags(
             QtCore.Qt.TextInteractionFlags(QtCore.Qt.TextSelectableByMouse))
         self.compoundEdit = QLineEdit()
-        self.compoundLabel.setBuddy(self.compoundEdit)
+        self.compoundEdit.setPlaceholderText(
+            'type here or select from the lists above')
+
+        # self.compoundListsLabel = QLabel("can also be defined from")
+        self.compoundList1 = ComboBoxWithPlaceholder()
+        self.compoundList1.addItems(
+            [k for k in
+             dict(sorted(compounds.items(), key=lambda it: it[1]['rho']))]),
+        self.compoundList1.setPlaceholderText("compounds (sorted by density)")
+        self.compoundList1.setToolTip("sorted by density")
+        self.compoundList1.setMaxVisibleItems(18)
+        self.compoundList1.setCurrentIndex(-1)
+        self.compoundList1.activated.connect(self.compoundActivated)
+        self.compoundList2 = ComboBoxWithPlaceholder()
+        self.compoundList2.addItems(elemental.keys())
+        self.compoundList2.setPlaceholderText("elements")
+        self.compoundList2.setMaxVisibleItems(18)
+        self.compoundList2.setCurrentIndex(-1)
+        self.compoundList2.activated.connect(self.elementActivated)
 
         self.compoundMassLabel = QLabel("M (g/mol) = ")
         self.compoundMass = QLabel("")
 
         self.muTdLabel = QLabel("")
         self.muTdEdit = QLineEdit()
+        self.muTdEdit.setPlaceholderText('typ. 2.6')
 #        font = QtGui.QFont(self.font())
 #        font.setPointSize(font.pointSize()+2)
 #        fm = QtGui.QFontMetrics(font)
 #        self.muTdEdit.setMinimumSize(fm.width("8.88"), fm.height())
         self.areaLabel = QLabel("")
         self.areaEdit = QLineEdit()
+        self.areaEdit.setPlaceholderText('1.33 for \u230013mm ')
 #        self.areaEdit.setMinimumSize(fm.width("8.88"), fm.height())
         self.dmudLabel = QLabel(u"δµd = ")
         self.dmudEdit = QLineEdit()
 #        self.dmudEdit.setMinimumSize(fm.width("8.888"), fm.height())
 
-        self.energyLabel = QLabel(r"&E (eV) =")
+        self.energyLabel = QLabel("E (eV) =")
         self.energyCB = QComboBox()
         self.read_energies()
         self.energyCB.addItems(self.energies)
         self.energyCB.setEditable(True)
-        self.energyCB.currentIndexChanged.connect(self.energyCB_selected)
-        self.energyLabel.setBuddy(self.energyCB)
+        self.energyCB.currentIndexChanged.connect(self.energySelected)
         self.energy = 9029
         self.energyCB.lineEdit().setText(str(self.energy))
 
-        self.tableLabel = QLabel(r"&data table:")
+        self.tableLabel = QLabel("f data table:")
         self.tableCB = QComboBox()
         self.tableCB.addItems(tables)
         self.tableCB.setCurrentIndex(3)  # Chantler total
         self.tableCB.currentIndexChanged.connect(self.calculate)
-        self.tableLabel.setBuddy(self.tableCB)
-        self.tablePlotButton = QPushButton('&Plot f"')
+        self.tablePlotButton = QPushButton('Plot f"')
         if not MAC:
             self.tablePlotButton.setFocusPolicy(QtCore.Qt.NoFocus)
 
@@ -268,9 +302,9 @@ class MainDlg(QDialog):
 
         self.buttonCalculate = QPushButton("Calculate")
         self.buttonCalculate.clicked.connect(self.calculate)
-        self.buttonAbout = QPushButton(r"&About...")
+        self.buttonAbout = QPushButton("About...")
         self.buttonAbout.clicked.connect(self.about)
-        self.buttonHelp = QPushButton(r"&Help...")
+        self.buttonHelp = QPushButton("Help...")
         self.buttonHelp.clicked.connect(self.myhelp)
 
         whatLayout = QHBoxLayout()
@@ -282,6 +316,11 @@ class MainDlg(QDialog):
         compoundLayout.addWidget(self.compoundLabel)
         compoundLayout.addWidget(self.compoundExLabel)
         compoundLayout.addStretch()
+
+        listsLayout = QHBoxLayout()
+        # listsLayout.addWidget(self.compoundListsLabel)
+        listsLayout.addWidget(self.compoundList1)
+        listsLayout.addWidget(self.compoundList2)
 
         compoundMassLayout = QHBoxLayout()
         compoundMassLayout.addWidget(self.compoundMassLabel)
@@ -379,6 +418,7 @@ class MainDlg(QDialog):
         hline1.setFrameStyle(QFrame.HLine)
         layout.addWidget(hline1)
         layout.addLayout(compoundLayout)
+        layout.addLayout(listsLayout)
         layout.addWidget(self.compoundEdit)
         layout.addLayout(compoundMassLayout)
         hline2 = QFrame(self)
@@ -562,7 +602,29 @@ class MainDlg(QDialog):
                 for ic, c in enumerate(cs[2:]):
                     self.energies.append(pre + edges[ic] + ' ' + c + ' + 50')
 
-    def energyCB_selected(self):
+    def compoundActivated(self):
+        txt = self.compoundList1.currentText()
+        self.compoundEdit.setText(compounds[txt]['formula'])
+        if self.what in [POWDER, FOIL]:
+            rho = compounds[txt]['rho']
+            if self.what == POWDER:
+                self.extraRhoEdit.setText(str(rho))
+            elif self.what == FOIL:
+                self.areaEdit.setText(str(rho))
+        self.calculate()
+
+    def elementActivated(self):
+        txt = self.compoundList2.currentText()
+        self.compoundEdit.setText(txt)
+        if self.what in [POWDER, FOIL]:
+            rho = elemental[txt]['rho']
+            if self.what == POWDER:
+                self.extraRhoEdit.setText(str(rho))
+            elif self.what == FOIL:
+                self.areaEdit.setText(str(rho))
+        self.calculate()
+
+    def energySelected(self):
         txt = self.energyCB.lineEdit().text()
         try:
             self.energy = float(txt)

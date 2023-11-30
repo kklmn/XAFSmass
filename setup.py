@@ -13,7 +13,7 @@ by either PyQt4, PyQt5 or PySide.
 
 setup(
     name='XAFSmass',
-    version='1.4.5',
+    version='1.5.0',
     description='A program for calculating the mass of XAFS samples. '
                 'For synchrotron users.',
     long_description=long_description,

@@ -12,9 +12,9 @@ percentage, also in nested form. XAFSmassQt reports the quantity (weight,
 thickness or pressure) together with the expected height of the absorption
 edge.
 
-.. |Screenshot1| image:: _images/1powder_140.png
+.. |Screenshot1| image:: _images/1powder_150.png
    :scale: 66 %
-.. |Screenshot3| image:: _images/3gas_140.png
+.. |Screenshot3| image:: _images/3gas_150.png
    :scale: 66 %
 
 Dependencies
@@ -195,12 +195,12 @@ of two elements in the same sample is
 
 """
 __module__ = "XAFSmass"
-__versioninfo__ = (1, 4, 5)
+__versioninfo__ = (1, 5, 0)
 __version__ = '.'.join(map(str, __versioninfo__))
 __author__ = \
     "Konstantin Klementiev (MAX IV Laboratory), " +\
     "Roman Chernikov (Canadian Light Source)"
 __email__ = \
     "konstantin.klementiev@gmail.com, rchernikov@gmail.com"
-__date__ = "6 Jun 2023"
+__date__ = "30 Nov 2023"
 __license__ = "MIT license"
