@@ -6,6 +6,7 @@ import sys
 import os
 import re
 from functools import partial
+from collections import OrderedDict
 import webbrowser
 import numpy as np
 import matplotlib as mpl
@@ -115,9 +116,11 @@ class ComboBoxWithPlaceholder(QComboBox):
 
         if self.currentIndex() < 0:
             painter.setPen(QColor('#888888'))
-            if self.placeholderText():
-                opt.currentText = self.placeholderText()
-
+            try:
+                if self.placeholderText():
+                    opt.currentText = self.placeholderText()
+            except AttributeError:
+                pass
         painter.drawControl(myQtGUI.QStyle.CE_ComboBoxLabel, opt)
 
 
@@ -230,16 +233,25 @@ class MainDlg(QDialog):
         # self.compoundListsLabel = QLabel("can also be defined from")
         self.compoundList1 = ComboBoxWithPlaceholder()
         self.compoundList1.addItems(
-            [k for k in
-             dict(sorted(compounds.items(), key=lambda it: it[1]['rho']))]),
-        self.compoundList1.setPlaceholderText("compounds (sorted by density)")
+            [k for k in OrderedDict(
+                sorted(compounds.items(), key=lambda it: it[1]['rho']))]),
+        try:
+            self.compoundList1.setPlaceholderText(
+                    "compounds (sorted by density)")
+        except AttributeError:
+            pass
         self.compoundList1.setToolTip("sorted by density")
         self.compoundList1.setMaxVisibleItems(18)
         self.compoundList1.setCurrentIndex(-1)
         self.compoundList1.activated.connect(self.compoundActivated)
         self.compoundList2 = ComboBoxWithPlaceholder()
-        self.compoundList2.addItems(elemental.keys())
-        self.compoundList2.setPlaceholderText("elements")
+        self.compoundList2.addItems(
+            [k for k in OrderedDict(  # have to sort it in Py2
+                sorted(elemental.items(), key=lambda it: it[1]['Z']))]),
+        try:
+            self.compoundList2.setPlaceholderText("elements")
+        except AttributeError:
+            pass
         self.compoundList2.setMaxVisibleItems(18)
         self.compoundList2.setCurrentIndex(-1)
         self.compoundList2.activated.connect(self.elementActivated)
@@ -603,7 +615,7 @@ class MainDlg(QDialog):
                     self.energies.append(pre + edges[ic] + ' ' + c + ' + 50')
 
     def compoundActivated(self):
-        txt = self.compoundList1.currentText()
+        txt = str(self.compoundList1.currentText())  # otherwise u'' in Py2
         self.compoundEdit.setText(compounds[txt]['formula'])
         if self.what in [POWDER, FOIL]:
             rho = compounds[txt]['rho']
@@ -614,7 +626,7 @@ class MainDlg(QDialog):
         self.calculate()
 
     def elementActivated(self):
-        txt = self.compoundList2.currentText()
+        txt = str(self.compoundList2.currentText())  # otherwise u'' in Py2
         self.compoundEdit.setText(txt)
         if self.what in [POWDER, FOIL]:
             rho = elemental[txt]['rho']
@@ -821,7 +833,7 @@ class MainDlg(QDialog):
                     print("do 'pip install distro' for a better view of Linux"
                           " distro string")
         elif 'Windows' in locos:
-            if isWin11:
+            if isWin11():
                 locos = 'Winows 11'
 
         if use_pyside:
