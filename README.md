@@ -33,4 +33,5 @@ package to the standard location.
 Documentation
 -------------
 
-See it at http://xafsmass.readthedocs.io
+See it on http://xafsmass.readthedocs.io
+[![Documentation Status](https://readthedocs.org/projects/xafsmass/badge/?version=latest)](https://xafsmass.readthedocs.io)
