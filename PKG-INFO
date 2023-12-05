@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: XAFSmass
-Version: 1.4.5
+Version: 1.5.0
 Summary: A program for calculating the mass of XAFS samples. For synchrotron users.
 Home-page: http://xafsmass.readthedocs.io
 Author: Konstantin Klementiev, Roman Chernikov
