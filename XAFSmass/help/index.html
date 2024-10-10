@@ -1,18 +1,17 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="./">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>XAFSmass &#8212; XAFSmassQt 1.5.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    <title>XAFSmass &#8212; XAFSmassQt 1.5.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=def86cc0" />
     
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/documentation_options.js?v=44dfd65d"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     <link rel="icon" href="_static/XAFSmassQt.ico"/>
@@ -28,7 +27,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">XAFSmassQt 1.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">XAFSmassQt 1.5.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">XAFSmass</a></li> 
       </ul>
     </div>  
@@ -39,22 +38,22 @@
           <div class="body" role="main">
             
   <section id="xafsmass">
-<h1>XAFSmass<a class="headerlink" href="#xafsmass" title="Permalink to this heading">¶</a></h1>
+<h1>XAFSmass<a class="headerlink" href="#xafsmass" title="Link to this heading">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Release<span class="colon">:</span></dt>
-<dd class="field-odd"><p>1.5.0 <a class="reference external" href="https://zenodo.org/badge/latestdoi/54989911"><img alt="DOI" src="https://zenodo.org/badge/54989911.svg" /></a></p>
+<dd class="field-odd"><p>1.5.1 <a class="reference external" href="https://zenodo.org/badge/latestdoi/54989911"><img alt="DOI" src="https://zenodo.org/badge/54989911.svg" /></a></p>
 </dd>
 <dt class="field-even">Date<span class="colon">:</span></dt>
-<dd class="field-even"><p>Nov 30, 2023</p>
+<dd class="field-even"><p>Oct 10, 2024</p>
 </dd>
 <dt class="field-odd">Authors<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Konstantin Klementiev (MAX IV Laboratory), Roman Chernikov (Canadian Light Source)</p>
+<dd class="field-odd"><p>Konstantin Klementiev (MAX IV Laboratory), Roman Chernikov (NSLS-II)</p>
 </dd>
 <dt class="field-even">License<span class="colon">:</span></dt>
 <dd class="field-even"><p>Open Source, <a class="reference internal" href="license.html#license"><span class="std std-ref">MIT License</span></a></p>
 </dd>
 </dl>
-<span class="target" id="module-XAFSmass.__init__"></span><p></p>
+<p id="module-XAFSmass.__init__"></p>
 <table class="docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_images/1powder_150.png"><img alt="Screenshot1" src="_images/1powder_150.png" style="width: 247.5px; height: 330.66px;" /></a></p></td>
@@ -68,19 +67,19 @@ percentage, also in nested form. XAFSmassQt reports the quantity (weight,
 thickness or pressure) together with the expected height of the absorption
 edge.</p>
 <section id="dependencies">
-<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this heading">¶</a></h2>
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">¶</a></h2>
 <p>numpy, pyparsing and matplotlib are required. Qt must be provided by either
 PyQt4, PyQt5 or PySide.</p>
 </section>
 <section id="get-xafsmass">
-<h2>Get XAFSmass<a class="headerlink" href="#get-xafsmass" title="Permalink to this heading">¶</a></h2>
+<h2>Get XAFSmass<a class="headerlink" href="#get-xafsmass" title="Link to this heading">¶</a></h2>
 <p>XAFSmass is available as source distribution from
 <a class="reference external" href="https://pypi.python.org/pypi/XAFSmass">PyPI</a> or
 <a class="reference external" href="https://github.com/kklmn/XAFSmass">Github</a>.
 The distribution archive also includes documentation.</p>
 </section>
 <section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h2>
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
 <p>Unzip the .zip file into a suitable directory and run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">XAFSmassQt.py</span></code>.
 On Windows, run <code class="docutils literal notranslate"><span class="pre">pythonw</span> <span class="pre">XAFSmassQt.py</span></code> or give it a .pyw extension to
 suppress the console window.</p>
@@ -88,14 +87,14 @@ suppress the console window.</p>
 package to the standard location.</p>
 </section>
 <section id="citing-xafsmass">
-<h2>Citing XAFSmass<a class="headerlink" href="#citing-xafsmass" title="Permalink to this heading">¶</a></h2>
+<h2>Citing XAFSmass<a class="headerlink" href="#citing-xafsmass" title="Link to this heading">¶</a></h2>
 <p>Please cite XAFSmass as:
 <a class="reference external" href="http://dx.doi.org/10.1088/1742-6596/712/1/012008">K. Klementiev and R. Chernikov, “XAFSmass: a program for calculating the
 optimal mass of XAFS samples”, J. Phys.: Conf. Ser. 712 (2016) 012008,
 doi:10.1088/1742-6596/712/1/012008</a>.</p>
 </section>
 <section id="theoretical-references-used">
-<h2>Theoretical references used<a class="headerlink" href="#theoretical-references-used" title="Permalink to this heading">¶</a></h2>
+<h2>Theoretical references used<a class="headerlink" href="#theoretical-references-used" title="Link to this heading">¶</a></h2>
 <p>The tabulated scattering factors are taken from Henke et al. (10 eV &lt; <em>E</em> &lt; 30
 keV) <a class="reference internal" href="#henke" id="id1"><span>[Henke]</span></a>, Brennan &amp; Cowan (30 eV &lt; <em>E</em> &lt; 509 keV) <a class="reference internal" href="#brco" id="id2"><span>[BrCo]</span></a> and Chantler
 (11 eV &lt; <em>E</em> &lt; 405 keV) <a class="reference internal" href="#chantler" id="id3"><span>[Chantler]</span></a>.</p>
@@ -137,9 +136,9 @@ Scattering Tabulation for Z = 1 - 92 from E = 1 - 10 eV to E = 0.4 -
 </div>
 </section>
 <section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">¶</a></h2>
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h2>
 <section id="chemical-formula-parser">
-<h3>Chemical formula parser<a class="headerlink" href="#chemical-formula-parser" title="Permalink to this heading">¶</a></h3>
+<h3>Chemical formula parser<a class="headerlink" href="#chemical-formula-parser" title="Link to this heading">¶</a></h3>
 <p>The parser understands chemical elements, optionally followed by atomic
 quantities or weight percentages. A group of atoms can be enclosed in
 parentheses and assigned a common quantity or wt%. Some examples are given
@@ -150,7 +149,7 @@ silica.</p>
 of interest.</p>
 </section>
 <section id="calculation-of-mass-and-absorption-step-for-powder-samples">
-<h3>Calculation of mass and absorption step for powder samples<a class="headerlink" href="#calculation-of-mass-and-absorption-step-for-powder-samples" title="Permalink to this heading">¶</a></h3>
+<h3>Calculation of mass and absorption step for powder samples<a class="headerlink" href="#calculation-of-mass-and-absorption-step-for-powder-samples" title="Link to this heading">¶</a></h3>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>You typically do not need the calculated values at exactly the edge
@@ -175,13 +174,13 @@ technique: in fluorescence or electron yield modes.</p>
 <a class="reference internal image-reference" href="_images/SNtransm100.png"><img alt="_images/SNtransm100.png" src="_images/SNtransm100.png" style="width: 300.0px; height: 300.0px;" /></a>
 </section>
 <section id="calculation-of-thickness-and-absorption-step-for-samples-with-known-density">
-<h3>Calculation of thickness and absorption step for samples with known density<a class="headerlink" href="#calculation-of-thickness-and-absorption-step-for-samples-with-known-density" title="Permalink to this heading">¶</a></h3>
+<h3>Calculation of thickness and absorption step for samples with known density<a class="headerlink" href="#calculation-of-thickness-and-absorption-step-for-samples-with-known-density" title="Link to this heading">¶</a></h3>
 <p>Here you can calculate the thickness of the sample with known density (usually,
 a foil). Commercial foils are highly homogeneous in thickness, so that you may
 ignore large step jumps and pay attention to the total μd only.</p>
 </section>
 <section id="calculation-of-gas-pressure-for-ionization-chambers">
-<h3>Calculation of gas pressure for ionization chambers<a class="headerlink" href="#calculation-of-gas-pressure-for-ionization-chambers" title="Permalink to this heading">¶</a></h3>
+<h3>Calculation of gas pressure for ionization chambers<a class="headerlink" href="#calculation-of-gas-pressure-for-ionization-chambers" title="Link to this heading">¶</a></h3>
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
 <p>For nitrogen, do not forget the 2: N2, not just N!</p>
@@ -198,9 +197,9 @@ partial pressures. The program will calculate the molar weight of each gas and
 update the chemical formula and the total attenuation.</p>
 </section>
 <section id="calculation-of-an-unknown-elemental-concentration">
-<h3>Calculation of an unknown elemental concentration<a class="headerlink" href="#calculation-of-an-unknown-elemental-concentration" title="Permalink to this heading">¶</a></h3>
+<h3>Calculation of an unknown elemental concentration<a class="headerlink" href="#calculation-of-an-unknown-elemental-concentration" title="Link to this heading">¶</a></h3>
 <section id="case-1-you-know-the-composition-of-the-matrix">
-<h4>Case 1: <em>You know the composition of the matrix</em><a class="headerlink" href="#case-1-you-know-the-composition-of-the-matrix" title="Permalink to this heading">¶</a></h4>
+<h4>Case 1: <em>You know the composition of the matrix</em><a class="headerlink" href="#case-1-you-know-the-composition-of-the-matrix" title="Link to this heading">¶</a></h4>
 <p>You need an absorption spectrum taken without the sample (empty spectrum) but
 with the same state of the ionization chambers. You then subtract it from the
 spectrum of the sample, e.g. in VIPER, and get a real (i.e. not vertically
@@ -209,7 +208,7 @@ shifted) absorption coefficient. Determine the value of μd above the edge
 formula with x.</p>
 </section>
 <section id="case-2-you-know-the-sample-mass-and-area">
-<h4>Case 2: <em>You know the sample mass and area</em><a class="headerlink" href="#case-2-you-know-the-sample-mass-and-area" title="Permalink to this heading">¶</a></h4>
+<h4>Case 2: <em>You know the sample mass and area</em><a class="headerlink" href="#case-2-you-know-the-sample-mass-and-area" title="Link to this heading">¶</a></h4>
 <p>Determine the edge jump (Δμd). For the pure element find such a value for μTd
 that the absorption step in the pull-down list be equal to your experimental
 Δμd. This will give you the mass of the element of interest. Just divide it by
@@ -217,7 +216,7 @@ the total mass to get the weight percentage.</p>
 </section>
 </section>
 <section id="finding-the-scattering-factors-f">
-<h3>Finding the scattering factors f’’<a class="headerlink" href="#finding-the-scattering-factors-f" title="Permalink to this heading">¶</a></h3>
+<h3>Finding the scattering factors f’’<a class="headerlink" href="#finding-the-scattering-factors-f" title="Link to this heading">¶</a></h3>
 <p>If you need to know the scattering factor f’’ at different energies and/or its
 jump at an edge (Δf’’), XAFSmass provides a graphical tool for this.</p>
 <p>For example, you may need these values to determine the composition of a binary
@@ -277,7 +276,7 @@ of two elements in the same sample is
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<div id="searchbox" style="display: none" role="search">
+<search id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -285,7 +284,7 @@ of two elements in the same sample is
       <input type="submit" value="Go" />
     </form>
     </div>
-</div>
+</search>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
@@ -300,13 +299,13 @@ of two elements in the same sample is
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">XAFSmassQt 1.5.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">XAFSmassQt 1.5.1 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">XAFSmass</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2015, Konstantin Klementiev, Roman Chernikov.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 6.1.3.
+    &#169; Copyright 2015, Konstantin Klementiev, Roman Chernikov.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
     </div>
   </body>
 </html>

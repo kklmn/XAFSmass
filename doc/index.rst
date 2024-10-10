@@ -8,7 +8,7 @@ XAFSmass
 
 :Release: |version| |DOI|
 :Date: |today|
-:Authors: Konstantin Klementiev (MAX IV Laboratory), Roman Chernikov (Canadian Light Source)
+:Authors: Konstantin Klementiev (MAX IV Laboratory), Roman Chernikov (NSLS-II)
 :License: Open Source, :ref:`MIT License <license>`
 
 .. |DOI| image:: https://zenodo.org/badge/54989911.svg

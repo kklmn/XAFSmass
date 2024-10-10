@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 __author__ = "Konstantin Klementiev, Roman Chernikov"
-__date__ = "30 Nov 2023"
+__date__ = "10 Oct 2024"
 
 import sys
 import os
@@ -261,14 +261,12 @@ class MainDlg(QDialog):
 
         self.muTdLabel = QLabel("")
         self.muTdEdit = QLineEdit()
-        self.muTdEdit.setPlaceholderText('typ. 2.6')
 #        font = QtGui.QFont(self.font())
 #        font.setPointSize(font.pointSize()+2)
 #        fm = QtGui.QFontMetrics(font)
 #        self.muTdEdit.setMinimumSize(fm.width("8.88"), fm.height())
         self.areaLabel = QLabel("")
         self.areaEdit = QLineEdit()
-        self.areaEdit.setPlaceholderText('1.33 for \u230013mm ')
 #        self.areaEdit.setMinimumSize(fm.width("8.88"), fm.height())
         self.dmudLabel = QLabel(u"δµd = ")
         self.dmudEdit = QLineEdit()
@@ -282,6 +280,7 @@ class MainDlg(QDialog):
         self.energyCB.currentIndexChanged.connect(self.energySelected)
         self.energy = 9029
         self.energyCB.lineEdit().setText(str(self.energy))
+        self.energyCB.setMaxVisibleItems(25)
 
         self.tableLabel = QLabel("f data table:")
         self.tableCB = QComboBox()
@@ -490,22 +489,30 @@ class MainDlg(QDialog):
             self.areaLabel.setText(u"S (cm<sup>2</sup>) = ")
             self.resNuLabel.setText(u"ν (mmol) = ")
             self.resMassLabel.setText("m (mg) = ")
+            self.muTdEdit.setPlaceholderText('typ. 2.6')
+            self.areaEdit.setPlaceholderText('1.33 for \u230013mm ')
             self.resNuLabel.show()
             self.resNu.show()
         elif self.what == FOIL:
             self.areaLabel.setText(u"ρ (g/cm<sup>3</sup>) = ")
             self.resMassLabel.setText(u"d (µm) = ")
+            self.muTdEdit.setPlaceholderText('typ. 2.6')
+            self.areaEdit.setPlaceholderText('')
             self.resNuLabel.hide()
             self.resNu.hide()
         elif self.what == GAS:
             self.areaLabel.setText(u"d (cm) = ")
             self.resMassLabel.setText(u"p (mbar) = ")
+            self.muTdEdit.setPlaceholderText('(0, 1)')
+            self.areaEdit.setPlaceholderText('')
             self.resNuLabel.hide()
             self.resNu.hide()
         elif self.what == XCONTENT:
             self.areaLabel.setText(u"Δµd = ")
             self.resNuLabel.setText("N<sub>x</sub> = ")
             self.resMassLabel.setText(r"wt%<sub>x</sub> = ")
+            self.muTdEdit.setPlaceholderText('')
+            self.areaEdit.setPlaceholderText('')
             self.resNuLabel.show()
             self.resNu.show()
 
@@ -849,7 +856,7 @@ class MainDlg(QDialog):
             <li>{1[0]}
             <li>{1[1]}
             </ul>
-            <p>Open source, {2}. Available at PyPI and GitHub<p>
+            <p>Open source, {2}. Available on PyPI and GitHub<p>
             <p>Your system:
             <ul>
             <li>{3}

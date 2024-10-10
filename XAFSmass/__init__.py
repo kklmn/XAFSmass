@@ -195,12 +195,12 @@ of two elements in the same sample is
 
 """
 __module__ = "XAFSmass"
-__versioninfo__ = (1, 5, 0)
+__versioninfo__ = (1, 5, 1)
 __version__ = '.'.join(map(str, __versioninfo__))
 __author__ = \
     "Konstantin Klementiev (MAX IV Laboratory), " +\
-    "Roman Chernikov (Canadian Light Source)"
+    "Roman Chernikov (NSLS-II)"
 __email__ = \
     "konstantin.klementiev@gmail.com, rchernikov@gmail.com"
-__date__ = "30 Nov 2023"
+__date__ = "10 Oct 2024"
 __license__ = "MIT license"
