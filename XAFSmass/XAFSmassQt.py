@@ -675,7 +675,7 @@ class MainDlg(QDialog):
                 if e[1] < 0:
                     withX = True
                 else:
-                    cMass += xc.read_atomic_data(e[0])*e[1]
+                    cMass += xc.rm.read_atomic_data(e[0])*e[1]
             if withX:
                 self.compoundMass.setText("(of matrix) {0}".format(
                     xc.round_to_n(cMass, 5)))

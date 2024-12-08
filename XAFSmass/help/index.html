@@ -5,13 +5,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>XAFSmass &#8212; XAFSmassQt 1.5.1 documentation</title>
+    <title>XAFSmass &#8212; XAFSmassQt 1.6.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
-    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=def86cc0" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css?v=514cf933" />
+    <link rel="stylesheet" type="text/css" href="_static/thumbnail.css?v=2a01ef26" />
     
-    <script src="_static/documentation_options.js?v=44dfd65d"></script>
-    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/documentation_options.js?v=72d88caf"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/animation.js?v=475f784f"></script>
     <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     <link rel="icon" href="_static/XAFSmassQt.ico"/>
@@ -27,7 +29,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">XAFSmassQt 1.5.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">XAFSmassQt 1.6.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">XAFSmass</a></li> 
       </ul>
     </div>  
@@ -41,10 +43,10 @@
 <h1>XAFSmass<a class="headerlink" href="#xafsmass" title="Link to this heading">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Release<span class="colon">:</span></dt>
-<dd class="field-odd"><p>1.5.1 <a class="reference external" href="https://zenodo.org/badge/latestdoi/54989911"><img alt="DOI" src="https://zenodo.org/badge/54989911.svg" /></a></p>
+<dd class="field-odd"><p>1.6.0 <a class="reference external" href="https://zenodo.org/badge/latestdoi/54989911"><img alt="DOI" src="https://zenodo.org/badge/54989911.svg" /></a></p>
 </dd>
 <dt class="field-even">Date<span class="colon">:</span></dt>
-<dd class="field-even"><p>Oct 10, 2024</p>
+<dd class="field-even"><p>Dec 08, 2024</p>
 </dd>
 <dt class="field-odd">Authors<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Konstantin Klementiev (MAX IV Laboratory), Roman Chernikov (NSLS-II)</p>
@@ -56,8 +58,16 @@
 <p id="module-XAFSmass.__init__"></p>
 <table class="docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="_images/1powder_150.png"><img alt="Screenshot1" src="_images/1powder_150.png" style="width: 247.5px; height: 330.66px;" /></a></p></td>
-<td><p><a class="reference internal" href="_images/3gas_150.png"><img alt="Screenshot3" src="_images/3gas_150.png" style="width: 247.5px; height: 335.94px;" /></a></p></td>
+<tr class="row-odd"><td><p><a class="thumbnail"><img class="align-left" src="_images/1powder_150.png"  width="247.5" height="330.66" /><span style="top: 0px;  width: 375px; left: 0px;  text-align: left; ">&ensp;Calculations for a powder material. The material was defined
+here from the list of compounds as "ZincSulfide", which specifies its
+chemical formula and its density. The latter value is optional and needed
+to calculate the sample thickness.<br><img class="align-left" src="_images/1powder_150.png"  width="375" height="501"/><br>&ensp;Calculations for a powder material. The material was defined
+here from the list of compounds as "ZincSulfide", which specifies its
+chemical formula and its density. The latter value is optional and needed
+to calculate the sample thickness.</span></a></p></td>
+<td><p><a class="thumbnail"><img class="align-left" src="_images/3gas_150.png"  width="247.5" height="335.94" /><span style="top: 0px;  width: 375px; right: 0px;  text-align: right; ">&ensp;Calculations of gas filling. When the gas formula is given with
+parentheses, slider widgets become visible.<br><img class="align-left" src="_images/3gas_150.png"  width="375" height="509"/><br>&ensp;Calculations of gas filling. When the gas formula is given with
+parentheses, slider widgets become visible.</span></a></p></td>
 </tr>
 </tbody>
 </table>
@@ -170,8 +180,13 @@ hoping that you will get better spectra – you will not: the optimal thickness
 gives <em>the best</em> signal-to-noise ratio (it is in this sense optimal). You can
 only try to measure your absorption spectra with another registration
 technique: in fluorescence or electron yield modes.</p>
-<a class="reference internal image-reference" href="_images/SNtransm050.png"><img alt="_images/SNtransm050.png" src="_images/SNtransm050.png" style="width: 300.0px; height: 300.0px;" /></a>
-<a class="reference internal image-reference" href="_images/SNtransm100.png"><img alt="_images/SNtransm100.png" src="_images/SNtransm100.png" style="width: 300.0px; height: 300.0px;" /></a>
+<table class="docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="thumbnail"><img class="align-left" src="_images/SNtransm050.png"  width="300.0" height="300.0" /><span style="top: 0px;  width: 600px; left: 0px;  text-align: left; "><br><img class="align-left" src="_images/SNtransm050.png"  width="600" height="600"/><br></span></a></p></td>
+<td><p><a class="thumbnail"><img class="align-left" src="_images/SNtransm100.png"  width="300.0" height="300.0" /><span style="top: 0px;  width: 600px; right: 0px;  text-align: right; "><br><img class="align-left" src="_images/SNtransm100.png"  width="600" height="600"/><br></span></a></p></td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="calculation-of-thickness-and-absorption-step-for-samples-with-known-density">
 <h3>Calculation of thickness and absorption step for samples with known density<a class="headerlink" href="#calculation-of-thickness-and-absorption-step-for-samples-with-known-density" title="Link to this heading">¶</a></h3>
@@ -192,12 +207,12 @@ total absorption (100%). For these two cases the optimal absorption of the 1st
 IC at a certain μd is found from the figures above showing the levels of
 signal-to-noise ratio.</p>
 <p>For exploring mixtures of several gases, give the gases in parentheses, e.g.
-as (Ar)(N2). The corresponding number of sliders will appear that define
-partial pressures. The program will calculate the molar weight of each gas and
-update the chemical formula and the total attenuation.</p>
+as (Ar)(N2). Each gas will get a slider defining its partial pressure. The
+program will calculate the molar weight of each gas and update the chemical
+formula and the total attenuation.</p>
 </section>
-<section id="calculation-of-an-unknown-elemental-concentration">
-<h3>Calculation of an unknown elemental concentration<a class="headerlink" href="#calculation-of-an-unknown-elemental-concentration" title="Link to this heading">¶</a></h3>
+<section id="calculation-of-unknown-elemental-concentration">
+<h3>Calculation of unknown elemental concentration<a class="headerlink" href="#calculation-of-unknown-elemental-concentration" title="Link to this heading">¶</a></h3>
 <section id="case-1-you-know-the-composition-of-the-matrix">
 <h4>Case 1: <em>You know the composition of the matrix</em><a class="headerlink" href="#case-1-you-know-the-composition-of-the-matrix" title="Link to this heading">¶</a></h4>
 <p>You need an absorption spectrum taken without the sample (empty spectrum) but
@@ -215,8 +230,8 @@ that the absorption step in the pull-down list be equal to your experimental
 the total mass to get the weight percentage.</p>
 </section>
 </section>
-<section id="finding-the-scattering-factors-f">
-<h3>Finding the scattering factors f’’<a class="headerlink" href="#finding-the-scattering-factors-f" title="Link to this heading">¶</a></h3>
+<section id="finding-scattering-factors-f">
+<h3>Finding scattering factors f’’<a class="headerlink" href="#finding-scattering-factors-f" title="Link to this heading">¶</a></h3>
 <p>If you need to know the scattering factor f’’ at different energies and/or its
 jump at an edge (Δf’’), XAFSmass provides a graphical tool for this.</p>
 <p>For example, you may need these values to determine the composition of a binary
@@ -256,12 +271,12 @@ of two elements in the same sample is
 <li><a class="reference internal" href="#calculation-of-mass-and-absorption-step-for-powder-samples">Calculation of mass and absorption step for powder samples</a></li>
 <li><a class="reference internal" href="#calculation-of-thickness-and-absorption-step-for-samples-with-known-density">Calculation of thickness and absorption step for samples with known density</a></li>
 <li><a class="reference internal" href="#calculation-of-gas-pressure-for-ionization-chambers">Calculation of gas pressure for ionization chambers</a></li>
-<li><a class="reference internal" href="#calculation-of-an-unknown-elemental-concentration">Calculation of an unknown elemental concentration</a><ul>
+<li><a class="reference internal" href="#calculation-of-unknown-elemental-concentration">Calculation of unknown elemental concentration</a><ul>
 <li><a class="reference internal" href="#case-1-you-know-the-composition-of-the-matrix">Case 1: <em>You know the composition of the matrix</em></a></li>
 <li><a class="reference internal" href="#case-2-you-know-the-sample-mass-and-area">Case 2: <em>You know the sample mass and area</em></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#finding-the-scattering-factors-f">Finding the scattering factors f’’</a></li>
+<li><a class="reference internal" href="#finding-scattering-factors-f">Finding scattering factors f’’</a></li>
 </ul>
 </li>
 </ul>
@@ -276,7 +291,7 @@ of two elements in the same sample is
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
-<search id="searchbox" style="display: none" role="search">
+<div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
@@ -284,7 +299,7 @@ of two elements in the same sample is
       <input type="submit" value="Go" />
     </form>
     </div>
-</search>
+</div>
 <script>document.getElementById('searchbox').style.display = "block"</script>
         </div>
       </div>
@@ -299,13 +314,13 @@ of two elements in the same sample is
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">XAFSmassQt 1.5.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">XAFSmassQt 1.6.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">XAFSmass</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2015, Konstantin Klementiev, Roman Chernikov.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.3.7.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     </div>
   </body>
 </html>

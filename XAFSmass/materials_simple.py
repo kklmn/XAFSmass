@@ -393,9 +393,13 @@ class Element(object):
 
     def get_f1f2(self, E):
         """Calculates (interpolates) f1 and f2 for the given array *E*."""
-        if (E < self.E[0]) or (E > self.E[-1]):
-            return (r'E={0} is out of the data table range [{1}, {2}]! ' +
-                    r'Use another table.').format(E, self.E[0], self.E[-1])
+        if np.any(E < self.E[0]) or np.any(E > self.E[-1]):
+            raise ValueError(
+                ('E={0} is out of the data table range ' +
+                 '[{1}, {2}]!!! Use another table.').format(
+                    E if isinstance(E, (int, float)) else
+                    E[np.where((E < self.E[0]) | (E > self.E[-1]))], self.E[0],
+                    self.E[-1]))
         f1 = np.interp(E, self.E, self.f1)
         f2 = np.interp(E, self.E, self.f2)
         return f1 + 1j*f2

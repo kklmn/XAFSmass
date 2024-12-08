@@ -12,10 +12,18 @@ percentage, also in nested form. XAFSmassQt reports the quantity (weight,
 thickness or pressure) together with the expected height of the absorption
 edge.
 
-.. |Screenshot1| image:: _images/1powder_150.png
+.. |Screenshot1| imagezoom:: _images/1powder_150.png
+   :loc: upper-left-corner
    :scale: 66 %
-.. |Screenshot3| image:: _images/3gas_150.png
+   :alt: &ensp;Calculations for a powder material. The material was defined
+      here from the list of compounds as "ZincSulfide", which specifies its
+      chemical formula and its density. The latter value is optional and needed
+      to calculate the sample thickness.
+.. |Screenshot3| imagezoom:: _images/3gas_150.png
+   :loc: upper-right-corner
    :scale: 66 %
+   :alt: &ensp;Calculations of gas filling. When the gas formula is given with
+      parentheses, slider widgets become visible.
 
 Dependencies
 ------------
@@ -124,11 +132,16 @@ gives *the best* signal-to-noise ratio (it is in this sense optimal). You can
 only try to measure your absorption spectra with another registration
 technique: in fluorescence or electron yield modes.
 
-.. image:: _images/SNtransm050.png
-   :scale: 50 %
++---------------+---------------+
+| |SNtransm050| | |SNtransm100| |
++---------------+---------------+
 
-.. image:: _images/SNtransm100.png
+.. |SNtransm050| imagezoom:: _images/SNtransm050.png
    :scale: 50 %
+   :loc: upper-left-corner
+.. |SNtransm100| imagezoom:: _images/SNtransm100.png
+   :scale: 50 %
+   :loc: upper-right-corner
 
 Calculation of thickness and absorption step for samples with known density
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -152,12 +165,12 @@ IC at a certain μd is found from the figures above showing the levels of
 signal-to-noise ratio.
 
 For exploring mixtures of several gases, give the gases in parentheses, e.g.
-as (Ar)(N2). The corresponding number of sliders will appear that define
-partial pressures. The program will calculate the molar weight of each gas and
-update the chemical formula and the total attenuation.
+as (Ar)(N2). Each gas will get a slider defining its partial pressure. The
+program will calculate the molar weight of each gas and update the chemical
+formula and the total attenuation.
 
-Calculation of an unknown elemental concentration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Calculation of unknown elemental concentration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Case 1: *You know the composition of the matrix*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -177,8 +190,8 @@ that the absorption step in the pull-down list be equal to your experimental
 Δμd. This will give you the mass of the element of interest. Just divide it by
 the total mass to get the weight percentage.
 
-Finding the scattering factors f''
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Finding scattering factors f''
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you need to know the scattering factor f'' at different energies and/or its
 jump at an edge (Δf''), XAFSmass provides a graphical tool for this.
@@ -195,12 +208,12 @@ of two elements in the same sample is
 
 """
 __module__ = "XAFSmass"
-__versioninfo__ = (1, 5, 1)
+__versioninfo__ = (1, 6, 0)
 __version__ = '.'.join(map(str, __versioninfo__))
 __author__ = \
     "Konstantin Klementiev (MAX IV Laboratory), " +\
     "Roman Chernikov (NSLS-II)"
 __email__ = \
     "konstantin.klementiev@gmail.com, rchernikov@gmail.com"
-__date__ = "10 Oct 2024"
+__date__ = "8 Dec 2024"
 __license__ = "MIT license"

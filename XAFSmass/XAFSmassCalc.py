@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 __author__ = "Konstantin Klementiev, Roman Chernikov"
-__date__ = "20 Feb 2023"
+__date__ = "25 Nov 2024"
 
 from math import log10, floor
 import itertools
 from collections import defaultdict, OrderedDict
 import numpy as np
-from pyparsing import (Suppress, Word, nums, Forward, Group,
-                       Optional, OneOrMore, oneOf, ParseResults)
+from pyparsing import (
+    Suppress, Word, nums, Forward, Group, Optional, OneOrMore, oneOf,
+    ParseResults, ParseBaseException)
+
 from . import materials_simple as rm
-from .materials_simple import read_atomic_data
 
 crossSection = 4.208e7  # 2*r_0*c*h*N_A [eV*cm^2/mol]
 R = 8.314510  # J/K/mol={m^3Pa/K/mol}
@@ -65,7 +66,7 @@ def sum_by_element(tokens):
             dopes.append([t, sg])
     if dopes:
         matrix = [[t[0], t[1]] for t in nt if isinstance(t[1], (float, int))]
-        matrixMass = sum([read_atomic_data(e[0])*e[1] for e in matrix])
+        matrixMass = sum([rm.read_atomic_data(e[0])*e[1] for e in matrix])
         dopeGroups = []
         for e in dopes:
             if not (e[1] in dopeGroups):
@@ -73,7 +74,7 @@ def sum_by_element(tokens):
         dopeUnitMasses = []
         dopewtPercents = []
         for dg in dopeGroups:
-            m = sum([read_atomic_data(e[0][0])*e[0][1].real for e in dopes
+            m = sum([rm.read_atomic_data(e[0][0])*e[0][1].real for e in dopes
                      if e[1] == dg])
             dopeUnitMasses.append(m)
             for e in dopes:
@@ -132,37 +133,76 @@ def _simple_line(x1, x2, y1, y2):
     return a, b
 
 
+def find_victoreen_f2(istart, iend, element):
+    ef2 = element.E[istart:iend+1]
+    f2 = element.f2[istart:iend+1]
+    b = np.log(ef2)
+    a = f2 * crossSection / ef2
+    sum6 = np.exp(-6*b).sum()
+    sum7 = np.exp(-7*b).sum()
+    sum8 = np.exp(-8*b).sum()
+    ysum1 = (a*np.exp(-3*b)).sum()
+    ysum2 = (a*np.exp(-4*b)).sum()
+
+    det = sum6*sum8 - sum7*sum7
+    c = (sum8*ysum1 - sum7*ysum2) / det
+    d = (-sum7*ysum1 + sum6*ysum2) / det
+    return c, d
+
+
 def find_edge_step(E, element):
-    lenArr, dE, backStep, maxStep = 0, 10, 250, 100
-    step = 0
-    while lenArr < 3:
-        mask = np.abs(E - element.E) < backStep
-        f2 = element.f2[mask]
-        ef2 = element.E[mask]
-        backStep += dE  # eV
-        lenArr = len(ef2)
-        step += 1
-        if step > maxStep:
-            break
-    df2 = np.diff(f2)
+    dE, backE, forwardE, maxStep = 50, 250, 50, 100
     dSigma2 = 0
     f2jump = 0
     sigma2x = 0
-    try:
-        iEdge = np.where(df2 > 0)[0][-1]
-#        f2jump = df2[iEdge]  # simple
-        a, b = _simple_line(ef2[iEdge-1], ef2[iEdge], f2[iEdge-1], f2[iEdge])
-        f2jump = f2[iEdge+1] - a*ef2[iEdge+1] - b
-        ef2jump = ef2[iEdge+1]
-        dSigma2 = f2jump * crossSection / ef2jump
-        sigma2x = f2[iEdge+1] * crossSection / ef2jump
-    except IndexError:
-        # print(e)
-        pass
-    return dSigma2, f2jump, sigma2x
+    iEdge = 0
+    istep = 0
+    while iEdge < 2:
+        mask = (E - backE < element.E) & (element.E < E + forwardE)
+        f2 = element.f2[mask]
+        ef2 = element.E[mask]
+        df2 = np.diff(f2)
+        try:
+            iEdge = np.where(df2 > 0)[0][-1]
+            a, b = _simple_line(
+                ef2[iEdge-1], ef2[iEdge], f2[iEdge-1], f2[iEdge])
+            f2bknd = a*ef2[iEdge+1] + b
+            f2jump = f2[iEdge+1] - f2bknd
+            toSigma2 = crossSection / ef2[iEdge+1]
+            dSigma2 = f2jump * toSigma2
+            sigma2x = f2[iEdge+1] * toSigma2
+        except IndexError:
+            break
+        backE += dE  # eV
+        istep += 1
+        if istep > maxStep:
+            break
+
+    if f2jump > 0:
+        vicc, vicd = find_victoreen_f2(iEdge-2, iEdge, element)
+    else:
+        vicc, vicd = None, None
+    return dSigma2, f2jump, sigma2x, vicc, vicd
 
 
 def calculate_element_dict(formulaList, E, table):
+    """
+    For *formulaList* (a list of [element, mole_amount]), energy *E* (float or
+    numpy array) and *table* (str) of scattering factors returns a tuple
+    (elementsDict, sumSigma2, sumMass) that serves as input for
+    :func:`calculate_powder`, :func:`calculate_foil` and :func:`calculate_gas`.
+
+    *formulaList* is obtained by a previous call of `formula.parseString` or
+    :func:`parse_compound`.
+
+    *elementsDict* is a dict of element symbols with dict values
+    [el, sigma2, dSigma2, n, f1f2.imag, f2jump, vicc, vicd], where *el* is
+    rm.Element object, *sigma2* is absorption σ² interpolated at energies *E*,
+    *dSigma2* is Δσ² (edje jump), *n* the total molar amount of this element in
+    the compound, *f1f2.imag* is the factor f'' at energies *E*, *f2jump* its
+    edge jump, and *vicc* and *vicd* are the Victoreen polynomial coefficients
+    if an absorption edge was detected or Nones otherwise.
+    """
     elementsDict = {}
     for t in formulaList:
         if t[0] not in elementsDict:
@@ -171,23 +211,44 @@ def calculate_element_dict(formulaList, E, table):
             if isinstance(f1f2, str):
                 return f1f2
             sigma2 = f1f2.imag * crossSection / E
-            dSigma2, f2jump, sigma2x = find_edge_step(E, el)
+            dSigma2, f2jump, sigma2x, vicc, vicd = find_edge_step(E, el)
             if sigma2x > 0:
                 sigma2 = sigma2x
-            elementsDict[t[0]] = [el, sigma2, dSigma2, 0, f1f2.imag, f2jump]
+            elementsDict[t[0]] = [el, sigma2, dSigma2, 0, f1f2.imag, f2jump,
+                                  vicc, vicd]
 
     sumSigma2 = 0.
     sumMass = 0.
     for t in formulaList:
         el, sigma2, dSigma2 = elementsDict[t[0]][0:3]
-        elementsDict[t[0]][3] += t[1]
+        elementsDict[t[0]][3] += t[1]  # total of element t[0] in the compound
         if t[1] > 0:
             sumSigma2 += sigma2 * t[1]
             sumMass += el.mass * t[1]
 
-    elementsDict = OrderedDict(sorted(elementsDict.items(),
-                                      key=lambda t: t[1][0].Z))
+    elementsDict = OrderedDict(
+        sorted(elementsDict.items(), key=lambda t: t[1][0].Z))
     return elementsDict, sumSigma2, sumMass
+
+
+def calculate_absorption_background(elementsDict, E):
+    """
+    For the dict *elementsDict* returned by :func:`calculate_element_dict()`
+    calculated absorption background (as σ²) at energies *E*. The background
+    consists of σ² of all elements that do not have an absorption edge detected
+    in *elementsDict* and an extrapolated pre0edge σ² for the element with a
+    detected absorption edge.
+    """
+    bknd = np.zeros_like(E)
+    for element in elementsDict.values():
+        if element[2] > 0:  # has edge
+            vicc, vicd = element[6:8]
+            vic = vicc*np.exp(-3*np.log(E)) + vicd*np.exp(-4*np.log(E))
+            bknd += vic * element[3]
+        else:
+            f1f2 = element[0].get_f1f2(E)
+            bknd += f1f2.imag * element[3] * crossSection / E
+    return bknd
 
 
 def calculate_powder(formulaList, E, muTd, area=None, rho=None,
@@ -264,78 +325,29 @@ def calculate_x(formulaList, E, muTd, Deltamud, deltamud=None,
     return xElement[3], wt, wt1
 
 
-def test_formula():
-    tests = """
-        H
-        NaCl
-        HO
-        H2O
-        HOH
-        (H2O)2
-        (H2O)2OH
-        ((H2O)2OH)12
-        C6H5OH
-        CuSO4
-        CuSO3.8
-        Fe%5SiO2
-        (Fe2)%5SiO2
-        (Al2O3)%10MgO
-        Ni%1((Al2O3)%10MgO)
-        Fe%2((Al2O3)%10SiO2)
-        Fe%0.02((Al2O3)%10SiO2)
-        FexSiO2
-        """.splitlines()
-    for t in tests:
-        if t.strip():
-            results = formula.parseString(t, parseAll=True)
-            print(t, '->', results.asList())
-            print(t, '->', results)
-            print(reconstruct(results))
+def parse_compound(compound, mass_digit=5):
+    """
+    If successful, returns a tuple (parsed_result, mass_str), where
+    *parsed_result* is a list of lists [element, mole_amount] and
+    *mass_str* is a str representation of the compound mass.
 
+    If unsuccessful, returns a str of the error statement.
+    """
 
-def test_powder_foil():
-    tests = [
-        ['CuSO4', 9100],
-        ['Fe%5SiO2', 7200],
-        ]
-    for comp, E in tests:
-        results = formula.parseString(comp)
-        nu, m, th, eDict = calculate_powder(results.asList(), E, 2.5, 1.33,
-                                            rho=5)
-        print(u'{0} at {1}eV: nu={2}mmol, mass={3}mg, th={4}µm'.format(
-              comp, E, round_to_n(nu), round_to_n(m), round_to_n(th)))
-        eDict2 = dict([k, [v[3], v[-2], v[-1]]] for k, v in eDict.items())
-        print(eDict2)
-
-        th, eDict = calculate_foil(results.asList(), E, 2.5, rho=5)
-        print(u'{0} at {1}eV: th={2}µm'.format(comp, E, round_to_n(th)))
-
-        eDict2 = dict([k, [v[-2], v[-1]]] for k, v in eDict.items())
-        print(eDict2)
-
-
-def test_gas():
-    tests = [
-        ['Ar', 9200],
-        ]
-    for comp, E in tests:
-        results = formula.parseString(comp)
-        P = calculate_gas(results.asList(), E, 0.1, 25)
-        print(u'{0} at {1}eV: p={2}mbar'.format(comp, E, round_to_n(P)))
-
-
-def test_x():
-    tests = [
-        ['CuxSiO2', 9200],
-        ]
-    for comp, E in tests:
-        results = formula.parseString(comp)
-        n, wt, wt1 = calculate_x(results.asList(), E, 1, 0.1, 0.01)
-        print(n, wt, wt1)
-
-
-if __name__ == '__main__':
-    test_formula()
-#    test_powder_foil()
-#    test_gas()
-#    test_x()
+    if len(compound) == 0:
+        return "no compound formula"
+    try:
+        res = formula.parseString(compound, parseAll=True)
+        cMass = 0.
+        for e in res.asList():
+            if e[1] < 0:
+                return "compound formula with x"
+            else:
+                cMass += rm.read_atomic_data(e[0])*e[1]
+        if '%' in compound:
+            return parse_compound(reconstruct(res))
+        else:
+            mass_str = '{0}'.format(round_to_n(cMass, mass_digit))
+    except (ParseBaseException, ValueError, ZeroDivisionError):
+        return "wrong compound formula"
+    return res.asList(), mass_str
