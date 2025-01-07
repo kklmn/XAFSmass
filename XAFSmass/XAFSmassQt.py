@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 __author__ = "Konstantin Klementiev, Roman Chernikov"
-__date__ = "10 Oct 2024"
+__date__ = "7 Jan 2024"
 
 import sys
 import os
@@ -45,13 +45,14 @@ else:
         import PyQt5.QtWidgets as myQtGUI
         import matplotlib.backends.backend_qt5agg as mpl_qt
 
-QDialog, QApplication, QLabel, QComboBox, QLineEdit, QPushButton,\
-    QSizePolicy, QHBoxLayout, QVBoxLayout, QFrame, QMessageBox, QWidget,\
+QDialog, QApplication, QLabel, QComboBox, QLineEdit, QPushButton, QCheckBox, \
+    QSizePolicy, QHBoxLayout, QVBoxLayout, QFrame, QMessageBox, QWidget, \
     QSlider, QPixmap, QColor = \
-    myQtGUI.QDialog, myQtGUI.QApplication, myQtGUI.QLabel,\
-    myQtGUI.QComboBox, myQtGUI.QLineEdit, myQtGUI.QPushButton,\
-    myQtGUI.QSizePolicy, myQtGUI.QHBoxLayout, myQtGUI.QVBoxLayout,\
-    myQtGUI.QFrame, myQtGUI.QMessageBox, myQtGUI.QWidget, myQtGUI.QSlider,\
+    myQtGUI.QDialog, myQtGUI.QApplication, myQtGUI.QLabel, \
+    myQtGUI.QComboBox, myQtGUI.QLineEdit, myQtGUI.QPushButton, \
+    myQtGUI.QCheckBox, \
+    myQtGUI.QSizePolicy, myQtGUI.QHBoxLayout, myQtGUI.QVBoxLayout, \
+    myQtGUI.QFrame, myQtGUI.QMessageBox, myQtGUI.QWidget, myQtGUI.QSlider, \
     QtGui.QPixmap, QtGui.QColor
 Canvas = mpl_qt.FigureCanvasQTAgg
 ToolBar = mpl_qt.NavigationToolbar2QT
@@ -145,11 +146,14 @@ class MyFormulaMplCanvas(Canvas):
 
 
 class MyMplCanvas(Canvas):
-    def __init__(self, parent=None, width=6, height=5):
-        fig = Figure(figsize=(width, height), dpi=96)
+    def __init__(self, parent=None, width=8, height=5):
+        self.showf1 = False
+        self.plotData = None
+        fig = Figure(figsize=(width, height))
         self.fig = fig
         self.axes = fig.add_subplot(111)
-        self.fig.subplots_adjust(left=0.15, right=0.97, bottom=0.15, top=0.97)
+        self.axesr = self.axes.twinx()
+        self.fig.subplots_adjust(left=0.12, right=0.88, bottom=0.15, top=0.97)
 #        self.axes.hold(False)  # clear axes every time plot() is called
         Canvas.__init__(self, fig)
         self.setParent(parent)
@@ -157,10 +161,19 @@ class MyMplCanvas(Canvas):
         fm = QtGui.QFontMetrics(self.font())
         self.fontsize = int(fm.height()) / 1.33
 
-    def plot(self, compound, E, table):
-        self.axes.cla()
         self.axes.set_xlabel('energy (keV)', fontsize=self.fontsize)
         self.axes.set_ylabel(r"$f''$", fontsize=self.fontsize)
+        self.axesr.set_ylabel(r"$f'$", fontsize=self.fontsize)
+        self.axesr.set_visible(self.showf1)
+
+    def plot(self, compound, E, table):
+        self.plotData = compound, E, table
+        for artist in self.axes.lines + self.axes.collections:
+            artist.remove()
+        if self.showf1:
+            for artist in self.axesr.lines + self.axesr.collections:
+                artist.remove()
+        self.axesr.set_visible(self.showf1)
         if compound is None:
             ll = self.axes.legend([], title='no given elements',
                                   loc='upper right', fontsize=self.fontsize)
@@ -170,15 +183,21 @@ class MyMplCanvas(Canvas):
                 QMessageBox.critical(self, "Error", ced)
                 return
             elementsDict = ced[0]
-            for elName, el in elementsDict.items():
+            for iel, (elName, el) in enumerate(elementsDict.items()):
+                color = 'C{0}'.format(iel % 10)
                 label = elName if el[5] == 0 else\
                     r"{0}, $f''$={1}, $\Delta f''$={2}".format(
                         elName, xc.round_to_n(el[4]), xc.round_to_n(el[5]))
                 self.axes.plot(el[0].E*1e-3, el[0].f2, '-', marker='.',
-                               label=label)
-            self.axes.set_xlim(el[0].E[0]*1e-3, el[0].E[-1]*1e-3)
+                               label=label, color=color)
+                if self.showf1:
+                    self.axesr.plot(el[0].E*1e-3, el[0].f1, '--', marker='.',
+                                    color=color)
+            # self.axes.set_xlim(el[0].E[0]*1e-3, el[0].E[-1]*1e-3)
             ll = self.axes.legend(loc='upper right', fontsize=self.fontsize)
             ylim = self.axes.get_ylim()
+            dy = ylim[1] - ylim[0]
+            ylim = ylim[0] + 0.2*dy, ylim[1] - 0.2*dy
             self.axes.plot([E*1e-3, E*1e-3], ylim, '--', color='gray',
                            label=None)
         mpl.artist.setp(ll.get_title(), fontsize=self.fontsize)
@@ -193,13 +212,17 @@ class PlotDlg(QDialog):
         self.plotCanvas.setSizePolicy(
             QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.toolbar = ToolBar(self.plotCanvas, self)
+        self.f1CB = QCheckBox("show f'")
+        self.f1CB.clicked.connect(self.showf1)
+        self.toolbar.insertWidget(self.toolbar.actions()[-1], self.f1CB)
+
         bl.addWidget(self.toolbar)
         bl.addWidget(self.plotCanvas)
         pg = parent.frameGeometry()
         self.move(parent.x()+pg.width(), parent.y())
         pg = parent.geometry()
         self.resize(int(pg.width()*1.5), int(pg.height()))
-        self.setWindowTitle("plots of f''")
+        self.setWindowTitle("plots of f' and f''")
         self.setWindowFlags(QtCore.Qt.Window)
         self.show()
         self.plotCanvas.plot(compound, E, table)
@@ -208,6 +231,12 @@ class PlotDlg(QDialog):
     def done(self, event):
         self.parent().plotDlg = None
         super(PlotDlg, self).done(event)
+
+    def showf1(self, checked):
+        self.plotCanvas.showf1 = checked
+        if self.plotCanvas.plotData is None:
+            return
+        self.plotCanvas.plot(*self.plotCanvas.plotData)
 
 
 class MainDlg(QDialog):
@@ -887,6 +916,7 @@ class MainDlg(QDialog):
         table = tablesF[self.tableCB.currentIndex()]
         if self.plotDlg is None:
             self.plotDlg = PlotDlg(self, self.parsedCompound, E, table)
+            self.plotDlg.setMinimumWidth(600)
         else:
             self.plotDlg.plotCanvas.plot(self.parsedCompound, E, table)
 
