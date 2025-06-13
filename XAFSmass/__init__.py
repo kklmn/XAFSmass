@@ -29,7 +29,7 @@ Dependencies
 ------------
 
 numpy, pyparsing and matplotlib are required. Qt must be provided by either
-PyQt4, PyQt5 or PySide.
+PyQt5, PySide2, PyQt6 or PySide6 by means of qtpy.
 
 Get XAFSmass
 ------------
@@ -208,12 +208,12 @@ of two elements in the same sample is
 
 """
 __module__ = "XAFSmass"
-__versioninfo__ = (1, 6, 0)
+__versioninfo__ = (1, 7, 0)
 __version__ = '.'.join(map(str, __versioninfo__))
 __author__ = \
     "Konstantin Klementiev (MAX IV Laboratory), " +\
     "Roman Chernikov (NSLS-II)"
 __email__ = \
     "konstantin.klementiev@gmail.com, rchernikov@gmail.com"
-__date__ = "8 Dec 2024"
+__date__ = "13 Jun 2025"
 __license__ = "MIT license"

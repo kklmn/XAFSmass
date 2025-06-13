@@ -8,12 +8,12 @@ thickness or pressure) together with the expected height of the absorption
 edge. The GUI is provided by Qt. The documentation is included.
 
 Dependencies: numpy, pyparsing and matplotlib are required. Qt must be provided
-by either PyQt4, PyQt5 or PySide.
+by either PyQt5, PySide2, PyQt6 or PySide6 by means of qtpy.
 """
 
 setup(
     name='XAFSmass',
-    version='1.6.0',
+    version='1.7.0',
     description='A program for calculating the mass of XAFS samples. '
                 'For synchrotron users.',
     long_description=long_description,
@@ -30,7 +30,7 @@ setup(
                                'help/_images/math/*.*', 'help/_sources/*.*',
                                'help/_static/*.*']},
     scripts=['XAFSmass/XAFSmassQt.py'],
-    install_requires=['numpy>=1.8.0', 'matplotlib>=2.0.0', 'distro'],
+    install_requires=['numpy>=1.8.0', 'matplotlib>=2.0.0', 'distro', 'qtpy'],
     classifiers=['Development Status :: 5 - Production/Stable',
                  'Intended Audience :: Science/Research',
                  'Natural Language :: English',

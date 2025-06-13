@@ -1,10 +1,11 @@
 ﻿# -*- coding: utf-8 -*-
 __author__ = "Konstantin Klementiev, Roman Chernikov"
-__date__ = "7 Jan 2024"
+__date__ = "13 Jun 2025"
 
 import sys
 import os
 import re
+import platform
 from functools import partial
 from collections import OrderedDict
 import webbrowser
@@ -17,55 +18,26 @@ from XAFSmass import XAFSmassCalc as xc
 from XAFSmass.__init__ import (__version__, __author__, __license__)
 from XAFSmass.materials_simple import elemental, compounds
 
-# ==this may help to resolve conflict betwen Qt4 and Qt5=======================
-# mpl.use("Qt4Agg")
-# =============================================================================
+# os.environ["QT_API"] = 'pyside6'
+import qtpy
+from qtpy import QtGui, QtCore
+import qtpy.QtWidgets as QtWidgets
 
-try:
-    from matplotlib.backends import qt_compat
-except ImportError:
-    from matplotlib.backends import qt4_compat
-    qt_compat = qt4_compat
-use_pyside = qt_compat.QT_API.startswith("PySide")
-if use_pyside:
-    QtName = "PySide"
-    import PySide
-    from PySide import QtGui, QtCore
-    import PySide.QtGui as myQtGUI
-    import matplotlib.backends.backend_qt4agg as mpl_qt
-else:
-    try:
-        QtName = "PyQt4"
-        from PyQt4 import QtGui, QtCore
-        import PyQt4.QtGui as myQtGUI
-        import matplotlib.backends.backend_qt4agg as mpl_qt
-    except ImportError:
-        QtName = "PyQt5"
-        from PyQt5 import QtGui, QtCore
-        import PyQt5.QtWidgets as myQtGUI
-        import matplotlib.backends.backend_qt5agg as mpl_qt
+from matplotlib.backends import qt_compat
+import matplotlib.backends.backend_qtagg as mpl_qt
 
-QDialog, QApplication, QLabel, QComboBox, QLineEdit, QPushButton, QCheckBox, \
-    QSizePolicy, QHBoxLayout, QVBoxLayout, QFrame, QMessageBox, QWidget, \
-    QSlider, QPixmap, QColor = \
-    myQtGUI.QDialog, myQtGUI.QApplication, myQtGUI.QLabel, \
-    myQtGUI.QComboBox, myQtGUI.QLineEdit, myQtGUI.QPushButton, \
-    myQtGUI.QCheckBox, \
-    myQtGUI.QSizePolicy, myQtGUI.QHBoxLayout, myQtGUI.QVBoxLayout, \
-    myQtGUI.QFrame, myQtGUI.QMessageBox, myQtGUI.QWidget, myQtGUI.QSlider, \
-    QtGui.QPixmap, QtGui.QColor
 Canvas = mpl_qt.FigureCanvasQTAgg
 ToolBar = mpl_qt.NavigationToolbar2QT
 
 # ==this can make the formulas look nicer:=====================================
 mpl.rcParams['mathtext.fontset'] = 'custom'
 
-#mpl.rcParams['mathtext.rm'] = 'serif'
-#mpl.rcParams['mathtext.it'] = 'serif:italic'
-#mpl.rcParams['mathtext.bf'] = 'serif:bold'
-#mpl.rcParams['mathtext.cal'] = 'cursive'
-#mpl.rcParams['mathtext.rm'] = 'serif'
-#mpl.rcParams['mathtext.tt'] = 'monospace'
+# mpl.rcParams['mathtext.rm'] = 'serif'
+# mpl.rcParams['mathtext.it'] = 'serif:italic'
+# mpl.rcParams['mathtext.bf'] = 'serif:bold'
+# mpl.rcParams['mathtext.cal'] = 'cursive'
+# mpl.rcParams['mathtext.rm'] = 'serif'
+# mpl.rcParams['mathtext.tt'] = 'monospace'
 
 mpl.rcParams['mathtext.rm'] = 'cmr10'
 mpl.rcParams['mathtext.it'] = 'cmmi10'
@@ -81,8 +53,7 @@ mpl.rcParams['mathtext.bf'] = 'cmss10'
 MAC = "qt_mac_set_native_menubar" in dir()
 
 POWDER, FOIL, GAS, XCONTENT = range(4)
-whats = ('powder', 'foil, film, glass etc.', 'gas',
-         'has unknown concentration')
+whats = 'powder', 'foil, film, glass etc.', 'gas', 'has unknown concentration'
 formulas = (
     r"$\nu = (\mu_T d)\cdot S\cdot\left(N_A 2r_0 \lambda \sum_i{N_i f_i''}"
     r"\right)^{-1}; \quad m = M\cdot\nu$",
@@ -107,22 +78,22 @@ gasMixerPressurePageStep = 50
 gasMixerPressureDefault = 1000
 
 
-class ComboBoxWithPlaceholder(QComboBox):
+class ComboBoxWithPlaceholder(QtWidgets.QComboBox):
     def paintEvent(self, event):
-        painter = myQtGUI.QStylePainter(self)
+        painter = QtWidgets.QStylePainter(self)
 
-        opt = myQtGUI.QStyleOptionComboBox()
+        opt = QtWidgets.QStyleOptionComboBox()
         self.initStyleOption(opt)
-        painter.drawComplexControl(myQtGUI.QStyle.CC_ComboBox, opt)
+        painter.drawComplexControl(QtWidgets.QStyle.CC_ComboBox, opt)
 
         if self.currentIndex() < 0:
-            painter.setPen(QColor('#888888'))
+            painter.setPen(QtGui.QColor('#888888'))
             try:
                 if self.placeholderText():
                     opt.currentText = self.placeholderText()
             except AttributeError:
                 pass
-        painter.drawControl(myQtGUI.QStyle.CE_ComboBoxLabel, opt)
+        painter.drawControl(QtWidgets.QStyle.CE_ComboBoxLabel, opt)
 
 
 class MyFormulaMplCanvas(Canvas):
@@ -132,10 +103,16 @@ class MyFormulaMplCanvas(Canvas):
         Canvas.__init__(self, fig)
         fig.patch.set_visible(False)
         self.setParent(parent)
-        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                           QtWidgets.QSizePolicy.Fixed)
         self.updateGeometry()
         fm = QtGui.QFontMetrics(self.font())
         self.fontsize = int(fm.height()) / 1.33
+        locos = platform.platform(terse=True)
+        if 'Linux' in locos:
+            self.fontsize = int(fm.height()) / 1.5
+        else:
+            self.fontsize = int(fm.height()) / 1.33
         self.setStyleSheet("background-color:transparent;")
 
     def update_formula(self, formula=None):
@@ -180,7 +157,7 @@ class MyMplCanvas(Canvas):
         else:
             ced = xc.calculate_element_dict(compound.asList(), E, table)
             if isinstance(ced, str):
-                QMessageBox.critical(self, "Error", ced)
+                QtWidgets.QMessageBox.critical(self, "Error", ced)
                 return
             elementsDict = ced[0]
             for iel, (elName, el) in enumerate(elementsDict.items()):
@@ -204,15 +181,15 @@ class MyMplCanvas(Canvas):
         self.draw()
 
 
-class PlotDlg(QDialog):
+class PlotDlg(QtWidgets.QDialog):
     def __init__(self, parent, compound, E, table):
         super(PlotDlg, self).__init__(parent)
-        bl = QVBoxLayout(self)
+        bl = QtWidgets.QVBoxLayout(self)
         self.plotCanvas = MyMplCanvas(self)
-        self.plotCanvas.setSizePolicy(
-            QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.plotCanvas.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                                      QtWidgets.QSizePolicy.Expanding)
         self.toolbar = ToolBar(self.plotCanvas, self)
-        self.f1CB = QCheckBox("show f'")
+        self.f1CB = QtWidgets.QCheckBox("show f'")
         self.f1CB.clicked.connect(self.showf1)
         self.toolbar.insertWidget(self.toolbar.actions()[-1], self.f1CB)
 
@@ -221,7 +198,7 @@ class PlotDlg(QDialog):
         pg = parent.frameGeometry()
         self.move(parent.x()+pg.width(), parent.y())
         pg = parent.geometry()
-        self.resize(int(pg.width()*1.5), int(pg.height()))
+        self.resize(int(pg.width()*1.8), int(pg.height()))
         self.setWindowTitle("plots of f' and f''")
         self.setWindowFlags(QtCore.Qt.Window)
         self.show()
@@ -239,27 +216,26 @@ class PlotDlg(QDialog):
         self.plotCanvas.plot(*self.plotCanvas.plotData)
 
 
-class MainDlg(QDialog):
+class MainDlg(QtWidgets.QDialog):
     def __init__(self, parent=None):
         super(MainDlg, self).__init__(parent)
 
-        self.whatLabel = QLabel(r"sample:")
-        self.whatCB = QComboBox()
+        self.whatLabel = QtWidgets.QLabel(r"sample:")
+        self.whatCB = QtWidgets.QComboBox()
         self.whatCB.addItems(whats)
         self.whatCB.currentIndexChanged.connect(self.updateUi)
         self.what = 0
 
         self.formula = MyFormulaMplCanvas(self, width=3.2, height=0.5)
 
-        self.compoundLabel = QLabel("compound:")
-        self.compoundExLabel = QLabel("")
+        self.compoundLabel = QtWidgets.QLabel("compound:")
+        self.compoundExLabel = QtWidgets.QLabel("")
         self.compoundExLabel.setTextInteractionFlags(
             QtCore.Qt.TextInteractionFlags(QtCore.Qt.TextSelectableByMouse))
-        self.compoundEdit = QLineEdit()
+        self.compoundEdit = QtWidgets.QLineEdit()
         self.compoundEdit.setPlaceholderText(
             'type here or select from the lists above')
 
-        # self.compoundListsLabel = QLabel("can also be defined from")
         self.compoundList1 = ComboBoxWithPlaceholder()
         self.compoundList1.addItems(
             [k for k in OrderedDict(
@@ -285,24 +261,24 @@ class MainDlg(QDialog):
         self.compoundList2.setCurrentIndex(-1)
         self.compoundList2.activated.connect(self.elementActivated)
 
-        self.compoundMassLabel = QLabel("M (g/mol) = ")
-        self.compoundMass = QLabel("")
+        self.compoundMassLabel = QtWidgets.QLabel("M (g/mol) = ")
+        self.compoundMass = QtWidgets.QLabel("")
 
-        self.muTdLabel = QLabel("")
-        self.muTdEdit = QLineEdit()
+        self.muTdLabel = QtWidgets.QLabel("")
+        self.muTdEdit = QtWidgets.QLineEdit()
 #        font = QtGui.QFont(self.font())
 #        font.setPointSize(font.pointSize()+2)
 #        fm = QtGui.QFontMetrics(font)
 #        self.muTdEdit.setMinimumSize(fm.width("8.88"), fm.height())
-        self.areaLabel = QLabel("")
-        self.areaEdit = QLineEdit()
+        self.areaLabel = QtWidgets.QLabel("")
+        self.areaEdit = QtWidgets.QLineEdit()
 #        self.areaEdit.setMinimumSize(fm.width("8.88"), fm.height())
-        self.dmudLabel = QLabel(u"δµd = ")
-        self.dmudEdit = QLineEdit()
+        self.dmudLabel = QtWidgets.QLabel(u"δµd = ")
+        self.dmudEdit = QtWidgets.QLineEdit()
 #        self.dmudEdit.setMinimumSize(fm.width("8.888"), fm.height())
 
-        self.energyLabel = QLabel("E (eV) =")
-        self.energyCB = QComboBox()
+        self.energyLabel = QtWidgets.QLabel("E (eV) =")
+        self.energyCB = QtWidgets.QComboBox()
         self.read_energies()
         self.energyCB.addItems(self.energies)
         self.energyCB.setEditable(True)
@@ -311,63 +287,64 @@ class MainDlg(QDialog):
         self.energyCB.lineEdit().setText(str(self.energy))
         self.energyCB.setMaxVisibleItems(25)
 
-        self.tableLabel = QLabel("f data table:")
-        self.tableCB = QComboBox()
+        self.tableLabel = QtWidgets.QLabel("f data table:")
+        self.tableCB = QtWidgets.QComboBox()
         self.tableCB.addItems(tables)
         self.tableCB.setCurrentIndex(3)  # Chantler total
         self.tableCB.currentIndexChanged.connect(self.calculate)
-        self.tablePlotButton = QPushButton('Plot f"')
+        self.tablePlotButton = QtWidgets.QPushButton('Plot f"')
         if not MAC:
             self.tablePlotButton.setFocusPolicy(QtCore.Qt.NoFocus)
 
         self.tablePlotButton.clicked.connect(self.plotf)
 
-        self.resNuLabel = QLabel("")
-        self.resNu = QLabel("")
-        self.resMassLabel = QLabel("")
-        self.resMass = QLabel("")
+        self.resNuLabel = QtWidgets.QLabel("")
+        self.resNu = QtWidgets.QLabel("")
+        self.resMassLabel = QtWidgets.QLabel("")
+        self.resMass = QtWidgets.QLabel("")
 
-        self.stepLabel = QLabel("absorptance step = ")
-        self.stepCB = QComboBox()
-        self.stepCB.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
+        self.stepLabel = QtWidgets.QLabel("absorptance step = ")
+        self.stepCB = QtWidgets.QComboBox()
+        self.stepCB.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                                  QtWidgets.QSizePolicy.Fixed)
 #        self.stepCB.setMinimumWidth(200)
 
-        self.extraRhoLabel = QLabel(u"ρ (g/cm<sup>3</sup>) = ")
-        self.extraRhoEdit = QLineEdit()
+        self.extraRhoLabel = QtWidgets.QLabel(u"ρ (g/cm<sup>3</sup>) = ")
+        self.extraRhoEdit = QtWidgets.QLineEdit()
 #        self.extraRhoEdit.setMinimumSize(fm.width("8.88"), fm.height())
-        self.extraRhoEdit.setSizePolicy(
-            QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
-        self.extraDLabel = QLabel(u"d (µm) = ")
-        self.extraD = QLabel(u"")
+        self.extraRhoEdit.setSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding,
+                                        QtWidgets.QSizePolicy.Fixed)
+        self.extraDLabel = QtWidgets.QLabel(u"d (µm) = ")
+        self.extraD = QtWidgets.QLabel(u"")
 
-        self.buttonCalculate = QPushButton("Calculate")
+        self.buttonCalculate = QtWidgets.QPushButton("Calculate")
         self.buttonCalculate.clicked.connect(self.calculate)
-        self.buttonAbout = QPushButton("About...")
+        self.buttonAbout = QtWidgets.QPushButton("About...")
         self.buttonAbout.clicked.connect(self.about)
-        self.buttonHelp = QPushButton("Help...")
+        self.buttonHelp = QtWidgets.QPushButton("Help...")
         self.buttonHelp.clicked.connect(self.myhelp)
 
-        whatLayout = QHBoxLayout()
+        whatLayout = QtWidgets.QHBoxLayout()
         whatLayout.addWidget(self.whatLabel)
         whatLayout.addWidget(self.whatCB)
         whatLayout.addStretch()
 
-        compoundLayout = QHBoxLayout()
+        compoundLayout = QtWidgets.QHBoxLayout()
         compoundLayout.addWidget(self.compoundLabel)
         compoundLayout.addWidget(self.compoundExLabel)
         compoundLayout.addStretch()
 
-        listsLayout = QHBoxLayout()
+        listsLayout = QtWidgets.QHBoxLayout()
         # listsLayout.addWidget(self.compoundListsLabel)
         listsLayout.addWidget(self.compoundList1)
         listsLayout.addWidget(self.compoundList2)
 
-        compoundMassLayout = QHBoxLayout()
+        compoundMassLayout = QtWidgets.QHBoxLayout()
         compoundMassLayout.addWidget(self.compoundMassLabel)
         compoundMassLayout.addWidget(self.compoundMass)
         compoundMassLayout.addStretch()
 
-        muTdLayout = QHBoxLayout()
+        muTdLayout = QtWidgets.QHBoxLayout()
         muTdLayout.addWidget(self.muTdLabel)
         muTdLayout.addWidget(self.muTdEdit)
         muTdLayout.addStretch()
@@ -378,19 +355,19 @@ class MainDlg(QDialog):
         muTdLayout.addWidget(self.dmudEdit)
         muTdLayout.addStretch()
 
-        energyLayout = QHBoxLayout()
+        energyLayout = QtWidgets.QHBoxLayout()
         energyLayout.addWidget(self.energyLabel)
         energyLayout.addWidget(self.energyCB)
         energyLayout.addStretch()
 
-        tableLayout = QHBoxLayout()
+        tableLayout = QtWidgets.QHBoxLayout()
         tableLayout.addWidget(self.tableLabel)
         tableLayout.addWidget(self.tableCB)
         tableLayout.addStretch()
         tableLayout.addWidget(self.tablePlotButton)
         tableLayout.addStretch()
 
-        resLayout = QHBoxLayout()
+        resLayout = QtWidgets.QHBoxLayout()
         resLayout.addWidget(self.resNuLabel)
         resLayout.addWidget(self.resNu)
         resLayout.addStretch()
@@ -398,12 +375,12 @@ class MainDlg(QDialog):
         resLayout.addWidget(self.resMass)
         resLayout.addStretch()
 
-        stepLayout = QHBoxLayout()
+        stepLayout = QtWidgets.QHBoxLayout()
         stepLayout.addWidget(self.stepLabel)
         stepLayout.addWidget(self.stepCB)
 #        stepLayout.addStretch()
 
-        extraLayout = QHBoxLayout()
+        extraLayout = QtWidgets.QHBoxLayout()
         extraLayout.addWidget(self.extraRhoLabel)
         extraLayout.addWidget(self.extraRhoEdit)
         extraLayout.addStretch()
@@ -414,27 +391,27 @@ class MainDlg(QDialog):
         self.gasesInMixture = []
         self.gasesInMixtureN = 0
         if gasMixerN > 0:
-            mixerLayout = QVBoxLayout()
+            mixerLayout = QtWidgets.QVBoxLayout()
             mixerLayout.setContentsMargins(0, 0, 0, 0)
             for iGas in range(gasMixerN):
-                gasInMixture = QWidget()
+                gasInMixture = QtWidgets.QWidget()
                 self.gasesInMixture.append(gasInMixture)
-                gasLayout = QHBoxLayout(gasInMixture)
+                gasLayout = QtWidgets.QHBoxLayout(gasInMixture)
                 gasLayout.setContentsMargins(0, 0, 0, 0)
 
-                gasLabel = QLabel()
+                gasLabel = QtWidgets.QLabel()
 
-                gasSlider = QSlider(QtCore.Qt.Horizontal)
+                gasSlider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
                 gasSlider.setMinimum(gasMixerPressureMin)
                 gasSlider.setMaximum(gasMixerPressureMax)
-                gasSlider.setTickPosition(QSlider.TicksAbove)
+                gasSlider.setTickPosition(QtWidgets.QSlider.TicksAbove)
                 gasSlider.setTickInterval(gasMixerPressurePageStep)
                 gasSlider.setPageStep(gasMixerPressurePageStep)
                 gasSlider.setValue(gasMixerPressureDefault)
                 gasSlider.valueChanged.connect(
                     partial(self.gasSliderChanged, iGas))
 
-                gasValue = QLabel(
+                gasValue = QtWidgets.QLabel(
                     "{0:.0f} mbar".format(gasMixerPressureDefault))
                 gasInMixture.pressure = gasMixerPressureDefault
 
@@ -444,34 +421,34 @@ class MainDlg(QDialog):
                 mixerLayout.addWidget(gasInMixture)
             self.calculateGasMixture()
 
-        buttonLayout = QHBoxLayout()
+        buttonLayout = QtWidgets.QHBoxLayout()
         buttonLayout.addStretch()
         buttonLayout.addWidget(self.buttonCalculate)  # 1st button gets Enter
         buttonLayout.addWidget(self.buttonAbout)
         buttonLayout.addWidget(self.buttonHelp)
         buttonLayout.addStretch()
 
-        layout = QVBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
         layout.addLayout(whatLayout)
         layout.addWidget(self.formula)
-        hline1 = QFrame(self)
-        hline1.setFrameStyle(QFrame.HLine)
+        hline1 = QtWidgets.QFrame(self)
+        hline1.setFrameStyle(QtWidgets.QFrame.HLine)
         layout.addWidget(hline1)
         layout.addLayout(compoundLayout)
         layout.addLayout(listsLayout)
         layout.addWidget(self.compoundEdit)
         layout.addLayout(compoundMassLayout)
-        hline2 = QFrame(self)
-        hline2.setFrameStyle(QFrame.HLine)
+        hline2 = QtWidgets.QFrame(self)
+        hline2.setFrameStyle(QtWidgets.QFrame.HLine)
         layout.addWidget(hline2)
         layout.addLayout(muTdLayout)
         layout.addLayout(energyLayout)
-        hline3 = QFrame(self)
-        hline3.setFrameStyle(QFrame.HLine)
+        hline3 = QtWidgets.QFrame(self)
+        hline3.setFrameStyle(QtWidgets.QFrame.HLine)
         layout.addWidget(hline3)
         layout.addLayout(tableLayout)
-        hline4 = QFrame(self)
-        hline4.setFrameStyle(QFrame.HLine)
+        hline4 = QtWidgets.QFrame(self)
+        hline4.setFrameStyle(QtWidgets.QFrame.HLine)
         layout.addWidget(hline4)
         layout.addLayout(resLayout)
         layout.addLayout(stepLayout)
@@ -484,11 +461,17 @@ class MainDlg(QDialog):
 
         self.setWindowTitle("XAFSmassQt")
         selfDir = os.path.dirname(__file__)
-        self.setWindowIcon(QtGui.QIcon(
-            os.path.join(selfDir, 'help', '_static', 'XAFSmassQt.ico')))
+        icon = QtGui.QIcon(os.path.abspath(os.path.join(
+            selfDir, 'help', '_static', 'XAFSmassQt.ico')))
+        self.setWindowIcon(icon)
         self.setWindowFlags(QtCore.Qt.Window)
-        self.move(QApplication.desktop().screen().rect().center() -
-                  self.rect().center())
+        try:
+            xy = QtWidgets.QApplication.primaryScreen().availableGeometry().center() - \
+                self.rect().center()
+        except AttributeError:
+            xy = QtWidgets.QApplication.desktop().screen().rect().center() - \
+                self.rect().center()
+        self.move(xy)
         self.updateUi()
         self.plotDlg = None
 #        pg = self.geometry()
@@ -796,7 +779,7 @@ class MainDlg(QDialog):
                 self.parsedCompound.asList(), E, muTd, area, rho, table=table)
             if isinstance(res, str):
                 self.clear_results()
-                QMessageBox.critical(self, "Error", res)
+                QtWidgets.QMessageBox.critical(self, "Error", res)
                 return
             nu, m, th, eDict = res
             self.resNu.setText('{0}'.format(xc.round_to_n(nu, 3)))
@@ -816,7 +799,7 @@ class MainDlg(QDialog):
                 self.parsedCompound.asList(), E, muTd, rho, table=table)
             if isinstance(res, str):
                 self.clear_results()
-                QMessageBox.critical(self, "Error", res)
+                QtWidgets.QMessageBox.critical(self, "Error", res)
                 return
             th, eDict = res
             self.resMass.setText("<b>{0}</b>".format(xc.round_to_n(th, 3)))
@@ -833,7 +816,7 @@ class MainDlg(QDialog):
                 table=table)
             if isinstance(res, str):
                 self.clear_results()
-                QMessageBox.critical(self, "Error", res)
+                QtWidgets.QMessageBox.critical(self, "Error", res)
                 return
             P = res
             self.resMass.setText("<b>{0}</b>".format(xc.round_to_n(P, 3)))
@@ -842,7 +825,7 @@ class MainDlg(QDialog):
                 self.parsedCompound.asList(), E, muTd, Dmud, dmud, table=table)
             if isinstance(res, str):
                 self.clear_results()
-                QMessageBox.critical(self, "Error", res)
+                QtWidgets.QMessageBox.critical(self, "Error", res)
                 return
             nu, wt, wt1 = res
             self.resNu.setText('{0}'.format(xc.round_to_n(nu, 3)))
@@ -856,7 +839,6 @@ class MainDlg(QDialog):
         def isWin11():
             return True if sys.getwindowsversion().build > 22000 else False
 
-        import platform
         locos = platform.platform(terse=True)
         if 'Linux' in locos:
             try:
@@ -864,7 +846,7 @@ class MainDlg(QDialog):
             except AttributeError:  # no platform.linux_distribution in py3.8
                 try:
                     import distro
-                    locos = " ".join(distro.linux_distribution())
+                    locos = " ".join([distro.name(), distro.version()])
                 except ImportError:
                     print("do 'pip install distro' for a better view of Linux"
                           " distro string")
@@ -872,12 +854,6 @@ class MainDlg(QDialog):
             if isWin11():
                 locos = 'Winows 11'
 
-        if use_pyside:
-            Qt_version = QtCore.__version__
-            PyQt_version = PySide.__version__
-        else:
-            Qt_version = QtCore.QT_VERSION_STR
-            PyQt_version = QtCore.PYQT_VERSION_STR
         title = "About XAFSmassQt"
         txt = \
             """<b>XAFSmass(Qt)</b> v {0}
@@ -890,17 +866,16 @@ class MainDlg(QDialog):
             <ul>
             <li>{3}
             <li>Python {4}
-            <li>Qt {5}
-            <li>{6} {7}
+            <li>Qt: {5} {6}
             </ul>""".format(
                 __version__, __author__.split(','), __license__,
                 locos, platform.python_version(),
-                Qt_version, QtName, PyQt_version)
+                qtpy.API_NAME, qtpy.QT_VERSION)
 
-        msg = QMessageBox()
+        msg = QtWidgets.QMessageBox()
         msg.setStyleSheet("#qt_msgbox_label{min-width: 400px;}")
         msg.setWindowIcon(self.windowIcon())
-        msg.setIconPixmap(QPixmap(os.path.join(
+        msg.setIconPixmap(QtGui.QPixmap(os.path.join(
              'help', '_static', 'XAFSmassQt.ico')))
         msg.setText(txt)
         msg.setWindowTitle(title)
@@ -922,7 +897,7 @@ class MainDlg(QDialog):
 
 
 def run():
-    app = QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     form = MainDlg()
     form.show()
     app.exec_()

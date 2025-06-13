@@ -207,7 +207,10 @@ def calculate_element_dict(formulaList, E, table):
     for t in formulaList:
         if t[0] not in elementsDict:
             el = rm.Element(t[0], table=table)
-            f1f2 = el.get_f1f2(E)
+            try:
+                f1f2 = el.get_f1f2(E)
+            except ValueError as e:
+                f1f2 = str(e)
             if isinstance(f1f2, str):
                 return f1f2
             sigma2 = f1f2.imag * crossSection / E

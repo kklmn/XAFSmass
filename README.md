@@ -18,7 +18,7 @@ Dependencies
 ------------
 
 numpy, pyparsing and matplotlib are required. Qt must be provided by either
-PyQt4, PyQt5 or PySide.
+PyQt5, PySide2, PyQt6 or PySide6 by means of qtpy.
 
 Installation
 ------------
