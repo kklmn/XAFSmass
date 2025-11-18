@@ -12,14 +12,14 @@ percentage, also in nested form. XAFSmassQt reports the quantity (weight,
 thickness or pressure) together with the expected height of the absorption
 edge.
 
-.. |Screenshot1| imagezoom:: _images/1powder_150.png
+.. |Screenshot1| imagezoom:: _images/1powder_170.png
    :loc: upper-left-corner
    :scale: 66 %
    :alt: &ensp;Calculations for a powder material. The material was defined
       here from the list of compounds as "ZincSulfide", which specifies its
       chemical formula and its density. The latter value is optional and needed
       to calculate the sample thickness.
-.. |Screenshot3| imagezoom:: _images/3gas_150.png
+.. |Screenshot3| imagezoom:: _images/3gas_170.png
    :loc: upper-right-corner
    :scale: 66 %
    :alt: &ensp;Calculations of gas filling. When the gas formula is given with
