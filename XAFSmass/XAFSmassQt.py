@@ -26,7 +26,7 @@ import qtpy.QtWidgets as QtWidgets
 from matplotlib.backends import qt_compat
 try:
     import matplotlib.backends.backend_qtagg as mpl_qt
-except ModuleNotFoundError:
+except ImportError:
     import matplotlib.backends.backend_qt5agg as mpl_qt
 
 Canvas = mpl_qt.FigureCanvasQTAgg
