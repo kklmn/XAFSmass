@@ -24,10 +24,12 @@ from qtpy import QtGui, QtCore
 import qtpy.QtWidgets as QtWidgets
 
 from matplotlib.backends import qt_compat
-try:
-    import matplotlib.backends.backend_qtagg as mpl_qt
-except ImportError:
+if str(qtpy.API_NAME).lower() in ('pyqt6', 'pyside6'):
+    import matplotlib.backends.backend_qt6agg as mpl_qt
+elif str(qtpy.API_NAME).lower() in ('pyqt5', 'pyside2'):
     import matplotlib.backends.backend_qt5agg as mpl_qt
+else:
+    raise ImportError(f"Unsupported Qt API: {qtpy.API_NAME}. Cannot find a suitable matplotlib Qt backend.")
 
 Canvas = mpl_qt.FigureCanvasQTAgg
 ToolBar = mpl_qt.NavigationToolbar2QT
