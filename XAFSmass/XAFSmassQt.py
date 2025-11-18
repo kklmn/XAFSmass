@@ -24,7 +24,10 @@ from qtpy import QtGui, QtCore
 import qtpy.QtWidgets as QtWidgets
 
 from matplotlib.backends import qt_compat
-import matplotlib.backends.backend_qtagg as mpl_qt
+try:
+    import matplotlib.backends.backend_qtagg as mpl_qt
+except ModuleNotFoundError:
+    import matplotlib.backends.backend_qt5agg as mpl_qt
 
 Canvas = mpl_qt.FigureCanvasQTAgg
 ToolBar = mpl_qt.NavigationToolbar2QT
