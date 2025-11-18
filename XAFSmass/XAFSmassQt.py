@@ -25,7 +25,7 @@ import qtpy.QtWidgets as QtWidgets
 
 from matplotlib.backends import qt_compat
 if str(qtpy.API_NAME).lower() in ('pyqt6', 'pyside6'):
-    import matplotlib.backends.backend_qt6agg as mpl_qt
+    import matplotlib.backends.backend_qtagg as mpl_qt
 elif str(qtpy.API_NAME).lower() in ('pyqt5', 'pyside2'):
     import matplotlib.backends.backend_qt5agg as mpl_qt
 else:
