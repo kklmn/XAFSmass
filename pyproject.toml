@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "XAFSmass"
+version = "1.7.0"
+description = "A program for calculating the mass of XAFS samples. For synchrotron users."
+readme = "README.md"
+license = { text = "MIT License" }
+authors = [
+    { name = "Konstantin Klementiev", email = "konstantin.klementiev@gmail.com" },
+    { name = "Roman Chernikov", email = "rchernikov@gmail.com" },
+]
+keywords = ["XAFS", "synchrotron", "absorption", "spectroscopy"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Scientific/Engineering :: Visualization",
+]
+requires-python = ">=3.7"
+dependencies = [
+    "numpy>=1.8.0",
+    "matplotlib>=2.0.0",
+    "pyparsing",
+    "distro",
+    "qtpy",
+    "PyQt6",
+]
+
+[project.optional-dependencies]
+pyqt5 = ["PyQt5"]
+pyside2 = ["PySide2"]
+pyqt6 = ["PyQt6"]
+pyside6 = ["PySide6"]
+
+[project.urls]
+Homepage = "http://xafsmass.readthedocs.io"
+Repository = "https://github.com/kklmn/XAFSmass"
+
+[project.scripts]
+xafsmass = "XAFSmass.XAFSmassQt:run"
+
+[tool.setuptools.packages.find]
+include = ["XAFSmass*"]
+
+[tool.setuptools.package-data]
+XAFSmass = [
+    "data/*.*",
+    "help/*.*",
+    "help/_images/*.*",
+    "help/_images/math/*.*",
+    "help/_sources/*.*",
+    "help/_static/*.*",
+]
