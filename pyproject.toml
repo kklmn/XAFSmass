@@ -30,14 +30,8 @@ dependencies = [
     "pyparsing",
     "distro",
     "qtpy",
-    "PyQt6",
+    "PySide6",
 ]
-
-[project.optional-dependencies]
-pyqt5 = ["PyQt5"]
-pyside2 = ["PySide2"]
-pyqt6 = ["PyQt6"]
-pyside6 = ["PySide6"]
 
 [project.urls]
 Homepage = "http://xafsmass.readthedocs.io"
