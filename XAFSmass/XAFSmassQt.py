@@ -236,7 +236,7 @@ class MainDlg(QtWidgets.QDialog):
         self.compoundLabel = QtWidgets.QLabel("compound:")
         self.compoundExLabel = QtWidgets.QLabel("")
         self.compoundExLabel.setTextInteractionFlags(
-            QtCore.Qt.TextInteractionFlags(QtCore.Qt.TextSelectableByMouse))
+            QtCore.Qt.TextSelectableByMouse)
         self.compoundEdit = QtWidgets.QLineEdit()
         self.compoundEdit.setPlaceholderText(
             'type here or select from the lists above')
