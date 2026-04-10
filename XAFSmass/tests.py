@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 __author__ = "Konstantin Klementiev, Roman Chernikov"
-__date__ = "25 Nov 2024"
+__date__ = "9 Apr 2026"
 
 import sys
 sys.path.append('..')  # analysis:ignore
 from XAFSmass import XAFSmassCalc as xc
+
+toSuper = str.maketrans("0123456789", "⁰¹²³⁴⁵⁶⁷⁸⁹")
 
 
 def test_formula():
@@ -34,6 +36,16 @@ def test_formula():
             print(t, '->', results.asList())
             print(t, '->', results)
             print(xc.reconstruct(results))
+
+
+def test_calculate_element_dict(table='Chantler'):
+    tests = [
+        ['Na', 1100],
+        ]
+    for comp, E in tests:
+        results = xc.formula.parseString(comp)
+        res = xc.calculate_element_dict(results.asList(), E, table)
+        print(res)
 
 
 def test_powder_foil():
@@ -99,9 +111,21 @@ def test_parse_compound():
             print(t, '->', res)
 
 
+def test_flux():
+    mix = [('N₂', 1013)]
+    res, att = xc.calculate_flux(mix, energy=11208, length=40)
+    fluxList = '{0:.1e}'.format(res).split('e+')
+    fluxList[1] = fluxList[1].translate(toSuper)
+    fluxStr = 'flux (ph/s/µA) = {0}, attenuation = {1:.1f} %'.format(
+        "·10".join(fluxList), att*100)
+    print(fluxStr)
+
+
 if __name__ == '__main__':
     # test_formula()
+    test_calculate_element_dict()
     # test_powder_foil()
     # test_gas()
     # test_x()
-    test_parse_compound()
+    # test_parse_compound()
+    # test_flux()

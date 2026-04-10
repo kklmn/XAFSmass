@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 __author__ = "Konstantin Klementiev, Roman Chernikov"
-__date__ = "25 Nov 2024"
+__date__ = "10 Apr 2026"
 
 from math import log10, floor
 import itertools
@@ -13,8 +13,11 @@ from pyparsing import (
 from . import materials_simple as rm
 
 crossSection = 4.208e7  # 2*r_0*c*h*N_A [eV*cm^2/mol]
+SIE0 = 1.602176565e-19  # eV to J
 R = 8.314510  # J/K/mol={m^3Pa/K/mol}
 T = 295  # K
+
+pairEnergy = {'He': 41, 'N₂': 36, 'Ar': 26, 'Kr': 24}  # xdb.lbl.gov/Section4
 
 LPAR, RPAR, PER = map(Suppress, "()#")
 nreal = Word(nums + '.' + '%' + 'x')
@@ -28,6 +31,8 @@ term = Group((element | Group(LPAR + formula + RPAR)("subgroup")) +
 formula << OneOrMore(term)
 
 subGroupCount = itertools.count(1)
+
+plotData = dict()  # used by GUI plot to display the edge jump
 
 
 # add parse actions for parse-time processing:
@@ -106,7 +111,7 @@ formula.setParseAction(sum_by_element)
 def round_to_n(x, n=3):
     res = x
     try:
-        res = round(x, -int(floor(log10(x))) + n-1) if \
+        res = round(x, -int(floor(log10(abs(x)))) + n-1) if \
             isinstance(x, (float, np.float32, np.float64)) else x
 #        res = round(x, -int(floor(log10(x))) + n-1)
     except (ValueError, OverflowError):
@@ -127,10 +132,10 @@ def reconstruct(parsed):
     return outStr
 
 
-def _simple_line(x1, x2, y1, y2):
-    a = (y2 - y1) / (x2 - x1)
+def _line(x1, x2, y1, y2):
+    k = (y2 - y1) / (x2 - x1)
     b = -(y2*x1 - y1*x2) / (x2 - x1)
-    return a, b
+    return k, b
 
 
 def find_victoreen_f2(istart, iend, element):
@@ -151,26 +156,36 @@ def find_victoreen_f2(istart, iend, element):
 
 
 def find_edge_step(E, element):
+    """
+    Search the energy range [E-backE, E+forwardE] for a jump of f2.
+    """
     dE, backE, forwardE, maxStep = 50, 250, 50, 100
     dSigma2 = 0
     f2jump = 0
     sigma2x = 0
     iEdge = 0
     istep = 0
+    auxDict = None
     while iEdge < 2:
         mask = (E - backE < element.E) & (element.E < E + forwardE)
         f2 = element.f2[mask]
         ef2 = element.E[mask]
         df2 = np.diff(f2)
         try:
-            iEdge = np.where(df2 > 0)[0][-1]
-            a, b = _simple_line(
-                ef2[iEdge-1], ef2[iEdge], f2[iEdge-1], f2[iEdge])
-            f2bknd = a*ef2[iEdge+1] + b
-            f2jump = f2[iEdge+1] - f2bknd
-            toSigma2 = crossSection / ef2[iEdge+1]
+            edge = np.where(df2 > 0)[0]
+            iPostEdge = edge[-1]
+            preEdge = np.where(df2 < 0)[0]
+            preEdge = preEdge[preEdge < iPostEdge]
+            iEdge = preEdge[-1]
+            k, b = _line(ef2[iEdge-1], ef2[iEdge], f2[iEdge-1], f2[iEdge])
+            f2bknd = k*ef2[iPostEdge+1] + b
+            f2jump = f2[iPostEdge+1] - f2bknd
+            auxDict = dict(
+                e1=ef2[iEdge-1], y1=f2[iEdge-1],
+                e2=ef2[iPostEdge+1], y20=f2bknd, y21=f2[iPostEdge+1])
+            toSigma2 = crossSection / ef2[iPostEdge+1]
             dSigma2 = f2jump * toSigma2
-            sigma2x = f2[iEdge+1] * toSigma2
+            sigma2x = f2[iPostEdge+1] * toSigma2
         except IndexError:
             break
         backE += dE  # eV
@@ -180,8 +195,11 @@ def find_edge_step(E, element):
 
     if f2jump > 0:
         vicc, vicd = find_victoreen_f2(iEdge-2, iEdge, element)
+        if auxDict is not None:
+            plotData[element.name] = auxDict
     else:
         vicc, vicd = None, None
+        plotData.pop(element.name, None)
     return dSigma2, f2jump, sigma2x, vicc, vicd
 
 
@@ -209,8 +227,8 @@ def calculate_element_dict(formulaList, E, table):
             el = rm.Element(t[0], table=table)
             try:
                 f1f2 = el.get_f1f2(E)
-            except ValueError as e:
-                f1f2 = str(e)
+            except ValueError as err:
+                f1f2 = str(err)
             if isinstance(f1f2, str):
                 return f1f2
             sigma2 = f1f2.imag * crossSection / E
@@ -354,3 +372,22 @@ def parse_compound(compound, mass_digit=5):
     except (ParseBaseException, ValueError, ZeroDivisionError):
         return "wrong compound formula"
     return res.asList(), mass_str
+
+
+def calculate_flux(mix, energy, length, table='Chantler'):
+    current = 1e-6  # A
+    # current = 2*14.4e-6
+    attenuation = 0
+    attOverPairEnergy = 0.
+    for gas in mix:
+        if gas[0] == 'N₂':
+            formulaList = [['N', 2]]
+        else:
+            formulaList = [[gas[0], 1]]
+        sumSigma2 = calculate_element_dict(formulaList, energy, table)[1]
+        nu = gas[1] * length / (R*T*1e4)
+        att = 1 - np.exp(-nu*sumSigma2)
+        attenuation += att
+        attOverPairEnergy += att / pairEnergy[gas[0]]
+    flux = current / (attOverPairEnergy * energy * SIE0)
+    return flux, attenuation

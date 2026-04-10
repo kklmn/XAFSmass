@@ -1,6 +1,6 @@
 ﻿# -*- coding: utf-8 -*-
 __author__ = "Konstantin Klementiev, Roman Chernikov"
-__date__ = "13 Jun 2025"
+__date__ = "10 Apr 2026"
 
 import sys
 import os
@@ -165,6 +165,7 @@ class MyMplCanvas(Canvas):
                 QtWidgets.QMessageBox.critical(self, "Error", ced)
                 return
             elementsDict = ced[0]
+            self.axes.axvline(E*1e-3, linestyle='--', color='gray', label=None)
             for iel, (elName, el) in enumerate(elementsDict.items()):
                 color = 'C{0}'.format(iel % 10)
                 label = elName if el[5] == 0 else\
@@ -172,16 +173,20 @@ class MyMplCanvas(Canvas):
                         elName, xc.round_to_n(el[4]), xc.round_to_n(el[5]))
                 self.axes.plot(el[0].E*1e-3, el[0].f2, '-', marker='.',
                                label=label, color=color)
+                try:
+                    aux = xc.plotData[elName]
+                    self.axes.plot([aux['e1']*1e-3, aux['e2']*1e-3],
+                                   [aux['y1'], aux['y20']], ':', color='gray')
+                    self.axes.plot([aux['e2']*1e-3, aux['e2']*1e-3],
+                                   [aux['y20'], aux['y21']], '--', color=color,
+                                   label='{0} edge jump '.format(elName))
+                except Exception:
+                    pass
                 if self.showf1:
                     self.axesr.plot(el[0].E*1e-3, el[0].f1, '--', marker='.',
                                     color=color)
             # self.axes.set_xlim(el[0].E[0]*1e-3, el[0].E[-1]*1e-3)
             ll = self.axes.legend(loc='upper right', fontsize=self.fontsize)
-            ylim = self.axes.get_ylim()
-            dy = ylim[1] - ylim[0]
-            ylim = ylim[0] + 0.2*dy, ylim[1] - 0.2*dy
-            self.axes.plot([E*1e-3, E*1e-3], ylim, '--', color='gray',
-                           label=None)
         mpl.artist.setp(ll.get_title(), fontsize=self.fontsize)
         self.draw()
 
