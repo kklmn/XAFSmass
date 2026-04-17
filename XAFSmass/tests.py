@@ -3,6 +3,7 @@ __author__ = "Konstantin Klementiev, Roman Chernikov"
 __date__ = "9 Apr 2026"
 
 import sys
+import os
 sys.path.append('..')  # analysis:ignore
 from XAFSmass import XAFSmassCalc as xc
 
@@ -41,6 +42,7 @@ def test_formula():
 def test_calculate_element_dict(table='Chantler'):
     tests = [
         ['Na', 1100],
+        ['Pd', 24522],
         ]
     for comp, E in tests:
         results = xc.formula.parseString(comp)
@@ -112,7 +114,8 @@ def test_parse_compound():
 
 
 def test_flux():
-    mix = [('N₂', 1013)]
+    # mix = [('N₂', 1013)]
+    mix = [('N', 1013)]
     res, att = xc.calculate_flux(mix, energy=11208, length=40)
     fluxList = '{0:.1e}'.format(res).split('e+')
     fluxList[1] = fluxList[1].translate(toSuper)
@@ -121,11 +124,36 @@ def test_flux():
     print(fluxStr)
 
 
+def test_edge_jumps(edge='K', table='Chantler'):
+    edges = ("K", "L1", "L2", "L3", "M1", "M2", "M3", "M4", "M5")
+
+    selfDir = os.path.dirname(__file__)
+    efname = os.path.join(selfDir, 'data', 'Energies.txt')
+    Es = dict()
+    iedge = edges.index(edge)
+    with open(efname, 'r') as f:
+        f.readline()
+        f.readline()
+        for line in f.readlines():
+            cs = line.strip().split()
+            try:
+                Es[cs[1]] = eval(cs[2+iedge])
+            except IndexError:
+                pass
+
+    for el, E in Es.items():
+        formula = xc.formula.parseString(el)
+        elementsDict = xc.calculate_element_dict(formula.asList(), E, table)[0]
+        dSigma2 = elementsDict[el][2]
+        print(el, dSigma2)
+
+
 if __name__ == '__main__':
     # test_formula()
-    test_calculate_element_dict()
+    # test_calculate_element_dict()
     # test_powder_foil()
     # test_gas()
     # test_x()
     # test_parse_compound()
     # test_flux()
+    test_edge_jumps('K')
