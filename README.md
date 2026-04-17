@@ -7,7 +7,7 @@ XAFSmass
   <img src="doc/_images/1powder_170.png" width=320 />
 </p>
 
-XAFSmass is a python program for calculating the mass of XAFS [X-ray Absorption Fine Structure] samples.
+XAFSmass is a python program for calculating the mass of XAFS (X-ray Absorption Fine Structure) samples.
 The chemical formula parser understands parentheses and weight percentage, also in nested form.
 XAFSmass reports the quantity (weight, thickness or pressure) together with the expected height
 of the absorption edge. The GUI is provided by Qt.
@@ -17,18 +17,21 @@ Copyright (c) 2015 Konstantin Klementiev and Roman Chernikov under the MIT Licen
 Dependencies
 ------------
 
-numpy, pyparsing and matplotlib are required. Qt must be provided by either
+numpy, matplotlib and pyparsing are required. Qt must be provided by either
 PyQt5, PySide2, PyQt6 or PySide6 by means of qtpy.
 
-Installation
-------------
+Running without installation
+----------------------------
 
-Unzip the .zip file into a suitable directory and run ``python XAFSmassQt.py``.
-On Windows, run ``pythonw XAFSmassQt.py`` or give it a .pyw extension to
-suppress the console window.
+Unzip the .zip file from GitHub into a suitable directory and run ``python XAFSmassQt.py``.
+One advantage of no installation is a single location of XAFSmass served by any Python installation.
 
-You may want to run ``python setup.py install`` in order to put the XAFSmass
-package to the standard location.
+Running with installation
+-------------------------
+
+From the unzipped directory that has ``pyproject.toml`` run ``python -m pip install .``
+or run ``pip install xafsmass`` to get it directly from PyPI.
+After installation, XAFSmass can be started by ``xafsmass`` command.
 
 Documentation
 -------------
