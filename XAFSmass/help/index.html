@@ -5,16 +5,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>XAFSmass &#8212; XAFSmassQt 1.7.0 documentation</title>
+    <title>XAFSmass &#8212; XAFSmassQt 1.8.0 documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/classic.css?v=2bf1fcf8" />
     <link rel="stylesheet" type="text/css" href="_static/thumbnail.css?v=2a01ef26" />
     
-    <script src="_static/documentation_options.js?v=030dc6f6"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/documentation_options.js?v=b51e6972"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="_static/animation.js?v=475f784f"></script>
-    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     
     <link rel="icon" href="_static/XAFSmassQt.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
@@ -29,7 +29,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">XAFSmassQt 1.7.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">XAFSmassQt 1.8.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">XAFSmass</a></li> 
       </ul>
     </div>  
@@ -43,10 +43,10 @@
 <h1>XAFSmass<a class="headerlink" href="#xafsmass" title="Link to this heading">¶</a></h1>
 <dl class="field-list simple">
 <dt class="field-odd">Release<span class="colon">:</span></dt>
-<dd class="field-odd"><p>1.7.0 <a class="reference external" href="https://zenodo.org/badge/latestdoi/54989911"><img alt="DOI" src="https://zenodo.org/badge/54989911.svg" /></a></p>
+<dd class="field-odd"><p>1.8.0 <a class="reference external" href="https://zenodo.org/badge/latestdoi/54989911"><img alt="DOI" src="https://zenodo.org/badge/54989911.svg" /></a></p>
 </dd>
 <dt class="field-even">Date<span class="colon">:</span></dt>
-<dd class="field-even"><p>Nov 18, 2025</p>
+<dd class="field-even"><p>Apr 17, 2026</p>
 </dd>
 <dt class="field-odd">Authors<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Konstantin Klementiev (MAX IV Laboratory), Roman Chernikov (NSLS-II)</p>
@@ -58,15 +58,15 @@
 <p id="module-XAFSmass.__init__"></p>
 <table class="docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="thumbnail"><img class="align-left" src="_images/1powder_170.png"  width="247.5" height="330.66" /><span style="top: 0px;  width: 375px; left: 0px;  text-align: left; ">&ensp;Calculations for a powder material. The material was defined
+<tr class="row-odd"><td><p><a class="thumbnail"><img class="align-left" src="_images/1powder_180.png"  width="247.5" height="330.66" /><span style="top: 0px;  width: 375px; left: 0px;  text-align: left; ">&ensp;Calculations for a powder material. The material was defined
 here from the list of compounds as "ZincSulfide", which specifies its
 chemical formula and its density. The latter value is optional and needed
-to calculate the sample thickness.<br><img class="align-left" src="_images/1powder_170.png"  width="375" height="501"/><br>&ensp;Calculations for a powder material. The material was defined
+to calculate the sample thickness.<br><img class="align-left" src="_images/1powder_180.png"  width="375" height="501"/><br>&ensp;Calculations for a powder material. The material was defined
 here from the list of compounds as "ZincSulfide", which specifies its
 chemical formula and its density. The latter value is optional and needed
 to calculate the sample thickness.</span></a></p></td>
-<td><p><a class="thumbnail"><img class="align-left" src="_images/3gas_170.png"  width="247.5" height="335.94" /><span style="top: 0px;  width: 375px; right: 0px;  text-align: right; ">&ensp;Calculations of gas filling. When the gas formula is given with
-parentheses, slider widgets become visible.<br><img class="align-left" src="_images/3gas_170.png"  width="375" height="509"/><br>&ensp;Calculations of gas filling. When the gas formula is given with
+<td><p><a class="thumbnail"><img class="align-left" src="_images/3gas_180.png"  width="247.5" height="335.94" /><span style="top: 0px;  width: 375px; right: 0px;  text-align: right; ">&ensp;Calculations of gas filling. When the gas formula is given with
+parentheses, slider widgets become visible.<br><img class="align-left" src="_images/3gas_180.png"  width="375" height="509"/><br>&ensp;Calculations of gas filling. When the gas formula is given with
 parentheses, slider widgets become visible.</span></a></p></td>
 </tr>
 </tbody>
@@ -78,23 +78,27 @@ thickness or pressure) together with the expected height of the absorption
 edge.</p>
 <section id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Link to this heading">¶</a></h2>
-<p>numpy, pyparsing and matplotlib are required. Qt must be provided by either
+<p>numpy, matplotlib and pyparsing are required. Qt must be provided by either
 PyQt5, PySide2, PyQt6 or PySide6 by means of qtpy.</p>
 </section>
 <section id="get-xafsmass">
 <h2>Get XAFSmass<a class="headerlink" href="#get-xafsmass" title="Link to this heading">¶</a></h2>
 <p>XAFSmass is available as source distribution from
 <a class="reference external" href="https://pypi.python.org/pypi/XAFSmass">PyPI</a> or
-<a class="reference external" href="https://github.com/kklmn/XAFSmass">Github</a>.
-The distribution archive also includes documentation.</p>
+<a class="reference external" href="https://github.com/kklmn/XAFSmass">GitHub</a>.
+The distribution archive also includes this documentation.</p>
 </section>
-<section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
-<p>Unzip the .zip file into a suitable directory and run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">XAFSmassQt.py</span></code>.
-On Windows, run <code class="docutils literal notranslate"><span class="pre">pythonw</span> <span class="pre">XAFSmassQt.py</span></code> or give it a .pyw extension to
-suppress the console window.</p>
-<p>You may want to run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">setup.py</span> <span class="pre">install</span></code> in order to put the XAFSmass
-package to the standard location.</p>
+<section id="running-without-installation">
+<h2>Running without installation<a class="headerlink" href="#running-without-installation" title="Link to this heading">¶</a></h2>
+<p>Unzip the .zip file from GitHub into a suitable directory and run
+<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">XAFSmassQt.py</span></code>. One advantage of no installation is a single location
+of XAFSmass served by any Python installation.</p>
+</section>
+<section id="running-with-installation">
+<h2>Running with installation<a class="headerlink" href="#running-with-installation" title="Link to this heading">¶</a></h2>
+<p>From the unzipped directory that has <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> run
+<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.</span></code> or run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">xafsmass</span></code> to get it directly
+from PyPI. After installation, XAFSmass can be started by <code class="docutils literal notranslate"><span class="pre">xafsmass</span></code> command.</p>
 </section>
 <section id="citing-xafsmass">
 <h2>Citing XAFSmass<a class="headerlink" href="#citing-xafsmass" title="Link to this heading">¶</a></h2>
@@ -167,19 +171,18 @@ position but rather at an energy somewhere above it. The list of edges
 offers the edge positions plus 50 eV. You are free to specify any energy
 within the range of the selected tabulation.</p>
 </div>
-<p>The most typical application is the calculation of the mass of a powder sample.
-The optimal <em>optical</em> sample thickness μd depends on the absorption levels
-selected for the ionization chambers (see below). Typically, μd is between 2
-and 3 (e.g. for a 17.4% absorption level for the 1st chamber and a 50% level
-for the 2nd chamber, the optimal thickness is 2.42). However, if you get the
-absorption step &gt; 1.5 (reported by the drop-down list “absorptance step = “),
-it is recommended to reduce the sample mass to avoid the potential thickness
-effect due to possible inhomogeneity in the wafer. If your sample is diluted
-and you get a very low absorption step, do not try to make the wafer thicker
-hoping that you will get better spectra – you will not: the optimal thickness
-gives <em>the best</em> signal-to-noise ratio (it is in this sense optimal). You can
-only try to measure your absorption spectra with another registration
-technique: in fluorescence or electron yield modes.</p>
+<p>The most common use is determining the mass of a powder sample. The optimal
+<em>optical</em> thickness μd depends on the absorption levels chosen for the
+ionization chambers (see below). In practice, μd typically lies between 2 and
+3. For example, with a 17.4% absorption in the first chamber and 50% in the
+second, the optimal thickness is 2.42. If the absorption step exceeds 1.5 (as
+reported by the drop‑down menu “absorptance step =”), the sample mass should be
+reduced to avoid the potential thickness effect arising from possible
+inhomogeneities in the wafer. If the sample is diluted and the absorption step
+is very low, increasing the wafer thickness will not improve the spectra. The
+optimal thickness already provides the best signal‑to‑noise ratio. In such
+cases, improved results can only be obtained by using an alternative detection
+mode, such as fluorescence or electron yield measurements.</p>
 <table class="docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="thumbnail"><img class="align-left" src="_images/SNtransm050.png"  width="300.0" height="300.0" /><span style="top: 0px;  width: 600px; left: 0px;  text-align: left; "><br><img class="align-left" src="_images/SNtransm050.png"  width="600" height="600"/><br></span></a></p></td>
@@ -190,9 +193,9 @@ technique: in fluorescence or electron yield modes.</p>
 </section>
 <section id="calculation-of-thickness-and-absorption-step-for-samples-with-known-density">
 <h3>Calculation of thickness and absorption step for samples with known density<a class="headerlink" href="#calculation-of-thickness-and-absorption-step-for-samples-with-known-density" title="Link to this heading">¶</a></h3>
-<p>Here you can calculate the thickness of the sample with known density (usually,
-a foil). Commercial foils are highly homogeneous in thickness, so that you may
-ignore large step jumps and pay attention to the total μd only.</p>
+<p>Here you can calculate the thickness of a sample with known density, typically
+a foil. Commercial foils are generally highly uniform in thickness, so large
+absorption steps and the potential thickness effect can be neglected.</p>
 </section>
 <section id="calculation-of-gas-pressure-for-ionization-chambers">
 <h3>Calculation of gas pressure for ionization chambers<a class="headerlink" href="#calculation-of-gas-pressure-for-ionization-chambers" title="Link to this heading">¶</a></h3>
@@ -203,31 +206,33 @@ ignore large step jumps and pay attention to the total μd only.</p>
 <p>Start with the 2nd ionization chamber (IC). If a reference foil is placed
 between the 2nd and the 3rd IC, the fraction of x-rays absorbed by the 2nd IC
 is usually set to 50%. If the reference foil is not needed, one can select the
-total absorption (100%). For these two cases the optimal absorption of the 1st
-IC at a certain μd is found from the figures above showing the levels of
-signal-to-noise ratio.</p>
+total absorption (close to 100%). For these two cases the optimal absorption of
+the 1st IC at a certain μd is found from the figures above showing the levels
+of signal-to-noise ratio.</p>
 <p>For exploring mixtures of several gases, give the gases in parentheses, e.g.
 as (Ar)(N2). Each gas will get a slider defining its partial pressure. The
 program will calculate the molar weight of each gas and update the chemical
 formula and the total attenuation.</p>
+<p>Absolute flux is reported per current unit of the ionization chamber. This
+calculation needs electron-ion pair energy that is taken from
+xdb.lbl.gov/Section4 where it is given for a few common gases.</p>
 </section>
 <section id="calculation-of-unknown-elemental-concentration">
 <h3>Calculation of unknown elemental concentration<a class="headerlink" href="#calculation-of-unknown-elemental-concentration" title="Link to this heading">¶</a></h3>
 <section id="case-1-you-know-the-composition-of-the-matrix">
 <h4>Case 1: <em>You know the composition of the matrix</em><a class="headerlink" href="#case-1-you-know-the-composition-of-the-matrix" title="Link to this heading">¶</a></h4>
-<p>You need an absorption spectrum taken without the sample (empty spectrum) but
-with the same state of the ionization chambers. You then subtract it from the
-spectrum of the sample, e.g. in VIPER, and get a real (i.e. not vertically
-shifted) absorption coefficient. Determine the value of μd above the edge
-(μTd), the edge jump (Δμd) and its uncertainty (δμd). Specify the chemical
-formula with x.</p>
+<p>You need an absorption spectrum taken without the sample (an empty spectrum)
+obtained with the same state of the ionization chambers. Subtract this spectrum
+from the sample spectrum to obtain the true absorption coefficient (without any
+vertical offset).Then determine the value of μd above the edge (μTd), the edge
+jump (Δμd) and its uncertainty (δμd). Specify the chemical formula with x.</p>
 </section>
 <section id="case-2-you-know-the-sample-mass-and-area">
 <h4>Case 2: <em>You know the sample mass and area</em><a class="headerlink" href="#case-2-you-know-the-sample-mass-and-area" title="Link to this heading">¶</a></h4>
-<p>Determine the edge jump (Δμd). For the pure element find such a value for μTd
-that the absorption step in the pull-down list be equal to your experimental
-Δμd. This will give you the mass of the element of interest. Just divide it by
-the total mass to get the weight percentage.</p>
+<p>Determine the edge jump (Δμd). For the pure element, adjust μTd until the
+absorption step shown in the pull‑down list matches the experimentally measured
+Δμd. This yields the mass of the element of interest. Dividing this value by
+the total sample mass gives the corresponding weight percentage.</p>
 </section>
 </section>
 <section id="finding-scattering-factors-f">
@@ -263,7 +268,8 @@ of two elements in the same sample is
 <li><a class="reference internal" href="#">XAFSmass</a><ul>
 <li><a class="reference internal" href="#dependencies">Dependencies</a></li>
 <li><a class="reference internal" href="#get-xafsmass">Get XAFSmass</a></li>
-<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#running-without-installation">Running without installation</a></li>
+<li><a class="reference internal" href="#running-with-installation">Running with installation</a></li>
 <li><a class="reference internal" href="#citing-xafsmass">Citing XAFSmass</a></li>
 <li><a class="reference internal" href="#theoretical-references-used">Theoretical references used</a></li>
 <li><a class="reference internal" href="#usage">Usage</a><ul>
@@ -314,13 +320,13 @@ of two elements in the same sample is
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">XAFSmassQt 1.7.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">XAFSmassQt 1.8.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">XAFSmass</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
     &#169; Copyright 2015, Konstantin Klementiev, Roman Chernikov.
-      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     </div>
   </body>
 </html>
