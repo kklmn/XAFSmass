@@ -12,14 +12,14 @@ percentage, also in nested form. XAFSmassQt reports the quantity (weight,
 thickness or pressure) together with the expected height of the absorption
 edge.
 
-.. |Screenshot1| imagezoom:: _images/1powder_170.png
+.. |Screenshot1| imagezoom:: _images/1powder_180.png
    :loc: upper-left-corner
    :scale: 66 %
    :alt: &ensp;Calculations for a powder material. The material was defined
       here from the list of compounds as "ZincSulfide", which specifies its
       chemical formula and its density. The latter value is optional and needed
       to calculate the sample thickness.
-.. |Screenshot3| imagezoom:: _images/3gas_170.png
+.. |Screenshot3| imagezoom:: _images/3gas_180.png
    :loc: upper-right-corner
    :scale: 66 %
    :alt: &ensp;Calculations of gas filling. When the gas formula is given with
@@ -28,7 +28,7 @@ edge.
 Dependencies
 ------------
 
-numpy, pyparsing and matplotlib are required. Qt must be provided by either
+numpy, matplotlib and pyparsing are required. Qt must be provided by either
 PyQt5, PySide2, PyQt6 or PySide6 by means of qtpy.
 
 Get XAFSmass
@@ -36,18 +36,22 @@ Get XAFSmass
 
 XAFSmass is available as source distribution from
 `PyPI <https://pypi.python.org/pypi/XAFSmass>`_ or
-`Github <https://github.com/kklmn/XAFSmass>`__.
-The distribution archive also includes documentation.
+`GitHub <https://github.com/kklmn/XAFSmass>`__.
+The distribution archive also includes this documentation.
 
-Installation
-------------
+Running without installation
+----------------------------
 
-Unzip the .zip file into a suitable directory and run ``python XAFSmassQt.py``.
-On Windows, run ``pythonw XAFSmassQt.py`` or give it a .pyw extension to
-suppress the console window.
+Unzip the .zip file from GitHub into a suitable directory and run
+``python XAFSmassQt.py``. One advantage of no installation is a single location
+of XAFSmass served by any Python installation.
 
-You may want to run ``python setup.py install`` in order to put the XAFSmass
-package to the standard location.
+Running with installation
+-------------------------
+
+From the unzipped directory that has ``pyproject.toml`` run
+``python -m pip install .`` or run ``pip install xafsmass`` to get it directly
+from PyPI. After installation, XAFSmass can be started by ``xafsmass`` command.
 
 Citing XAFSmass
 ---------------
@@ -118,19 +122,18 @@ Calculation of mass and absorption step for powder samples
     offers the edge positions plus 50 eV. You are free to specify any energy
     within the range of the selected tabulation.
 
-The most typical application is the calculation of the mass of a powder sample.
-The optimal *optical* sample thickness μd depends on the absorption levels
-selected for the ionization chambers (see below). Typically, μd is between 2
-and 3 (e.g. for a 17.4% absorption level for the 1st chamber and a 50% level
-for the 2nd chamber, the optimal thickness is 2.42). However, if you get the
-absorption step > 1.5 (reported by the drop-down list "absorptance step = "),
-it is recommended to reduce the sample mass to avoid the potential thickness
-effect due to possible inhomogeneity in the wafer. If your sample is diluted
-and you get a very low absorption step, do not try to make the wafer thicker
-hoping that you will get better spectra -- you will not: the optimal thickness
-gives *the best* signal-to-noise ratio (it is in this sense optimal). You can
-only try to measure your absorption spectra with another registration
-technique: in fluorescence or electron yield modes.
+The most common use is determining the mass of a powder sample. The optimal
+*optical* thickness μd depends on the absorption levels chosen for the
+ionization chambers (see below). In practice, μd typically lies between 2 and
+3. For example, with a 17.4% absorption in the first chamber and 50% in the
+second, the optimal thickness is 2.42. If the absorption step exceeds 1.5 (as
+reported by the drop‑down menu "absorptance step ="), the sample mass should be
+reduced to avoid the potential thickness effect arising from possible
+inhomogeneities in the wafer. If the sample is diluted and the absorption step
+is very low, increasing the wafer thickness will not improve the spectra. The
+optimal thickness already provides the best signal‑to‑noise ratio. In such
+cases, improved results can only be obtained by using an alternative detection
+mode, such as fluorescence or electron yield measurements.
 
 +---------------+---------------+
 | |SNtransm050| | |SNtransm100| |
@@ -146,9 +149,9 @@ technique: in fluorescence or electron yield modes.
 Calculation of thickness and absorption step for samples with known density
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Here you can calculate the thickness of the sample with known density (usually,
-a foil). Commercial foils are highly homogeneous in thickness, so that you may
-ignore large step jumps and pay attention to the total μd only.
+Here you can calculate the thickness of a sample with known density, typically
+a foil. Commercial foils are generally highly uniform in thickness, so large
+absorption steps and the potential thickness effect can be neglected.
 
 Calculation of gas pressure for ionization chambers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -160,14 +163,18 @@ Calculation of gas pressure for ionization chambers
 Start with the 2nd ionization chamber (IC). If a reference foil is placed
 between the 2nd and the 3rd IC, the fraction of x-rays absorbed by the 2nd IC
 is usually set to 50%. If the reference foil is not needed, one can select the
-total absorption (100%). For these two cases the optimal absorption of the 1st
-IC at a certain μd is found from the figures above showing the levels of
-signal-to-noise ratio.
+total absorption (close to 100%). For these two cases the optimal absorption of
+the 1st IC at a certain μd is found from the figures above showing the levels
+of signal-to-noise ratio.
 
 For exploring mixtures of several gases, give the gases in parentheses, e.g.
 as (Ar)(N2). Each gas will get a slider defining its partial pressure. The
 program will calculate the molar weight of each gas and update the chemical
 formula and the total attenuation.
+
+Absolute flux is reported per current unit of the ionization chamber. This
+calculation needs electron-ion pair energy that is taken from
+xdb.lbl.gov/Section4 where it is given for a few common gases.
 
 Calculation of unknown elemental concentration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -175,20 +182,19 @@ Calculation of unknown elemental concentration
 Case 1: *You know the composition of the matrix*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You need an absorption spectrum taken without the sample (empty spectrum) but
-with the same state of the ionization chambers. You then subtract it from the
-spectrum of the sample, e.g. in VIPER, and get a real (i.e. not vertically
-shifted) absorption coefficient. Determine the value of μd above the edge
-(μTd), the edge jump (Δμd) and its uncertainty (δμd). Specify the chemical
-formula with x.
+You need an absorption spectrum taken without the sample (an empty spectrum)
+obtained with the same state of the ionization chambers. Subtract this spectrum
+from the sample spectrum to obtain the true absorption coefficient (without any
+vertical offset).Then determine the value of μd above the edge (μTd), the edge
+jump (Δμd) and its uncertainty (δμd). Specify the chemical formula with x.
 
 Case 2: *You know the sample mass and area*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Determine the edge jump (Δμd). For the pure element find such a value for μTd
-that the absorption step in the pull-down list be equal to your experimental
-Δμd. This will give you the mass of the element of interest. Just divide it by
-the total mass to get the weight percentage.
+Determine the edge jump (Δμd). For the pure element, adjust μTd until the
+absorption step shown in the pull‑down list matches the experimentally measured
+Δμd. This yields the mass of the element of interest. Dividing this value by
+the total sample mass gives the corresponding weight percentage.
 
 Finding scattering factors f''
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -208,12 +214,12 @@ of two elements in the same sample is
 
 """
 __module__ = "XAFSmass"
-__versioninfo__ = (1, 7, 0)
+__versioninfo__ = (1, 8, 0)
 __version__ = '.'.join(map(str, __versioninfo__))
 __author__ = \
     "Konstantin Klementiev (MAX IV Laboratory), " +\
     "Roman Chernikov (NSLS-II)"
 __email__ = \
     "konstantin.klementiev@gmail.com, rchernikov@gmail.com"
-__date__ = "13 Jun 2025"
-__license__ = "MIT license"
+__date__ = "17 Apr 2026"
+__license__ = "MIT"

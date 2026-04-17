@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 __author__ = "Konstantin Klementiev, Roman Chernikov"
-__date__ = "10 Apr 2026"
+__date__ = "17 Apr 2026"
 
 from math import log10, floor
 import itertools
@@ -17,7 +17,8 @@ SIE0 = 1.602176565e-19  # eV to J
 R = 8.314510  # J/K/mol={m^3Pa/K/mol}
 T = 295  # K
 
-pairEnergy = {'He': 41, 'N₂': 36, 'Ar': 26, 'Kr': 24}  # xdb.lbl.gov/Section4
+pairEnergy = {  # xdb.lbl.gov/Section4
+    'He': 41, 'N₂': 36, 'Ne': 36.3, 'Ar': 26, 'Kr': 24, 'Xe': 22}
 
 LPAR, RPAR, PER = map(Suppress, "()#")
 nreal = Word(nums + '.' + '%' + 'x')
@@ -150,6 +151,8 @@ def find_victoreen_f2(istart, iend, element):
     ysum2 = (a*np.exp(-4*b)).sum()
 
     det = sum6*sum8 - sum7*sum7
+    if det == 0:
+        return 0., 0.
     c = (sum8*ysum1 - sum7*ysum2) / det
     d = (-sum7*ysum1 + sum6*ysum2) / det
     return c, d
@@ -159,36 +162,47 @@ def find_edge_step(E, element):
     """
     Search the energy range [E-backE, E+forwardE] for a jump of f2.
     """
-    dE, backE, forwardE, maxStep = 50, 250, 50, 100
+    dE, backE, forwardE, maxStep = 50, 250, 50, 50
     dSigma2 = 0
     f2jump = 0
     sigma2x = 0
+
     iEdge = 0
+    iPostEdge = 0
     istep = 0
     auxDict = None
-    while iEdge < 2:
+    while istep < maxStep and iPostEdge < 2 and iEdge < 1:
         mask = (E - backE < element.E) & (element.E < E + forwardE)
         f2 = element.f2[mask]
         ef2 = element.E[mask]
         df2 = np.diff(f2)
         try:
             edge = np.where(df2 > 0)[0]
-            iPostEdge = edge[-1]
+            iPostEdge = edge[-1] + 1
+            if iPostEdge < 2:
+                backE += dE
+                istep += 1
+                continue
+
             preEdge = np.where(df2 < 0)[0]
             preEdge = preEdge[preEdge < iPostEdge]
-            iEdge = preEdge[-1]
+            if len(preEdge) > 0:
+                iEdge = preEdge[-1] + 1
+            else:
+                iEdge = iPostEdge - 1
+
             k, b = _line(ef2[iEdge-1], ef2[iEdge], f2[iEdge-1], f2[iEdge])
-            f2bknd = k*ef2[iPostEdge+1] + b
-            f2jump = f2[iPostEdge+1] - f2bknd
+            f2bknd = k*ef2[iPostEdge] + b
+            f2jump = f2[iPostEdge] - f2bknd
             auxDict = dict(
                 e1=ef2[iEdge-1], y1=f2[iEdge-1],
-                e2=ef2[iPostEdge+1], y20=f2bknd, y21=f2[iPostEdge+1])
-            toSigma2 = crossSection / ef2[iPostEdge+1]
+                e2=ef2[iPostEdge], y20=f2bknd, y21=f2[iPostEdge])
+            toSigma2 = crossSection / ef2[iPostEdge]
             dSigma2 = f2jump * toSigma2
-            sigma2x = f2[iPostEdge+1] * toSigma2
+            sigma2x = f2[iPostEdge] * toSigma2
         except IndexError:
-            break
-        backE += dE  # eV
+            pass
+        forwardE += dE
         istep += 1
         if istep > maxStep:
             break
@@ -376,18 +390,26 @@ def parse_compound(compound, mass_digit=5):
 
 def calculate_flux(mix, energy, length, table='Chantler'):
     current = 1e-6  # A
-    # current = 2*14.4e-6
-    attenuation = 0
+    attenuation = 0.
     attOverPairEnergy = 0.
+    failed = False
     for gas in mix:
-        if gas[0] == 'N₂':
+        if gas[0] in ('N', 'N2'):
             formulaList = [['N', 2]]
+            pairEnergyKey = 'N₂'
         else:
             formulaList = [[gas[0], 1]]
+            pairEnergyKey = gas[0]
         sumSigma2 = calculate_element_dict(formulaList, energy, table)[1]
         nu = gas[1] * length / (R*T*1e4)
         att = 1 - np.exp(-nu*sumSigma2)
         attenuation += att
-        attOverPairEnergy += att / pairEnergy[gas[0]]
-    flux = current / (attOverPairEnergy * energy * SIE0)
+        try:
+            attOverPairEnergy += att / pairEnergy[pairEnergyKey]
+        except KeyError:
+            failed = True
+
+    if attOverPairEnergy == 0:
+        failed = True
+    flux = -1 if failed else current / (attOverPairEnergy * energy * SIE0)
     return flux, attenuation

@@ -58,7 +58,7 @@ mpl.rcParams['mathtext.bf'] = 'cmss10'
 MAC = "qt_mac_set_native_menubar" in dir()
 
 POWDER, FOIL, GAS, XCONTENT = range(4)
-whats = 'powder', 'foil, film, glass etc.', 'gas', 'has unknown concentration'
+whats = 'powder', 'foil, film, glass', 'gas', 'unknown atomic concentration'
 formulas = (
     r"$\nu = (\mu_T d)\cdot S\cdot\left(N_A 2r_0 \lambda \sum_i{N_i f_i''}"
     r"\right)^{-1}; \quad m = M\cdot\nu$",
@@ -123,7 +123,7 @@ class MyFormulaMplCanvas(Canvas):
     def update_formula(self, formula=None):
         self.fig.clf()
         self.fig.suptitle(formula, x=0.5, y=0.48, ha='center', va='center',
-                          fontsize=self.fontsize)
+                          fontsize=self.fontsize, color='#003388')
         self.draw()
 
 
@@ -308,10 +308,8 @@ class MainDlg(QtWidgets.QDialog):
 
         self.tablePlotButton.clicked.connect(self.plotf)
 
-        self.resNuLabel = QtWidgets.QLabel("")
-        self.resNu = QtWidgets.QLabel("")
-        self.resMassLabel = QtWidgets.QLabel("")
-        self.resMass = QtWidgets.QLabel("")
+        self.res1 = QtWidgets.QLabel("")
+        self.res2 = QtWidgets.QLabel("")
 
         self.stepLabel = QtWidgets.QLabel("absorptance step = ")
         self.stepCB = QtWidgets.QComboBox()
@@ -378,11 +376,10 @@ class MainDlg(QtWidgets.QDialog):
         tableLayout.addStretch()
 
         resLayout = QtWidgets.QHBoxLayout()
-        resLayout.addWidget(self.resNuLabel)
-        resLayout.addWidget(self.resNu)
         resLayout.addStretch()
-        resLayout.addWidget(self.resMassLabel)
-        resLayout.addWidget(self.resMass)
+        resLayout.addWidget(self.res1)
+        resLayout.addStretch()
+        resLayout.addWidget(self.res2)
         resLayout.addStretch()
 
         stepLayout = QtWidgets.QHBoxLayout()
@@ -509,34 +506,20 @@ class MainDlg(QtWidgets.QDialog):
 
         if self.what == POWDER:
             self.areaLabel.setText(u"S (cm<sup>2</sup>) = ")
-            self.resNuLabel.setText(u"ν (mmol) = ")
-            self.resMassLabel.setText("m (mg) = ")
             self.muTdEdit.setPlaceholderText('typ. 2.6')
             self.areaEdit.setPlaceholderText('1.33 for \u230013mm ')
-            self.resNuLabel.show()
-            self.resNu.show()
         elif self.what == FOIL:
             self.areaLabel.setText(u"ρ (g/cm<sup>3</sup>) = ")
-            self.resMassLabel.setText(u"d (µm) = ")
             self.muTdEdit.setPlaceholderText('typ. 2.6')
             self.areaEdit.setPlaceholderText('')
-            self.resNuLabel.hide()
-            self.resNu.hide()
         elif self.what == GAS:
             self.areaLabel.setText(u"d (cm) = ")
-            self.resMassLabel.setText(u"p (mbar) = ")
             self.muTdEdit.setPlaceholderText('(0, 1)')
             self.areaEdit.setPlaceholderText('')
-            self.resNuLabel.hide()
-            self.resNu.hide()
         elif self.what == XCONTENT:
             self.areaLabel.setText(u"Δµd = ")
-            self.resNuLabel.setText("N<sub>x</sub> = ")
-            self.resMassLabel.setText(r"wt%<sub>x</sub> = ")
             self.muTdEdit.setPlaceholderText('')
             self.areaEdit.setPlaceholderText('')
-            self.resNuLabel.show()
-            self.resNu.show()
 
         if self.what in [POWDER, FOIL]:
             self.stepLabel.show()
@@ -599,6 +582,7 @@ class MainDlg(QtWidgets.QDialog):
         table = tablesF[self.tableCB.currentIndex()]
         nus2 = 0.
         sumPressure = 0.
+        mix = []
         for gasNo in range(self.gasesInMixtureN):
             gasLabel = self.gasesInMixture[gasNo].layout().itemAt(0).widget()
             compound = str(gasLabel.text())
@@ -614,13 +598,27 @@ class MainDlg(QtWidgets.QDialog):
             nu = self.gasesInMixture[gasNo].pressure / (xc.R*xc.T)*length*1e-4
             nus2 += nu * sumSigma2
             sumPressure += self.gasesInMixture[gasNo].pressure
+            mix.append((compound, self.gasesInMixture[gasNo].pressure))
         attenuation = 1 - np.exp(-nus2)
         self.muTdEdit.setText("{0:.3f}".format(attenuation))
-        self.resMass.setText("<b>{0:.0f}</b>".format(sumPressure))
+        self.res1.setText("p (mbar) = <b>{0:.0f}</b>".format(sumPressure))
+        res, att = xc.calculate_flux(mix, E, length=length, table=table)
+        if res > 0:
+            fluxList = '{0:.1e}'.format(res).split('e+')
+            fluxList[1] = '<sup>{0}</sup>'.format(fluxList[1])
+            fluxStr = 'flux (ph/s/µA) = {0}'.format("·10".join(fluxList))
+            # fluxStr += ', attenuation = {0:.1f} %'.format(att*100)
+        else:
+            fluxStr = ''
+        self.res2.setText(fluxStr)
+
         compound = ""
         for gasNo in range(self.gasesInMixtureN):
             gasLabel = self.gasesInMixture[gasNo].layout().itemAt(0).widget()
-            normPressure = self.gasesInMixture[gasNo].pressure/sumPressure
+            if sumPressure > 0:
+                normPressure = self.gasesInMixture[gasNo].pressure/sumPressure
+            else:
+                normPressure = 0
             if abs(normPressure - 1) < 1e-3:
                 textNormPressure = ''
             else:
@@ -631,10 +629,10 @@ class MainDlg(QtWidgets.QDialog):
     def read_energies(self):
         selfDir = os.path.dirname(__file__)
         efname = os.path.join(selfDir, 'data', 'Energies.txt')
+        self.energies = []
         with open(efname, 'r') as f:
             f.readline()
             f.readline()
-            self.energies = []
             for line in f.readlines():
                 cs = line.strip().split()
                 if len(cs[0]) == 1:
@@ -679,8 +677,8 @@ class MainDlg(QtWidgets.QDialog):
         self.calculate()
 
     def clear_results(self):
-        self.resNu.setText("")
-        self.resMass.setText("")
+        self.res1.setText("")
+        self.res2.setText("")
         self.extraD.setText("")
 
     def parse_compound(self):
@@ -784,16 +782,18 @@ class MainDlg(QtWidgets.QDialog):
             except ValueError:
                 dmud = 0
 
+        cList = self.parsedCompound.asList()
         if self.what == POWDER:
-            res = xc.calculate_powder(
-                self.parsedCompound.asList(), E, muTd, area, rho, table=table)
+            res = xc.calculate_powder(cList, E, muTd, area, rho, table=table)
             if isinstance(res, str):
                 self.clear_results()
                 QtWidgets.QMessageBox.critical(self, "Error", res)
                 return
             nu, m, th, eDict = res
-            self.resNu.setText('{0}'.format(xc.round_to_n(nu, 3)))
-            self.resMass.setText("<b>{0}</b>".format(xc.round_to_n(m, 3)))
+            txtOut = "ν (mmol) = {0}".format(xc.round_to_n(nu, 3))
+            self.res1.setText(txtOut)
+            txtOut = "m (mg) = <b>{0}</b>".format(xc.round_to_n(m, 3))
+            self.res2.setText(txtOut)
             if rho is not None:
                 self.extraD.setText('{0}'.format(xc.round_to_n(th, 4)))
             iSelect = 0
@@ -805,14 +805,15 @@ class MainDlg(QtWidgets.QDialog):
                     iSelect = i
             self.stepCB.setCurrentIndex(iSelect)
         elif self.what == FOIL:
-            res = xc.calculate_foil(
-                self.parsedCompound.asList(), E, muTd, rho, table=table)
+            res = xc.calculate_foil(cList, E, muTd, rho, table=table)
             if isinstance(res, str):
                 self.clear_results()
                 QtWidgets.QMessageBox.critical(self, "Error", res)
                 return
             th, eDict = res
-            self.resMass.setText("<b>{0}</b>".format(xc.round_to_n(th, 3)))
+            txtOut = "d (µm) = <b>{0}</b>".format(xc.round_to_n(th, 3))
+            self.res1.setText("")
+            self.res2.setText(txtOut)
             iSelect = 0
             for i, (k, v) in enumerate(eDict.items()):
                 self.stepCB.addItem("{0}: {1}".format(
@@ -821,28 +822,40 @@ class MainDlg(QtWidgets.QDialog):
                     iSelect = i
             self.stepCB.setCurrentIndex(iSelect)
         elif self.what == GAS:
-            res = xc.calculate_gas(
-                self.parsedCompound.asList(), E, attenuation, thickness,
-                table=table)
-            if isinstance(res, str):
+            P = xc.calculate_gas(cList, E, attenuation, thickness, table=table)
+            if isinstance(P, str):
                 self.clear_results()
-                QtWidgets.QMessageBox.critical(self, "Error", res)
+                QtWidgets.QMessageBox.critical(self, "Error", P)
                 return
-            P = res
-            self.resMass.setText("<b>{0}</b>".format(xc.round_to_n(P, 3)))
+            txtOut = "p (mbar) = <b>{0:.0f}</b>".format(xc.round_to_n(P, 3))
+            self.res1.setText(txtOut)
+
+            partP = P / len(cList)
+            mix = [(gas[0], partP) for gas in cList]
+            res, att = xc.calculate_flux(mix, E, length=thickness, table=table)
+            if res > 0:
+                fluxList = '{0:.1e}'.format(res).split('e+')
+                fluxList[1] = '<sup>{0}</sup>'.format(fluxList[1])
+                fluxStr = 'flux (ph/s/µA) = {0}'.format("·10".join(fluxList))
+                # fluxStr += ', attenuation = {0:.1f} %'.format(att*100)
+            else:
+                fluxStr = ''
+            self.res2.setText(fluxStr)
         elif self.what == XCONTENT:
-            res = xc.calculate_x(
-                self.parsedCompound.asList(), E, muTd, Dmud, dmud, table=table)
+            res = xc.calculate_x(cList, E, muTd, Dmud, dmud, table=table)
             if isinstance(res, str):
                 self.clear_results()
                 QtWidgets.QMessageBox.critical(self, "Error", res)
                 return
             nu, wt, wt1 = res
-            self.resNu.setText('{0}'.format(xc.round_to_n(nu, 3)))
             outStr = '{0}'.format(xc.round_to_n(wt, 5))
             if wt1 > 0:
                 outStr += u'±{0}'.format(xc.round_to_n(wt1, 3))
-            self.resMass.setText(u"<b>{0}</b>".format(outStr))
+
+            txtOut = "N<sub>x</sub> = {0}".format(xc.round_to_n(nu, 3))
+            self.res1.setText(txtOut)
+            txtOut = "wt%<sub>x</sub> = <b>{0}</b>".format(outStr)
+            self.res2.setText(txtOut)
 
     def about(self):
         # https://stackoverflow.com/a/69325836/2696065
