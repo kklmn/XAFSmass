@@ -21,7 +21,8 @@ import os
 sys.path.append('..')
 sys.path.append(os.path.abspath('exts'))
 
-from XAFSmass import __version__
+# from XAFSmass import __version__  # fails on rtfd
+__version__ = '1.8.0'
 
 # -- General configuration ------------------------------------------------
 
